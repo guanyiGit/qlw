@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息发布</title>
+    <script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/Validform.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="./js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <!--<link href="./bootstrap-fileinput/css/fileinput.css" rel="stylesheet">-->
+
+    <!--<link rel="stylesheet" href="./views/device_manager/device_manager-active.css">-->
+
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <!--bootstrap table -->
+
+    <!--<link href="../../../static/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">-->
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="./utils/stringBuffer.js"></script>
+    <link href="../../../static/views/device_manager/device_manager-active.css" rel="stylesheet">
+    <!--引入本页面js-->
+    <script type="text/javascript" src="./js/sendHttp.js"></script>
+    <script type="text/javascript" src="./views/info/infoRelease.js"></script>
+    <!--<script type="text/javascript" src="./bootstrap-fileinput/js/fileinput.js"></script>-->
+
+    <style>
+        #dogCardTable{
+            border: solid 1px #ccc;
+            width: 100%;
+        }
+        .theadStyle thead tr{
+            height: 40px;background: rgb(65, 199, 214);
+            font-size: 15px;
+        }
+        .theadStyle tbody tr{
+            height: 40px;
+            font-size: 15px;
+        }
+        .info-fb{
+            background: url("../../../static/images/xxfb.png")no-repeat ;
+        }
+
+
+
+        .search-container {
+            margin: 42px 16px 42px 0;
+            position: relative;
+            width: 313px;
+            float: right;
+        }
+
+        .search-icon {
+            display: inline-block;
+            height: 35px;
+            width: 35px;
+            background: url(../../../static/assets/img/seach-icon.png) no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            left: -29px;
+            top: 8px;
+        }
+
+        .search-container::after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .form-input {
+            border-radius: 50px;
+            width: 350px;
+            margin-right: 10px;
+            border: solid 1px #A3C3FA;
+            height: 46px;
+            text-indent: 4em;
+            float: right;
+            transition: text-indent 1s;
+            -moz-transition: text-indent 1s; /* Firefox 4 */
+            -webkit-transition: text-indent 1s; /* Safari 和 Chrome */
+            -o-transition: text-indent 1s;
+        }
+
+        input:focus {
+            outline: none !important;
+            border: 1px solid red;
+            box-shadow: 0 0 10px #719ECE;
+        }
+
+
+
+        .disa-icon{
+            background: url("../../../static/images/xxfb.png")no-repeat;
+            background-size: 90% 100%;
+        }
+        .con-icons>div>div>span:last-of-type,.msg-text,.disa-text{
+            color: #51CAD4;
+            width: 80px;
+            margin-left: 10px;
+            /*padding-left: 10px;*/
+            /*padding-right: 10px;*/
+        }
+        .con-icons>div{
+            width: 138px;
+            height: 45px;
+            font-size: 17px;
+            line-height: 45px;
+        }
+
+        .row {
+            margin-right: -15px;
+            margin-left: -13px;}
+    </style>
+</head>
+<body>
+<div class="container-fluid" id="app" style="margin-top: 20px;margin-left:20px;width: 90%">
+    <!--<div class="row" style="margin-top: -8px">-->
+    <!--<span style="margin-left: 16px">-->
+    <!--<label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);"><a href="#" style="color:rgb(255, 102, 85);">信息发布&gt;&gt;</a></label>-->
+    <!--</span>-->
+    <!--</div>-->
+    <div class="row titile" style="margin-top: -48px">
+        <input type="file" class="uploadfile" name="file" multiple style="display: none;">
+        <!--<div class="col-sm-6 con-icons" id="titile">-->
+        <!--<div class="col-sm-3 example-excel" >-->
+        <!--<img src="../../../static/images/xxfb.png" style="width: 25px;height: 25px">-->
+        <!--<a style="color: rgb(67, 200, 214);font-size: 18px">信息发布</a>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-6">-->
+        <!--<div class="input-group">-->
+        <!--<input id="inpu" type="text"  placeholder="标题" class="form-control">-->
+        <!--<span id="search11" class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="container con-icons">
+            <div id="titile" class="col-sm-3 disableds ">
+                <span class="col-sm-4 disa-icon"></span>
+                <span class="col-sm-5 col-sm-offset-1 disa-text">信息发布 </span>
+            </div>
+        </div>
+        <div class="search-container">
+            <span id="search11" class="search-icon"></span>
+            <input id="inpu" class="form-input" type="text" placeholder="标题...">
+        </div>
+    </div>
+    <table id="dogCardTable"></table>
+
+</div>
+</body>
+</html>

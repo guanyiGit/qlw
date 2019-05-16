@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="../../../static/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!-- 引入bootstrap select插件 -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-select.min.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/Operator_manager/power_manager.js"></script>
+    <!--引入stringbuffer.js-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!-- 弹框组件 -->
+    <script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery.form.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/search-input.css">
+    <style>
+        .col-sm-1 {
+            padding: 0;
+            line-height: 34px;
+        }
+    </style>
+
+</head>
+<body>
+<!--分配角色-->
+<div id="assign_role" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-title">
+                <h1 class="text-center">分配角色</h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-group">
+                    <div class="form-group">
+                        <label for="checkRole">请选择角色</label>
+                        <select id="checkRole" class="selectpicker form-control" multiple  name="checkRole">
+                            <option value="1">犬只办</option>
+                            <option value="2">收容所</option>
+                            <option value="3">犬主</option>
+                            <option value="4">宠物医院</option>
+                            <option value="5">运营方</option>
+                        </select>
+                    </div>
+                    <div class="text-right">
+                        <button id="role_submit" class="btn btn-primary" >确定</button>
+                        <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="add_user" class="modal fade" tabindex="-1" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">注册</h1>
+                </div>
+                <div class="modal-body">
+                    <form  id="user_form" class="form-group">
+                        <div class="form-group">
+                            <label for="userName">用户名称</label>
+                            <input id="userName" class="form-control" type="text"  name="name" placeholder="请输入用户名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="sex">性别</label>
+                            <select id="sex" class="selectpicker form-control" name="sex" title="请选择性别">
+                                <option value="0">男</option>
+                                <option value="1">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">联系方式</label>
+                            <input class="form-control" id="phone" type="text"  name="phone"  placeholder="请输入11位手机号码">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">邮箱email</label>
+                            <input class="form-control" id="email" type="text"  name="email"  placeholder="example@163.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="orgType">机构类型</label>
+                            <select id="orgType" class="selectpicker form-control" name="orgType" title="请选择机构类型" onchange="orgTypeOnchange(this)" >
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="orgName">机构名称</label>
+                                <select id="orgName" class="selectpicker form-control" data-live-search="true" name="organizationId" title="请输入机构名称"></select>
+                        </div>
+                        <div class="text-right">
+                            <button id="submit_button" class="btn btn-primary">确定</button>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+</div>
+
+<div  class="container-fluid" style="width: 90%;padding-top: 30px">
+    <div class="row">
+        <ul id="myNav" class="nav nav-pills ">
+            <li class="activeli" style="width: 48%;text-align: center;">
+                <a href="#user" data-toggle="tab" >
+                    用&nbsp;&nbsp;&nbsp;&nbsp;户
+                </a>
+            </li>
+            <li style="width: 48%;text-align: center"><a href="#role" data-toggle="tab">角&nbsp;&nbsp;&nbsp;&nbsp;色</a></li>
+        </ul>
+    </div>
+    <div id="my" class="tab-content">
+        <div class="tab-pane fade in active" id="user">
+            <div  class="row texts" style="margin-top: 20px">
+                <div class="col-sm-1">
+                    <a data-toggle="modal" data-target="#add_user" href="#"><span  class="glyphicon glyphicon-plus" style="color: rgb(67, 200, 214)">新增用户</span></a>
+                </div>
+                <div class="col-sm-1">
+                    <a id="delete_user" ><span class="glyphicon glyphicon-remove" style="color: rgb(67, 200, 214)">删除用户</span></a>
+                </div>
+                <div class="col-sm-1">
+                    <a data-toggle="modal" data-target="#assign_role"  href="#"><span class="glyphicon glyphicon-star" style="color: rgb(67, 200, 214)">分配角色</span></a>
+                </div>
+                <div class="col-sm-1">
+                    <a id="enable"><span  class="glyphicon glyphicon-eye-open" style="color: rgb(67, 200, 214)">启用</span></a>
+                </div>
+                <div class="col-sm-1">
+                   <a id="disable"> <span  class="glyphicon glyphicon-eye-close" style="color: rgb(67, 200, 214)">禁用</span></a>
+                </div>
+                <div class="col-sm-7">
+                    <div class="search-container">
+                        <span class="search-icon " id="query_user"></span>
+                        <input class="form-input" type="text" placeholder="标题">
+                    </div>
+
+                    <!--<div class="input-group">-->
+                        <!--<input id="query_user" type="text"  placeholder="用户编号/手机号" class="form-control">-->
+                        <!--<span  class="input-group-addon "><a href="#"><i class="glyphicon glyphicon-search"> <span id="searchUser">搜索   </span></i></a></span>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <!-- 用户列表 -->
+            <div>
+                <table id="userTable"></table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="role">
+            <div  class="row" style="margin-top: 20px">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input id="query_role" type="text"  placeholder="角色编号/角色名称" class="form-control">
+                        <span class="input-group-addon query"><a href="#"><i class="glyphicon glyphicon-search"> <span id="searchRole">搜索   </span></i></a></span>
+                    </div>
+                </div>
+            </div>
+            <!-- 角色列表 -->
+            <div>
+                <table id="roleTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    .activeli{
+        background-color: #49C8DA;
+    }
+    .activeli a{
+        color: #fff;
+    }
+    .texts>div{
+        line-height: 114px;
+    }
+    .texts>div:last-child{
+        height: auto;
+    }
+    #myNav{
+        font-size: 18px;
+    }
+
+</style>
+</html>

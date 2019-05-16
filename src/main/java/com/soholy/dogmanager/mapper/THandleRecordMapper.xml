@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.THandleRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.THandleRecord" >
+    <id column="handle_id" property="handleId" jdbcType="BIGINT" />
+    <result column="collection_id" property="collectionId" jdbcType="BIGINT" />
+    <result column="claim_name" property="claimName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="handle_reason" property="handleReason" jdbcType="VARCHAR" />
+    <result column="handle_time" property="handleTime" jdbcType="TIMESTAMP" />
+    <result column="handle_type" property="handleType" jdbcType="INTEGER" />
+    <result column="card_type" property="cardType" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="adress" property="adress" jdbcType="VARCHAR" />
+    <result column="handle_way" property="handleWay" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    handle_id, collection_id, claim_name, phone, operator_id, card_num, handle_reason, 
+    handle_time, handle_type, card_type, remark, adress, handle_way
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.THandleRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_handle_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_handle_record
+    where handle_id = #{handleId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_handle_record
+    where handle_id = #{handleId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.THandleRecordExample" >
+    delete from t_handle_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.THandleRecord" >
+    insert into t_handle_record (handle_id, collection_id, claim_name, 
+      phone, operator_id, card_num, 
+      handle_reason, handle_time, handle_type, 
+      card_type, remark, adress, 
+      handle_way)
+    values (#{handleId,jdbcType=BIGINT}, #{collectionId,jdbcType=BIGINT}, #{claimName,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{operatorId,jdbcType=BIGINT}, #{cardNum,jdbcType=VARCHAR}, 
+      #{handleReason,jdbcType=VARCHAR}, #{handleTime,jdbcType=TIMESTAMP}, #{handleType,jdbcType=INTEGER}, 
+      #{cardType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{adress,jdbcType=VARCHAR}, 
+      #{handleWay,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.THandleRecord" >
+    insert into t_handle_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="handleId != null" >
+        handle_id,
+      </if>
+      <if test="collectionId != null" >
+        collection_id,
+      </if>
+      <if test="claimName != null" >
+        claim_name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="handleReason != null" >
+        handle_reason,
+      </if>
+      <if test="handleTime != null" >
+        handle_time,
+      </if>
+      <if test="handleType != null" >
+        handle_type,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="adress != null" >
+        adress,
+      </if>
+      <if test="handleWay != null" >
+        handle_way,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="handleId != null" >
+        #{handleId,jdbcType=BIGINT},
+      </if>
+      <if test="collectionId != null" >
+        #{collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="claimName != null" >
+        #{claimName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="handleReason != null" >
+        #{handleReason,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null" >
+        #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleType != null" >
+        #{handleType,jdbcType=INTEGER},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null" >
+        #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="handleWay != null" >
+        #{handleWay,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.THandleRecordExample" resultType="java.lang.Integer" >
+    select count(*) from t_handle_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_handle_record
+    <set >
+      <if test="record.handleId != null" >
+        handle_id = #{record.handleId,jdbcType=BIGINT},
+      </if>
+      <if test="record.collectionId != null" >
+        collection_id = #{record.collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.claimName != null" >
+        claim_name = #{record.claimName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorId != null" >
+        operator_id = #{record.operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.cardNum != null" >
+        card_num = #{record.cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.handleReason != null" >
+        handle_reason = #{record.handleReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.handleTime != null" >
+        handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.handleType != null" >
+        handle_type = #{record.handleType,jdbcType=INTEGER},
+      </if>
+      <if test="record.cardType != null" >
+        card_type = #{record.cardType,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adress != null" >
+        adress = #{record.adress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.handleWay != null" >
+        handle_way = #{record.handleWay,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_handle_record
+    set handle_id = #{record.handleId,jdbcType=BIGINT},
+      collection_id = #{record.collectionId,jdbcType=BIGINT},
+      claim_name = #{record.claimName,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      operator_id = #{record.operatorId,jdbcType=BIGINT},
+      card_num = #{record.cardNum,jdbcType=VARCHAR},
+      handle_reason = #{record.handleReason,jdbcType=VARCHAR},
+      handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+      handle_type = #{record.handleType,jdbcType=INTEGER},
+      card_type = #{record.cardType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      adress = #{record.adress,jdbcType=VARCHAR},
+      handle_way = #{record.handleWay,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.THandleRecord" >
+    update t_handle_record
+    <set >
+      <if test="collectionId != null" >
+        collection_id = #{collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="claimName != null" >
+        claim_name = #{claimName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="handleReason != null" >
+        handle_reason = #{handleReason,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null" >
+        handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleType != null" >
+        handle_type = #{handleType,jdbcType=INTEGER},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null" >
+        adress = #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="handleWay != null" >
+        handle_way = #{handleWay,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where handle_id = #{handleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.THandleRecord" >
+    update t_handle_record
+    set collection_id = #{collectionId,jdbcType=BIGINT},
+      claim_name = #{claimName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      card_num = #{cardNum,jdbcType=VARCHAR},
+      handle_reason = #{handleReason,jdbcType=VARCHAR},
+      handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      handle_type = #{handleType,jdbcType=INTEGER},
+      card_type = #{cardType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      adress = #{adress,jdbcType=VARCHAR},
+      handle_way = #{handleWay,jdbcType=VARCHAR}
+    where handle_id = #{handleId,jdbcType=BIGINT}
+  </update>
+</mapper>

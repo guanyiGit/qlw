@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>已认领</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+	<script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <script type="text/javascript" src="../../../static/js/YLUtils.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/AdoptionDetail.js"></script>
+    <style>
+        .biginput{
+            width: 350px;
+        }
+        .leftdiv{
+            margin-left: 20%;
+        }
+    </style>
+
+</head>
+<body >
+    <div class="container-fluid" style="width: 1200px" id="detail">
+        <div style="z-index: 14;">
+            <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label" style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);"><div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+                <div style="width: auto; height: auto; text-align: left;">
+                    <div style="width: auto; height: auto;">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                   	已认领&gt;&gt;查看详情
+                        </label>
+                    </div>
+                </div>
+            </div>
+                <div style="display: none;"></div>
+            </div>
+        </div>
+        <div class="panel panel-default" style="margin-top: 20px">
+            <div class="row" style="margin-right: 20px;margin-left: 20px;margin-top: 10px">
+                <div class="titile-tab" style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px">&nbsp&nbsp&nbsp&nbsp犬只信息</div>
+       <div class="col-sm-10" style="height: 100%">
+                    <form>
+                        <div style="margin-top: 20px">
+                            <span style="margin-left: 10px">
+                                <laber>犬只编号:</laber>
+                                <input  type="text" id="qzbh">
+                            </span>
+                            <span  style="margin-left: 210px">
+                                <laber>犬舍编号:</laber>
+                                <input  type="text" id="qsbh">
+                            </span>
+                        </div>
+                        <div >
+                            <span style="margin-left: 10px;">
+                                <laber>标示牌号:</laber>
+                                <input  type="text" id="bsph">
+                            </span>
+                            <span style="margin-left: 210px;">
+                                <laber>犬只名称:</laber>
+                                <input  type="text" id="qzmc">
+                            </span>
+                        </div>
+                        <div class="type">
+                            <span style="margin-left: 10px" >
+                                <laber>品种:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="csrq" type="text">
+                                <!-- <select id="breedSelect" style="width:174px">
+                                </select> -->
+                            </span>
+                            <span  style="margin-left: 210px">
+                                <laber>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                               <!--  <input id="ms" type="text"> -->
+                               <input type="radio" name="xb" value="0" id="xb1">雄
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="radio" name="xb" value="1" id="xb2">雌
+                            </span>
+                        </div>
+                        <div >
+                            <span style="margin-left: 10px;">
+                                <laber>犬龄:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="ql" type="text">
+                            </span>
+                            <span  style="margin-left: 209px">
+                                <laber>毛色:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="ms" type="text">
+                                  <!--  <select id="colorSelect" style="width:174px">
+                                	</select> -->
+                            </span>
+                        </div>
+                        <div s>
+                            <span style="margin-left: 10px;">
+                                <laber>体重:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="tz" type="text">
+                            </span>
+                            <span  style="margin-left: 209px">
+                                <laber>特点:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="td" type="text">
+                            </span>
+                        </div>
+                        <div >
+                            <span style="margin-left: 10px;">
+                                <laber>健康状况:</laber>
+                                <!-- <input id="jkzk" type="text"> -->
+                                   <select id="jkzk"  style="width: 168px;height: 27px;">
+                                    <option value="0">良好</option>
+                                    <option value="1">差</option>
+                                </select>
+                            </span>
+                            <span  style="margin-left: 209px">
+                                <laber>收容原因:</laber>
+                                <input id="sryy" type="text">
+                                 <!--  <select id="collTypeSelect" style="width:174px">
+                                </select> -->
+                            </span>
+                        </div>
+                        <div >
+                            <span style="margin-left: 10px;">
+                                <laber>收容时间:</laber>
+                                <input id="srsj" type="text">
+                            </span>
+                        </div>
+                        <div >
+                            <span style="margin-left: 10px;">
+                                <laber>备注:</laber>
+                                <textarea class="form-control" id="bz" name="deblock_udid" rows="16" style="min-width:60%;max-width: 99%;height: 150px;margin-left: 10px;"></textarea>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-2" style="height: 100%">
+                    <div style="width:100px;height:100px;line-height: 1px;margin-top: 20px">
+                        <div class="panel panel-info "   >
+                            <img src="../../images/dog.jpg" alt="没有图片" id="pic">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-right: 20px;margin-left: 20px;margin-top: 10px">
+                <div class="titile-tab" style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px">&nbsp&nbsp&nbsp&nbsp认领信息</div>
+                <div class="col-sm-12" style="height: 100%;margin-bottom: 50px;margin-top: 20px;">
+                    <form>
+                        <div class="leftdiv" style="margin-top: 20px">
+                            <span>
+                                <laber>认领时间:</laber>
+                                <input class="biginput" id="rlsj" type="text">
+                            </span>
+                        </div>
+                        <div class="leftdiv"style="margin-top: 20px">
+                            <span>
+                                <laber>认领人:&nbsp&nbsp&nbsp</laber>
+                                <input class="biginput" id="rlr" type="text">
+                            </span>
+                        </div>
+                        <div class="leftdiv" style="margin-top: 20px">
+                            <span>
+                                <laber>证件类型:</laber>
+                                <input class="biginput" id="zjlx" type="text">
+                            </span>
+                        </div>
+                        <div class="leftdiv" style="margin-top: 20px">
+                            <span>
+                                <laber>证件号码:</laber>
+                                <input class="biginput" id="zjhm" type="text">
+                            </span>
+                        </div>
+                        <div class="leftdiv" style="margin-top: 20px">
+                            <span>
+                                <laber>联系电话:</laber>
+                                <input class="biginput" id="lxdh" type="text">
+                            </span>
+                        </div>
+                        <div class="leftdiv" style="margin-top: 20px">
+                            <span>
+                                <laber>养犬地址:</laber>
+                                <input class="biginput" id="yqdz" type="text">
+                            </span>
+                        </div>
+                        <div class="leftdiv" style="margin-top: 20px;padding-bottom: 20px;">
+                            <span class="text-alilt">
+                                <laber>备注:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <!--<textarea id="bz" class="form-control"  rows="16" style="height: 80px;margin-left: 10px;position: relative;top: -15px;left: 54px;width: 350px;"></textarea>-->
+                                <textarea id="bz" class="form-control"  rows="16" ></textarea>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    .titile-tab{
+        color: #fff;
+        font-size: 17px;
+    }
+    form>div{
+        height: 40px;
+        line-height: 40px;
+        border-bottom: dashed 1px #aaa;
+    }
+    form>div:last-child{height: auto}
+    form>div>span{
+
+    }
+    form>div:nth-child(odd){
+        background-color: #eee;
+    }
+    form>div:nth-child(even){
+        /*background-color: #bbb;*/
+    }
+    form input{
+        height: 28px;
+        line-height: 28px;
+    }
+    form laber{
+        width: 110px;
+        display: inline-block;
+    }
+    .type>span{
+        line-height: 40px;
+        height: 40px;
+        display: inline-block;
+        margin-top: -6px;
+    }
+    .leftdiv{
+        margin: 0 auto;
+        padding-left: 10px;
+    }
+    .leftdiv>span>label{
+        width: 110px;
+        display: inline-block;
+    }
+    #bz{
+        min-width: 60%;
+        max-width: 80%;
+        height: 150px;
+    }
+</style>
+</html>

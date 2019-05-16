@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--运营方首页-->
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+
+    <!--<link href="../../../static/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">-->
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+
+    <!--引入echarts-->
+    <script type="text/javascript" src="../../../static/echarts/echarts.min.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/homePage/operatorHomePage.js"></script>
+
+    <style>
+        .cartogram{
+            /*margin-top: 10px;*/
+            margin-top: 10px;
+            position: absolute;
+            left: 40px;
+            font-size: 18px;
+            font-family: 微软雅黑;
+            color: rgb(65, 199, 214);
+        }
+        .myMessageSpanLeft{
+            position: relative;
+            left: 3%;
+            font-size: 16px;
+        }
+        .myMessageSpanRight{
+            position: relative;
+            right: -42%;
+        }
+        .jrzxdiv{
+            position: relative;
+            top: 30%;
+        }
+        .jrzxdivdiv1{
+            display: inline-block;
+            position: relative;
+            left: 20px;
+        }
+        .jrzxdivdiv2{
+            display: inline-block;
+            position: relative;
+            left: 65px;
+            font-size: 16px;
+        }
+        .jrzxdivdiv3{
+            display: inline-block;
+            position: absolute;
+            right:35px;
+            font-size: 24px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid" style="width: 1200px">
+        <div class="row" style="margin-top: 20px">
+            <div class="col-sm-8">
+                <div style="border: 1px solid gray;">
+                    <div class="cartogram">
+                        <label>我的消息</label>
+                    </div>
+                    <!--分隔线-->
+                    <hr style="border: 1px solid #0f0f0f;width: 96%;position: absolute;top: 26px">
+                    <!--echarts-->
+                    <div id="myMessage" style="height:423px;margin-top: 20px"></div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="border: 1px solid rgb(255, 102, 85);height: 77px;border-radius: 10px">
+                            <div class="jrzxdiv">
+                                <div class="jrzxdivdiv1">
+                                    <img src="../../../static/images/operator/3.png">
+                                </div>
+                                <div class="jrzxdivdiv2">今日在线人数</div>
+                                <div id="onlineCount" class="jrzxdivdiv3">32</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <!-- <div class="row" style="margin-top: 10px">
+                    <div class="col-sm-12">
+                        <div style="border: 1px solid rgb(255, 153, 102);height: 77px;border-radius: 10px">
+                            <div class="jrzxdiv">
+                                <div class="jrzxdivdiv1">
+                                    <img src="../../../static/images/operator/2.png">
+                                </div>
+                                <div class="jrzxdivdiv2">今日设备在线数量</div>
+                                <div class="jrzxdivdiv3">32</div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-sm-12">
+                        <div style="border: 1px solid rgb(255, 204, 102);height: 77px;border-radius: 10px;">
+                            <div class="jrzxdiv">
+                                <div class="jrzxdivdiv1">
+                                    <img src="../../../static/images/operator/1.png">
+                                </div>
+                                <div class="jrzxdivdiv2">今日信息发布条数</div>
+                                <div id="msg" class="jrzxdivdiv3">32</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div style="border: 1px solid gray;margin-top: 20px">
+                            <div style="margin-top: 10px">
+                                <label style="margin-left: 20px;color: rgb(65, 199, 214);font-size: 14px;">设备使用情况</label>
+                            </div>
+                            <!--分隔线-->
+                            <hr style="border: 1px solid #0f0f0f;width: 92%;position: absolute;top: 40px;">
+                            <div id="sbsydetail" style="margin-top: 15px;height: 172px"></div>
+
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px">
+            <div class="col-sm-12">
+                <div style="border: 1px solid gray;">
+                    <div class="cartogram">
+                        <label>用户在线趋势</label>
+                    </div>
+                    <hr style="border: 1px solid gray;width: 97%;position: absolute;top: 27px;">
+                    <div id="yhzxEchart" style="height: 400px;margin-top: 100px"></div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row" style="margin-top: 20px">
+            <div class="col-sm-12">
+                <div style="border: 1px solid gray;">
+                    <div class="cartogram">
+                        <label>设备在线趋势</label>
+                    </div>
+                    <hr style="border: 1px solid gray;width: 97%;position: absolute;top: 27px;">
+                    <div id="deviceOnlineEchart" style="height: 400px;margin-top: 100px"></div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</body>
+</html>

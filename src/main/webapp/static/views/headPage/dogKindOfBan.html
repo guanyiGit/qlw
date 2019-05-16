@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>禁养犬种</title>
+    <!--禁养犬种-->
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="../../../static/ImgPageGrid/js/jquery-ui.min.js"></script>
+    <!--引入ImgPageGrid js css-->
+    <link href="../../../static/ImgPageGrid/css/imggrid.css" rel="stylesheet" />
+    <link href="../../../static/ImgPageGrid/css/animate.min.css" rel="stylesheet" />
+    <script src="../../../static/ImgPageGrid/js/imggrid.js"></script>
+
+    <!--引入bootstrap-select 组件-->
+    <link href="../../../static/easyui/demo/demo.css" rel="stylesheet" />
+    <link href="../../../static/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../static/easyui/themes/icon.css" rel="stylesheet" />
+    <script src="../../../static/easyui/jquery.easyui.min.js"></script>
+
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/headPage/dogKindOfBan.js"></script>
+    <style>
+        .divMargin{
+            margin-right: 97px;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="imggrid">-->
+<!--</div>-->
+<div class="container-fluid" style="width: 1200px;margin-left: -60px;margin-top: -40px">
+    <div class="row" style="width: 1000px;position: relative;margin-right: auto;margin-left: auto;">
+        <div class="col-sm-12">
+            <div class="row" style="margin-top: 20px">
+                    <span style="">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);"><a href="#" style="color:rgb(255, 102, 85);">禁养品种&gt;&gt;</a></label>
+                    </span>
+            </div>
+            <hr style="border: 1px dashed #ccc;width:103%;height:0px;position: relative;left: -14px;">
+            <!--<div class="row" style="margin-top: 20px">-->
+                <!--<form class="form-inline" role="form" style="width: 1135px;">-->
+                    <!--<div class="form-group divMargin">-->
+                        <!--<label class="" for="breedSelect">品种:</label>-->
+                        <!--<input id="breedSelect">-->
+                    <!--</div>-->
+                    <!--<div class="form-group divMargin">-->
+                        <!--<label class="" for="sexSelect">性别:</label>-->
+                        <!--<input id="sexSelect">-->
+                    <!--</div>-->
+                    <!--<div class="form-group divMargin">-->
+                        <!--<label class="" for="dogAgeSelect">犬龄:</label>-->
+                        <!--<input id="dogAgeSelect">-->
+                    <!--</div>-->
+                    <!--<div class="form-group ">-->
+                        <!--<label class="" for="hairColorSelect">毛色:</label>-->
+                        <!--<input id="hairColorSelect">-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</div>-->
+            <span style="color: rgb(255, 102, 85);margin-left: -15px">声明：图片仅供参考，最终以养犬登记站审核为准！</span>
+                <div class="input-group" style="width: 300px;margin-left: 683px;margin-top: -25px">
+                    <input id="input" type="text"  placeholder="" class="form-control">
+                    <span class="input-group-addon" id="ss"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>
+                </div>
+            <div class="row" style="margin-top: 20px">
+                <div id="imggrid"  style=""></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

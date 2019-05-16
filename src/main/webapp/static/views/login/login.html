@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--登录页面-->
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <!--<script type="text/javascript" src="../../../static/views/login/login.js"></script>-->
+    <style>
+        .parent {
+            /*width:1200px;*/
+            height:975px;
+            /*border:2px solid #000;*/
+            position:relative;
+            background-size: 100% 100%;
+        }
+        .child {
+            width:660px;
+            height:409px;
+            margin: auto;
+            position: absolute;
+            top: 60px; left: 0; bottom: 0; right: 0;
+            background-color: white;
+        }
+        /*.input{*/
+            /*margin: 47px 0;*/
+            /*text-align: center;*/
+            /*font-size: 18px;*/
+        /*}*/
+        /*.input input{*/
+            /*margin-left: 20px;*/
+        /*}*/
+        .clear-pwd{
+            margin-left: 55px;
+        }
+        .btns{
+            margin-top: 30px;
+        }
+        #login{
+            font-size: 18px;
+            /*letter-spacing:10px;*/
+            text-align: center;
+        }
+        .inputs>*{
+            display: inline-block;
+        }
+        .inputs input{
+            width: 300px;
+            margin-left: 10px;
+        }
+        .inputs{
+            padding-left: 22%;
+            margin: 33px auto;
+        }
+        .btns{
+            padding-left: 25%;
+            margin-top: -8px;
+        }
+        .input{
+            margin-top: 50px;
+        }
+        .login-main{
+            margin-right: -2.1%;
+            margin-left: -2.1%;
+            padding: 0;
+            margin-top: -0.7%;
+            margin-bottom: -0.7%;
+        }
+    </style>
+    <script>
+        var logUser={username:null,password:null}
+        //页面载入完毕后执行
+        $(function() {
+            // $.ajaxSetup({
+            //     async: false
+            // });
+            //给登录按钮绑定单击处理
+            $("#login").click(function(){
+                login();
+            });
+            $("#loginName").focus(function(){
+                $("#count_span").empty();
+            });
+            $('#password').focus(function(){
+                $("#count_span").empty();
+            });
+        });
+        //登录处理
+        function login() {
+            var ok = true;
+            //获取请求参数
+            var username = $("#loginName").val().trim();
+            var password = $("#password").val().trim();
+            logUser.username=username;
+            logUser.password=password;
+            //检测参数格式
+            // var accReg=/^\d{12}$/;
+            var mmReg=/^[a-zA-Z0-9]{6,15}$/;
+            // if (accAccount == ""||!accReg.test(accAccount)) {
+            //     ok = false;
+            //     $("#count_span").empty().html("工号为8位数字");
+            // }
+            if (password == ""||!mmReg.test(password)) {
+                ok = false;
+                $("#count_span").empty().html("密码错误!");
+            }
+            //发送Ajax请求
+            if (ok) {
+                var url = "/biz/login"+"?"+Math.random();
+                $.post(url, logUser, function(results) {
+                    console.log(results)
+                    if (results.status == 200 && results.data!=null) {
+                        window.sessionStorage.setItem("user",JSON.stringify(results.data));
+                        window.location.href="../../../static/index.html";
+                    }else if (results.status == 200 && results.data==null) {
+                        window.location.href="../../../static/index.html";
+                    }else {
+                        $("#count_span").empty().html(results.msg);
+                    }
+                },'json');
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container-fluid login-main">
+        <div  style="background: url('../../../static/images/A8975B86644634A84A44330C3F69933B.jpg');" class="parent">
+            <div class="child" style="border-radius: 12px">
+                <div class="" style="text-align: center;margin-top: 50px">
+                    <img src="../../../static/images/DB53DACABCA7D7F6798B554CE0CB1656.png" style="width: 250px;height: 65px">
+                </div>
+                <!--<div style="margin-top: 20px;margin-left: 135px">-->
+                <div >
+                    <form class="form-group input">
+                        <div  class="inputs">
+                            <label>用户名:</label>
+                            <!--<span class="input-group-addon" id="basic-addon1">@</span>-->
+                            <input type="text" id="loginName" class="form-control" placeholder="请输入用户名" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="inputs">
+                            <label>密&nbsp&nbsp&nbsp&nbsp码:</label>
+                            <!--<span class="input-group-addon" id="basic-addon2">@</span>-->
+                            <input type="password" id="password" class="form-control" placeholder="请输入密码" aria-describedby="basic-addon1">
+                        </div>
+
+                        <!--<div class="form-inline" style="margin-bottom: 20px">-->
+                            <!--<label>用户名:</label>-->
+                            <!--<input id="loginName" style="border:1px solid #b6b6b6;">-->
+                        <!--</div>-->
+                        <!--<div class="form-inline">-->
+                            <!--<label>密&nbsp&nbsp&nbsp&nbsp码:</label>-->
+                            <!--<input id="password" type="password" style="border:1px solid #b6b6b6;">-->
+                        <!--</div>-->
+                        <span id="count_span" style="margin-left: 53px;color: red"></span>
+                        <!--<div class="form-group" style="margin-top: 20px">-->
+                            <!--<label class="radio-inline">-->
+                                <!--<input type="radio"  value="option1" name="">犬只办-->
+                            <!--</label>-->
+                            <!--<label class="radio-inline">-->
+                                <!--<input type="radio"  value="option2" name="">宠物医院-->
+                            <!--</label>-->
+                            <!--<label class="radio-inline">-->
+                                <!--<input type="radio"  value="option3"name="">收容所-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="radio-inline">-->
+                                <!--<input type="radio"  value="option1" name="">畜牧局-->
+                            <!--</label>-->
+                            <!--<label class="radio-inline">-->
+                                <!--<input type="radio"  value="option2" name="">卫生监督所-->
+                            <!--</label>-->
+                            <!--<label class="radio-inline">-->
+                                <!--<input type="radio"  value="option3" name="">犬主-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <!--<div style="margin-top: 20px;margin-left: 36px">-->
+                        <div class="btns">
+                            <!--<button type="submit" style="background-color: rgb(153, 204, 255)"><span style="color: white">登录</span></button>-->
+                            <button id="login" type="button" class="btn btn-primary"  style="width: 177px">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                            <a href="#" class="clear-pwd">忘记密码</a>
+                        </div>
+                    </form>
+                </div>
+                <!--<div>-->
+                    <!--<ul class="list-inline">-->
+                        <!--<li>-->
+                            <!--<label class="checkbox-inline">-->
+                                <!--<input type="checkbox" id="inlineCheckbox1" value="option1">犬只办-->
+                             <!--</label>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label class="checkbox-inline">-->
+                                <!--<input type="checkbox" id="inlineCheckbox1" value="option1">犬只办-->
+                            <!--</label>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label class="checkbox-inline">-->
+                                <!--<input type="checkbox" id="inlineCheckbox1" value="option1">犬只办-->
+                            <!--</label>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+
+                <!--</div>-->
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

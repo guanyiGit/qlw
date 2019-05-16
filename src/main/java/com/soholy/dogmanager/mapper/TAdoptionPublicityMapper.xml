@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TAdoptionPublicityMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TAdoptionPublicity" >
+    <id column="adoption_publicity_id" property="adoptionPublicityId" jdbcType="BIGINT" />
+    <result column="collection_id" property="collectionId" jdbcType="BIGINT" />
+    <result column="publish_date" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="expire_date" property="expireDate" jdbcType="TIMESTAMP" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="publish_org_id" property="publishOrgId" jdbcType="INTEGER" />
+    <result column="dog_status" property="dogStatus" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    adoption_publicity_id, collection_id, publish_date, expire_date, operator_id, publish_org_id, 
+    dog_status, create_date
+  </sql>
+  
+  <insert id="saveAdoptionPublicityBatch" parameterType="java.util.List">
+  	insert into t_adoption_publicity (adoption_publicity_id, collection_id, 
+      publish_date, expire_date, operator_id, 
+      publish_org_id, dog_status, create_date
+      )
+   	 VALUES
+    <foreach collection="list" item="item" separator=",">
+       (#{item.adoptionPublicityId,jdbcType=BIGINT}, #{item.collectionId,jdbcType=BIGINT}, 
+	      #{item.publishDate,jdbcType=TIMESTAMP}, #{item.expireDate,jdbcType=TIMESTAMP}, #{item.operatorId,jdbcType=BIGINT}, 
+	      #{item.publishOrgId,jdbcType=INTEGER}, #{item.dogStatus,jdbcType=INTEGER}, #{item.createDate,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+  
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicityExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_adoption_publicity
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_adoption_publicity
+    where adoption_publicity_id = #{adoptionPublicityId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_adoption_publicity
+    where adoption_publicity_id = #{adoptionPublicityId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicityExample" >
+    delete from t_adoption_publicity
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicity" >
+    insert into t_adoption_publicity (adoption_publicity_id, collection_id, 
+      publish_date, expire_date, operator_id, 
+      publish_org_id, dog_status, create_date
+      )
+    values (#{adoptionPublicityId,jdbcType=BIGINT}, #{collectionId,jdbcType=BIGINT}, 
+      #{publishDate,jdbcType=TIMESTAMP}, #{expireDate,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, 
+      #{publishOrgId,jdbcType=INTEGER}, #{dogStatus,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicity" >
+    insert into t_adoption_publicity
+  	  <selectKey resultType ="java.lang.Long" keyProperty= "adoptionPublicityId"
+                   order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     	</selectKey >
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adoptionPublicityId != null" >
+        adoption_publicity_id,
+      </if>
+      <if test="collectionId != null" >
+        collection_id,
+      </if>
+      <if test="publishDate != null" >
+        publish_date,
+      </if>
+      <if test="expireDate != null" >
+        expire_date,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="publishOrgId != null" >
+        publish_org_id,
+      </if>
+      <if test="dogStatus != null" >
+        dog_status,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adoptionPublicityId != null" >
+        #{adoptionPublicityId,jdbcType=BIGINT},
+      </if>
+      <if test="collectionId != null" >
+        #{collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireDate != null" >
+        #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="publishOrgId != null" >
+        #{publishOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="dogStatus != null" >
+        #{dogStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicityExample" resultType="java.lang.Integer" >
+    select count(*) from t_adoption_publicity
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_adoption_publicity
+    <set >
+      <if test="record.adoptionPublicityId != null" >
+        adoption_publicity_id = #{record.adoptionPublicityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.collectionId != null" >
+        collection_id = #{record.collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.publishDate != null" >
+        publish_date = #{record.publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.expireDate != null" >
+        expire_date = #{record.expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operatorId != null" >
+        operator_id = #{record.operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.publishOrgId != null" >
+        publish_org_id = #{record.publishOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dogStatus != null" >
+        dog_status = #{record.dogStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_adoption_publicity
+    set adoption_publicity_id = #{record.adoptionPublicityId,jdbcType=BIGINT},
+      collection_id = #{record.collectionId,jdbcType=BIGINT},
+      publish_date = #{record.publishDate,jdbcType=TIMESTAMP},
+      expire_date = #{record.expireDate,jdbcType=TIMESTAMP},
+      operator_id = #{record.operatorId,jdbcType=BIGINT},
+      publish_org_id = #{record.publishOrgId,jdbcType=INTEGER},
+      dog_status = #{record.dogStatus,jdbcType=INTEGER},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicity" >
+    update t_adoption_publicity
+    <set >
+      <if test="collectionId != null" >
+        collection_id = #{collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="publishDate != null" >
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireDate != null" >
+        expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="publishOrgId != null" >
+        publish_org_id = #{publishOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="dogStatus != null" >
+        dog_status = #{dogStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where adoption_publicity_id = #{adoptionPublicityId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TAdoptionPublicity" >
+    update t_adoption_publicity
+    set collection_id = #{collectionId,jdbcType=BIGINT},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      publish_org_id = #{publishOrgId,jdbcType=INTEGER},
+      dog_status = #{dogStatus,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where adoption_publicity_id = #{adoptionPublicityId,jdbcType=BIGINT}
+  </update>
+</mapper>

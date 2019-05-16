@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--犬只档案>> 犬只信息-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <script type="text/javascript" src="../../../static/js/YLUtils.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/dogDetail.js"></script>
+</head>
+<body >
+    <div class="container-fluid">
+        <div style="z-index: 14;" style="width: 1200px">
+            <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label" style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);"><div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+                <div style="width: auto; height: auto; text-align: left;">
+                    <div style="width: auto; height: auto;">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                            犬只档案&gt;&gt;犬只详情
+                        </label>
+                    </div>
+                </div>
+            </div>
+                <div style="display: none;"></div>
+            </div>
+        </div>
+        <div class="panel panel-default" style="width: 1200px;margin-top: 20px">
+            <div class="row tables" style="margin-right: 20px;margin-left: 20px;margin-top: 50px">
+                <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px">&nbsp&nbsp&nbsp&nbsp犬只信息</div>
+                <div class="col-sm-10" style="height: 100%">
+                    <div style="margin-top: 20px">
+                        <span>
+                            <labe>犬名:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input id="qm" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>品种:</labe>
+                            <input id="pz" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <span>
+                            <labe>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input id="xb" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>犬龄:</labe>
+                            <input id="ql" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <span>
+                            <labe>出生日期:</labe>
+                            <input id="csrq" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>毛色:</labe>
+                            <input id="ms" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>父本:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input id="fb" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>母本:</labe>
+                            <input id="mb" type="text">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-2" style="height: 100%">
+                    <div style="width:100px;height:100px;line-height: 1px;margin-top: 20px">
+                        <div class="panel panel-info "   >
+                            <img src="../../images/dog.jpg" alt="没有图片" id="pic">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--证件信息-->
+            <div class="row tables" style="margin-right: 20px;margin-left: 20px;margin-top: 50px">
+                <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px">&nbsp&nbsp&nbsp&nbsp证件信息</div>
+                <div  class="col-sm-12" style="height: 100%">
+                    <div style="margin-top: 20px">
+                        <span>
+                            <labe>免疫证号:</labe>
+                            <input id="myzh" type="text" >
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>签发机构:</labe>
+                            <input id="qfjg1" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <span>
+                            <labe>签发日期:</labe>
+                            <input id="qfrq1" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <span>
+                            <labe>有效期限:</labe>
+                            <input id="Syxqx1" type="text"><p style="display: inline;margin-left: 32px; margin-right: 30px;">—</p><input id="Eyxqx1" type="text">
+                        </span>
+                    </div>
+                    <!--分隔线-->
+                    <hr style="border: 2px dashed #0f0f0f;width: 100%;color: #0f0f0f;size: 1px">
+
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>犬证号码:</labe>
+                            <input id="qzhm" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>签发机构:</labe>
+                            <input id="qfjg2" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>签发日期:</labe>
+                            <input id="qfrq2" type="text"> 
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>有效期限:</labe>
+                            <input id="Syxqx2" type="text"><p style="display: inline;margin-left: 32px; margin-right: 30px;">—</p>
+                            <input id="Eyxqx2" type="text">
+                        </span>
+                    </div>
+                    <!--分隔线-->
+                    <hr style="border: 2px dashed #0f0f0f;width: 100%;color: #0f0f0f;size: 1px">
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>项圈编号:</labe>
+                            <input id="xqbh" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>签发机构:</labe>
+                            <input id="qfjg3" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>签发日期:</labe>
+                            <input id="qfrq3" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>有效期限:</labe>
+                            <input id="Syxqx3" type="text"><p style="display: inline;margin-left: 32px; margin-right: 30px;">—</p>
+                            <input id="Eyxqx3" type="text">
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <!--犬主信息-->
+            <div class="row tables" style="margin-right: 20px;margin-left: 20px;margin-top: 50px">
+                <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px">&nbsp&nbsp&nbsp&nbsp犬主信息</div>
+                <div  class="col-sm-12" style="height: 100%">
+                    <div style="margin-top: 20px">
+                        <span>
+                            <labe>犬主姓名:</labe>
+                            <input id="qzxm" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>性质:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input id="xz" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <span>
+                            <labe>证件类型:</labe>
+                            <input id="zjlx" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>证件号码:</labe>
+                            <input id="zjhm" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <span>
+                            <labe>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input id="qzxb" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>出生日期:</labe>
+                            <input id="qzqsrq" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <span>
+                            <labe>现住区县:</labe>
+                            <input id="xzxq" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>所属本门:</labe>
+                            <input id="ssbm" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <span>
+                            <labe>所属社区:</labe>
+                            <input id="sssq" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>邮编:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input id="yb" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <span>
+                            <labe>联系电话:</labe>
+                            <input id="dh" type="text">
+                        </span>
+                        <span  style="margin-left: 160px">
+                            <labe>电子邮箱:</labe>
+                            <input id="yx" type="text">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>详细地址:</labe>
+                            <input id="dz" type="text">
+                        </span>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-2" style="height: 100%">
+                    <div style="width:100px;height:100px;line-height: 1px;margin-top: 20px">
+                        <div class="panel panel-info "   >
+                            <img src="../../images/dog.jpg" alt="没有图片">
+                        </div >
+                    </div>
+                </div> -->
+            </div>
+            <!--防疫信息-->
+            <div class="row tables" style="margin-right: 20px;margin-left: 20px;margin-top: 50px">
+                <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;margin-bottom: 10px">&nbsp&nbsp&nbsp&nbsp防疫信息</div>
+                <div  class="col-sm-12" style="height: 100%">
+                    <table id="antiepidemicMessageTable"></table>
+                </div>
+            </div>
+            <!--年检信息-->
+            <div class="row tables" style="margin-right: 20px;margin-left: 20px;margin-top: 50px">
+                <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;margin-bottom: 10px">&nbsp&nbsp&nbsp&nbsp年检信息</div>
+                <div  class="col-sm-12" style="height: 100%">
+                    <table id="annualSurveyTable"></table>
+                </div>
+            </div>
+            <!--违法信息-->
+            <div class="row tables" style="margin-right: 20px;margin-left: 20px;margin-top: 50px">
+                <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;margin-bottom: 10px">&nbsp&nbsp&nbsp&nbsp违法信息</div>
+                <div  class="col-sm-12" style="height: 100%">
+                    <table id="illegalInformationTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    .panel labe{
+        display: inline-block;
+        width: 110px;
+    }
+
+    .tables>div>div{
+        height: 40px;
+        line-height: 40px;
+        border-bottom: dashed 1px #aaa;
+        margin-bottom: 20px;
+    }
+    input,select{
+        height: 30px;
+        line-height: 30px;
+        width: 220px;
+    }
+</style>
+</html>

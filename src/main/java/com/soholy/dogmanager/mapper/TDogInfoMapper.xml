@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDogInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDogInfo" >
+    <id column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="dog_breed_type" property="dogBreedType" jdbcType="INTEGER" />
+    <result column="dog_color_type" property="dogColorType" jdbcType="INTEGER" />
+    <result column="dog_name" property="dogName" jdbcType="VARCHAR" />
+    <result column="birth_time" property="birthTime" jdbcType="TIMESTAMP" />
+    <result column="dog_gender" property="dogGender" jdbcType="INTEGER" />
+    <result column="dog_character" property="dogCharacter" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="dog_status" property="dogStatus" jdbcType="INTEGER" />
+    <result column="deduction_sum" property="deductionSum" jdbcType="DOUBLE" />
+    <result column="father_id" property="fatherId" jdbcType="BIGINT" />
+    <result column="mother_id" property="motherId" jdbcType="BIGINT" />
+    <result column="health_status" property="healthStatus" jdbcType="INTEGER" />
+    <result column="operation_id" property="operationId" jdbcType="BIGINT" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="dogAge" property="dogAge" jdbcType="DOUBLE" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TDogInfo" extends="BaseResultMap" >
+    <result column="dog_remarks" property="dogRemarks" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+
+
+  <resultMap id="dogInfoMapper" type="com.soholy.dogmanager.pojo.statistic.DogInfoVO">
+    <id column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="dog_breed_type" property="dogBreedType" jdbcType="INTEGER" />
+    <result column="dog_color_type" property="dogColorType" jdbcType="INTEGER" />
+    <result column="dog_name" property="dogName" jdbcType="VARCHAR" />
+    <result column="birth_time" property="birthTime" jdbcType="TIMESTAMP" />
+    <result column="dog_gender" property="dogGender" jdbcType="INTEGER" />
+    <result column="dog_character" property="dogCharacter" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="dog_status" property="dogStatus" jdbcType="INTEGER" />
+    <result column="deduction_sum" property="deductionSum" jdbcType="DOUBLE" />
+    <result column="father_id" property="fatherId" jdbcType="BIGINT" />
+    <result column="mother_id" property="motherId" jdbcType="BIGINT" />
+    <result column="health_status" property="healthStatus" jdbcType="INTEGER" />
+    <result column="operation_id" property="operationId" jdbcType="BIGINT" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="dogAge" property="dogAge" jdbcType="DOUBLE" />
+    <result column="immune_card_num" property="immuneCardNum" jdbcType="VARCHAR" />
+    <result column="dogBreed" property="dogBreed" jdbcType="VARCHAR" />
+    <result column="dogColor" property="dogColor" jdbcType="VARCHAR" />
+    <result column="zUrl" property="zUrl" jdbcType="VARCHAR" />
+    <result column="cUrl" property="cUrl" jdbcType="VARCHAR" />
+
+  </resultMap>
+
+
+
+  <select id="findDogInfoVOById" resultMap="dogInfoMapper" parameterType="long" >
+   SELECT
+      dic.dictionary_describe dogBreed,dic2.dictionary_describe dogColor,im.thumbnail_url ztUrl,im.image_url zUrl,im.image_id zImageId,im2.thumbnail_url ctUrl,im2.image_url cUrl,im2.image_id cImageId,
+      di.dog_id,di.dog_breed_type,di.dog_gender,di.dog_color_type,di.dogAge,di.creation_time,ic.immune_card_num,di.dog_name,di.dog_owner_id
+    FROM t_dog_info di
+    LEFT JOIN t_immune_card ic
+    ON di.dog_id=ic.dog_id
+    LEFT JOIN t_dictionary dic
+    ON di.dog_breed_type=dic.dictionary_value AND dic.dictionary_field='dog_breed_type'
+    LEFT JOIN t_dictionary dic2
+    ON di.dog_color_type=dic2.dictionary_value AND dic2.dictionary_field='dog_color_type'
+    LEFT JOIN t_images_ref ir
+    ON di.dog_id =ir.ref_id AND ir.target_type=2
+    LEFT JOIN t_images im
+    ON ir.image_id=im.image_id
+    LEFT JOIN t_images_ref ir2
+    ON di.dog_id =ir2.ref_id AND ir2.target_type=10
+    LEFT JOIN t_images im2
+    ON ir2.image_id=im2.image_id
+    WHERE di.dog_id=#{dogId}
+  </select>
+
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    dog_id, dog_owner_id, dog_breed_type, dog_color_type, dog_name, birth_time, dog_gender, 
+    dog_character, weight, dog_status, deduction_sum, father_id, mother_id, health_status, 
+    operation_id, creation_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    dog_remarks
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TDogInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_dog_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TDogInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_dog_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_dog_info
+    where dog_id = #{dogId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_dog_info
+    where dog_id = #{dogId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDogInfoExample" >
+    delete from t_dog_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TDogInfo" >
+    insert into t_dog_info (dog_id, dog_owner_id, dog_breed_type, 
+      dog_color_type, dog_name, birth_time, 
+      dog_gender, dog_character, weight, 
+      dog_status, deduction_sum, father_id, 
+      mother_id, health_status, operation_id, 
+      creation_time, dog_remarks)
+    values (#{dogId,jdbcType=BIGINT}, #{dogOwnerId,jdbcType=BIGINT}, #{dogBreedType,jdbcType=INTEGER}, 
+      #{dogColorType,jdbcType=INTEGER}, #{dogName,jdbcType=VARCHAR}, #{birthTime,jdbcType=TIMESTAMP}, 
+      #{dogGender,jdbcType=INTEGER}, #{dogCharacter,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{dogStatus,jdbcType=INTEGER}, #{deductionSum,jdbcType=DOUBLE}, #{fatherId,jdbcType=BIGINT}, 
+      #{motherId,jdbcType=BIGINT}, #{healthStatus,jdbcType=INTEGER}, #{operationId,jdbcType=BIGINT}, 
+      #{creationTime,jdbcType=TIMESTAMP}, #{dogRemarks,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDogInfo" >
+  <selectKey resultType="Long" order="AFTER" keyProperty="dogId">
+            SELECT LAST_INSERT_ID() 
+        </selectKey>
+    insert into t_dog_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id,
+      </if>
+      <if test="dogBreedType != null" >
+        dog_breed_type,
+      </if>
+      <if test="dogColorType != null" >
+        dog_color_type,
+      </if>
+      <if test="dogName != null" >
+        dog_name,
+      </if>
+      <if test="birthTime != null" >
+        birth_time,
+      </if>
+      <if test="dogGender != null" >
+        dog_gender,
+      </if>
+      <if test="dogCharacter != null" >
+        dog_character,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="dogStatus != null" >
+        dog_status,
+      </if>
+      <if test="deductionSum != null" >
+        deduction_sum,
+      </if>
+      <if test="fatherId != null" >
+        father_id,
+      </if>
+      <if test="motherId != null" >
+        mother_id,
+      </if>
+      <if test="healthStatus != null" >
+        health_status,
+      </if>
+      <if test="operationId != null" >
+        operation_id,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="dogRemarks != null" >
+        dog_remarks,
+      </if>
+      <if test="dogAge != null" >
+        dogAge,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dogId != null" >
+        #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="dogBreedType != null" >
+        #{dogBreedType,jdbcType=INTEGER},
+      </if>
+      <if test="dogColorType != null" >
+        #{dogColorType,jdbcType=INTEGER},
+      </if>
+      <if test="dogName != null" >
+        #{dogName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthTime != null" >
+        #{birthTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dogGender != null" >
+        #{dogGender,jdbcType=INTEGER},
+      </if>
+      <if test="dogCharacter != null" >
+        #{dogCharacter,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="dogStatus != null" >
+        #{dogStatus,jdbcType=INTEGER},
+      </if>
+      <if test="deductionSum != null" >
+        #{deductionSum,jdbcType=DOUBLE},
+      </if>
+      <if test="fatherId != null" >
+        #{fatherId,jdbcType=BIGINT},
+      </if>
+      <if test="motherId != null" >
+        #{motherId,jdbcType=BIGINT},
+      </if>
+      <if test="healthStatus != null" >
+        #{healthStatus,jdbcType=INTEGER},
+      </if>
+      <if test="operationId != null" >
+        #{operationId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dogRemarks != null" >
+        #{dogRemarks,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="dogAge != null" >
+        #{dogAge,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDogInfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_dog_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_dog_info
+    <set >
+      <if test="record.dogId != null" >
+        dog_id = #{record.dogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogOwnerId != null" >
+        dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogBreedType != null" >
+        dog_breed_type = #{record.dogBreedType,jdbcType=INTEGER},
+      </if>
+      <if test="record.dogColorType != null" >
+        dog_color_type = #{record.dogColorType,jdbcType=INTEGER},
+      </if>
+      <if test="record.dogName != null" >
+        dog_name = #{record.dogName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthTime != null" >
+        birth_time = #{record.birthTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dogGender != null" >
+        dog_gender = #{record.dogGender,jdbcType=INTEGER},
+      </if>
+      <if test="record.dogCharacter != null" >
+        dog_character = #{record.dogCharacter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight != null" >
+        weight = #{record.weight,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dogStatus != null" >
+        dog_status = #{record.dogStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.deductionSum != null" >
+        deduction_sum = #{record.deductionSum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.fatherId != null" >
+        father_id = #{record.fatherId,jdbcType=BIGINT},
+      </if>
+      <if test="record.motherId != null" >
+        mother_id = #{record.motherId,jdbcType=BIGINT},
+      </if>
+      <if test="record.healthStatus != null" >
+        health_status = #{record.healthStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.operationId != null" >
+        operation_id = #{record.operationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dogRemarks != null" >
+        dog_remarks = #{record.dogRemarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_dog_info
+    set dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      dog_breed_type = #{record.dogBreedType,jdbcType=INTEGER},
+      dog_color_type = #{record.dogColorType,jdbcType=INTEGER},
+      dog_name = #{record.dogName,jdbcType=VARCHAR},
+      birth_time = #{record.birthTime,jdbcType=TIMESTAMP},
+      dog_gender = #{record.dogGender,jdbcType=INTEGER},
+      dog_character = #{record.dogCharacter,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=DOUBLE},
+      dog_status = #{record.dogStatus,jdbcType=INTEGER},
+      deduction_sum = #{record.deductionSum,jdbcType=DOUBLE},
+      father_id = #{record.fatherId,jdbcType=BIGINT},
+      mother_id = #{record.motherId,jdbcType=BIGINT},
+      health_status = #{record.healthStatus,jdbcType=INTEGER},
+      operation_id = #{record.operationId,jdbcType=BIGINT},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      dog_remarks = #{record.dogRemarks,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_dog_info
+    set dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      dog_breed_type = #{record.dogBreedType,jdbcType=INTEGER},
+      dog_color_type = #{record.dogColorType,jdbcType=INTEGER},
+      dog_name = #{record.dogName,jdbcType=VARCHAR},
+      birth_time = #{record.birthTime,jdbcType=TIMESTAMP},
+      dog_gender = #{record.dogGender,jdbcType=INTEGER},
+      dog_character = #{record.dogCharacter,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=DOUBLE},
+      dog_status = #{record.dogStatus,jdbcType=INTEGER},
+      deduction_sum = #{record.deductionSum,jdbcType=DOUBLE},
+      father_id = #{record.fatherId,jdbcType=BIGINT},
+      mother_id = #{record.motherId,jdbcType=BIGINT},
+      health_status = #{record.healthStatus,jdbcType=INTEGER},
+      operation_id = #{record.operationId,jdbcType=BIGINT},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDogInfo" >
+    update t_dog_info
+    <set >
+      <if test="dogOwnerId != null" >
+        dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="dogBreedType != null" >
+        dog_breed_type = #{dogBreedType,jdbcType=INTEGER},
+      </if>
+      <if test="dogColorType != null" >
+        dog_color_type = #{dogColorType,jdbcType=INTEGER},
+      </if>
+      <if test="dogName != null" >
+        dog_name = #{dogName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthTime != null" >
+        birth_time = #{birthTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dogGender != null" >
+        dog_gender = #{dogGender,jdbcType=INTEGER},
+      </if>
+      <if test="dogCharacter != null" >
+        dog_character = #{dogCharacter,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="dogStatus != null" >
+        dog_status = #{dogStatus,jdbcType=INTEGER},
+      </if>
+      <if test="deductionSum != null" >
+        deduction_sum = #{deductionSum,jdbcType=DOUBLE},
+      </if>
+      <if test="fatherId != null" >
+        father_id = #{fatherId,jdbcType=BIGINT},
+      </if>
+      <if test="motherId != null" >
+        mother_id = #{motherId,jdbcType=BIGINT},
+      </if>
+      <if test="healthStatus != null" >
+        health_status = #{healthStatus,jdbcType=INTEGER},
+      </if>
+      <if test="operationId != null" >
+        operation_id = #{operationId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dogRemarks != null" >
+        dog_remarks = #{dogRemarks,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="dogAge != null">
+        dogAge = #{dogAge,jdbcType=INTEGER}
+      </if>
+    </set>
+    where dog_id = #{dogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TDogInfo" >
+    update t_dog_info
+    set dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      dog_breed_type = #{dogBreedType,jdbcType=INTEGER},
+      dog_color_type = #{dogColorType,jdbcType=INTEGER},
+      dog_name = #{dogName,jdbcType=VARCHAR},
+      birth_time = #{birthTime,jdbcType=TIMESTAMP},
+      dog_gender = #{dogGender,jdbcType=INTEGER},
+      dog_character = #{dogCharacter,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      dog_status = #{dogStatus,jdbcType=INTEGER},
+      deduction_sum = #{deductionSum,jdbcType=DOUBLE},
+      father_id = #{fatherId,jdbcType=BIGINT},
+      mother_id = #{motherId,jdbcType=BIGINT},
+      health_status = #{healthStatus,jdbcType=INTEGER},
+      operation_id = #{operationId,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      dog_remarks = #{dogRemarks,jdbcType=LONGVARCHAR}
+    where dog_id = #{dogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDogInfo" >
+    update t_dog_info
+    set dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      dog_breed_type = #{dogBreedType,jdbcType=INTEGER},
+      dog_color_type = #{dogColorType,jdbcType=INTEGER},
+      dog_name = #{dogName,jdbcType=VARCHAR},
+      birth_time = #{birthTime,jdbcType=TIMESTAMP},
+      dog_gender = #{dogGender,jdbcType=INTEGER},
+      dog_character = #{dogCharacter,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      dog_status = #{dogStatus,jdbcType=INTEGER},
+      deduction_sum = #{deductionSum,jdbcType=DOUBLE},
+      father_id = #{fatherId,jdbcType=BIGINT},
+      mother_id = #{motherId,jdbcType=BIGINT},
+      health_status = #{healthStatus,jdbcType=INTEGER},
+      operation_id = #{operationId,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where dog_id = #{dogId,jdbcType=BIGINT}
+  </update>
+
+
+
+
+
+
+</mapper>

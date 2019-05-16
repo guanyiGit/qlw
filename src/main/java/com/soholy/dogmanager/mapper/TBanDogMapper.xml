@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TBanDogMapper">
+    <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TBanDog">
+        <id column="dog_ban_id" property="dogBanId" jdbcType="INTEGER"/>
+        <result column="dictionary_id" property="dictionaryId" jdbcType="INTEGER"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="TBanDogRefDictResultMap" type="com.soholy.dogmanager.entity.TBanDogRefDict" extends="BaseResultMap">
+        <association property="tDictionary" javaType="com.soholy.dogmanager.entity.TDictionary"
+                     resultMap="com.soholy.dogmanager.mapper.TDictionaryMapper.BaseResultMap"
+        ></association>
+        <collection property="tImages" ofType="com.soholy.dogmanager.entity.TImages"
+                    resultMap="com.soholy.dogmanager.mapper.TImagesMapper.BaseResultMap"></collection>
+    </resultMap>
+
+    <!--插入返回主键-->
+    <insert id="save" >
+        INSERT INTO t_ban_dog (
+            dictionary_id,
+            <if test="bandog != null and bandog.note!= null and bandog.note != ''">
+                note,
+            </if>
+            creation_time
+        ) VALUES (
+            #{bandog.dictionaryId},
+            <if test="bandog != null and bandog.note!= null and bandog.note != ''">
+                #{bandog.note},
+            </if>
+            #{bandog.creationTime}
+        )
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="bandog.dogBanId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--查列表 名称搜索-->
+    <select id="findAll" resultMap="TBanDogRefDictResultMap">
+        SELECT * FROM
+        <if test="pn != null and pageSize != null">
+            (SELECT * FROM t_ban_dog LIMIT #{pn}, #{pageSize}) b
+        </if>
+        <if test="pn == null or pageSize == null">
+            t_ban_dog b
+        </if>
+        LEFT JOIN t_dictionary d ON b.dictionary_id = d.dictionary_id
+        LEFT JOIN t_images_ref ir ON ir.ref_id = b.dog_ban_id AND ir.target_type = 7
+        LEFT JOIN t_images i ON i.image_id = ir.image_id
+        <if test="string != null and string != ''">
+            WHERE d.dictionary_describe LIKE CONCAT('%',#{string},'%')
+        </if>
+    </select>
+
+    <!--查列表 名称搜索-->
+    <select id="findAllCount" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM
+            t_ban_dog b
+        <if test="string != null and string != ''">
+            WHERE d.dictionary_describe LIKE CONCAT('%',#{string},'%')
+        </if>
+    </select>
+
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    dog_ban_id, dictionary_id, note, creation_time
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TBanDogExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_ban_dog
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ban_dog
+        where dog_ban_id = #{dogBanId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_ban_dog
+    where dog_ban_id = #{dogBanId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TBanDogExample">
+        delete from t_ban_dog
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.soholy.dogmanager.entity.TBanDog">
+    insert into t_ban_dog (dog_ban_id, dictionary_id, note,
+    creation_time)
+    values (#{dogBanId,jdbcType=INTEGER}, #{dictionaryId,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR},
+    #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TBanDog">
+        insert into t_ban_dog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dogBanId != null">
+                dog_ban_id,
+            </if>
+            <if test="dictionaryId != null">
+                dictionary_id,
+            </if>
+            <if test="note != null">
+                note,
+            </if>
+            <if test="creationTime != null">
+                creation_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dogBanId != null">
+                #{dogBanId,jdbcType=INTEGER},
+            </if>
+            <if test="dictionaryId != null">
+                #{dictionaryId,jdbcType=INTEGER},
+            </if>
+            <if test="note != null">
+                #{note,jdbcType=VARCHAR},
+            </if>
+            <if test="creationTime != null">
+                #{creationTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TBanDogExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_ban_dog
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_ban_dog
+        <set>
+            <if test="record.dogBanId != null">
+                dog_ban_id = #{record.dogBanId,jdbcType=INTEGER},
+            </if>
+            <if test="record.dictionaryId != null">
+                dictionary_id = #{record.dictionaryId,jdbcType=INTEGER},
+            </if>
+            <if test="record.note != null">
+                note = #{record.note,jdbcType=VARCHAR},
+            </if>
+            <if test="record.creationTime != null">
+                creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_ban_dog
+        set dog_ban_id = #{record.dogBanId,jdbcType=INTEGER},
+        dictionary_id = #{record.dictionaryId,jdbcType=INTEGER},
+        note = #{record.note,jdbcType=VARCHAR},
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TBanDog">
+        update t_ban_dog
+        <set>
+            <if test="dictionaryId != null">
+                dictionary_id = #{dictionaryId,jdbcType=INTEGER},
+            </if>
+            <if test="note != null">
+                note = #{note,jdbcType=VARCHAR},
+            </if>
+            <if test="creationTime != null">
+                creation_time = #{creationTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where dog_ban_id = #{dogBanId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TBanDog">
+    update t_ban_dog
+    set dictionary_id = #{dictionaryId,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where dog_ban_id = #{dogBanId,jdbcType=INTEGER}
+  </update>
+</mapper>

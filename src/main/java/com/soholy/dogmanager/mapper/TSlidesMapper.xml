@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TSlidesMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TSlides">
+		<id column="slides_id" property="slidesId" jdbcType="INTEGER" />
+		<result column="slides_type" property="slidesType" jdbcType="INTEGER" />
+		<result column="slides_name" property="slidesName" jdbcType="VARCHAR" />
+		<result column="slides_titile" property="slidesTitile"
+			jdbcType="VARCHAR" />
+		<result column="slides_url" property="slidesUrl" jdbcType="VARCHAR" />
+		<result column="slides_size" property="slidesSize" jdbcType="DOUBLE" />
+		<result column="slides_ext" property="slidesExt" jdbcType="VARCHAR" />
+		<result column="thumbnail_url" property="thumbnailUrl"
+			jdbcType="VARCHAR" />
+		<result column="thumbnail_size" property="thumbnailSize"
+			jdbcType="DOUBLE" />
+		<result column="upload_date" property="uploadDate" jdbcType="TIMESTAMP" />
+		<result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="seq" property="seq" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		slides_id, slides_type, slides_name, slides_titile, slides_url, slides_size,
+		slides_ext,
+		thumbnail_url, thumbnail_size, upload_date, start_date, end_date, seq, status,
+		create_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TSlidesExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_slides
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_slides
+		where slides_id = #{slidesId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_slides
+		where slides_id = #{slidesId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TSlidesExample">
+		delete from t_slides
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.soholy.dogmanager.entity.TSlides">
+		insert into t_slides (slides_id, slides_type, slides_name,
+		slides_titile, slides_url, slides_size,
+		slides_ext, thumbnail_url, thumbnail_size,
+		upload_date, start_date, end_date,
+		seq, status, create_time
+		)
+		values (#{slidesId,jdbcType=INTEGER}, #{slidesType,jdbcType=INTEGER},
+		#{slidesName,jdbcType=VARCHAR},
+		#{slidesTitile,jdbcType=VARCHAR}, #{slidesUrl,jdbcType=VARCHAR}, #{slidesSize,jdbcType=DOUBLE},
+		#{slidesExt,jdbcType=VARCHAR}, #{thumbnailUrl,jdbcType=VARCHAR},
+		#{thumbnailSize,jdbcType=DOUBLE},
+		#{uploadDate,jdbcType=TIMESTAMP}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},
+		#{seq,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TSlides">
+		insert into t_slides
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="slidesId != null">
+				slides_id,
+			</if>
+			<if test="slidesType != null">
+				slides_type,
+			</if>
+			<if test="slidesName != null">
+				slides_name,
+			</if>
+			<if test="slidesTitile != null">
+				slides_titile,
+			</if>
+			<if test="slidesUrl != null">
+				slides_url,
+			</if>
+			<if test="slidesSize != null">
+				slides_size,
+			</if>
+			<if test="slidesExt != null">
+				slides_ext,
+			</if>
+			<if test="thumbnailUrl != null">
+				thumbnail_url,
+			</if>
+			<if test="thumbnailSize != null">
+				thumbnail_size,
+			</if>
+			<if test="uploadDate != null">
+				upload_date,
+			</if>
+			<if test="startDate != null">
+				start_date,
+			</if>
+			<if test="endDate != null">
+				end_date,
+			</if>
+			<if test="seq != null">
+				seq,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="slidesId != null">
+				#{slidesId,jdbcType=INTEGER},
+			</if>
+			<if test="slidesType != null">
+				#{slidesType,jdbcType=INTEGER},
+			</if>
+			<if test="slidesName != null">
+				#{slidesName,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesTitile != null">
+				#{slidesTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesUrl != null">
+				#{slidesUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesSize != null">
+				#{slidesSize,jdbcType=DOUBLE},
+			</if>
+			<if test="slidesExt != null">
+				#{slidesExt,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnailUrl != null">
+				#{thumbnailUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnailSize != null">
+				#{thumbnailSize,jdbcType=DOUBLE},
+			</if>
+			<if test="uploadDate != null">
+				#{uploadDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="startDate != null">
+				#{startDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="seq != null">
+				#{seq,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TSlidesExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_slides
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_slides
+		<set>
+			<if test="record.slidesId != null">
+				slides_id = #{record.slidesId,jdbcType=INTEGER},
+			</if>
+			<if test="record.slidesType != null">
+				slides_type = #{record.slidesType,jdbcType=INTEGER},
+			</if>
+			<if test="record.slidesName != null">
+				slides_name = #{record.slidesName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.slidesTitile != null">
+				slides_titile = #{record.slidesTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.slidesUrl != null">
+				slides_url = #{record.slidesUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.slidesSize != null">
+				slides_size = #{record.slidesSize,jdbcType=DOUBLE},
+			</if>
+			<if test="record.slidesExt != null">
+				slides_ext = #{record.slidesExt,jdbcType=VARCHAR},
+			</if>
+			<if test="record.thumbnailUrl != null">
+				thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.thumbnailSize != null">
+				thumbnail_size = #{record.thumbnailSize,jdbcType=DOUBLE},
+			</if>
+			<if test="record.uploadDate != null">
+				upload_date = #{record.uploadDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.startDate != null">
+				start_date = #{record.startDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.endDate != null">
+				end_date = #{record.endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.seq != null">
+				seq = #{record.seq,jdbcType=INTEGER},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_slides
+		set slides_id = #{record.slidesId,jdbcType=INTEGER},
+		slides_type = #{record.slidesType,jdbcType=INTEGER},
+		slides_name = #{record.slidesName,jdbcType=VARCHAR},
+		slides_titile = #{record.slidesTitile,jdbcType=VARCHAR},
+		slides_url = #{record.slidesUrl,jdbcType=VARCHAR},
+		slides_size = #{record.slidesSize,jdbcType=DOUBLE},
+		slides_ext = #{record.slidesExt,jdbcType=VARCHAR},
+		thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
+		thumbnail_size = #{record.thumbnailSize,jdbcType=DOUBLE},
+		upload_date = #{record.uploadDate,jdbcType=TIMESTAMP},
+		start_date = #{record.startDate,jdbcType=TIMESTAMP},
+		end_date = #{record.endDate,jdbcType=TIMESTAMP},
+		seq = #{record.seq,jdbcType=INTEGER},
+		status = #{record.status,jdbcType=INTEGER},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TSlides">
+		update t_slides
+		<set>
+			<if test="slidesType != null">
+				slides_type = #{slidesType,jdbcType=INTEGER},
+			</if>
+			<if test="slidesName != null">
+				slides_name = #{slidesName,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesTitile != null">
+				slides_titile = #{slidesTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesUrl != null">
+				slides_url = #{slidesUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesSize != null">
+				slides_size = #{slidesSize,jdbcType=DOUBLE},
+			</if>
+			<if test="slidesExt != null">
+				slides_ext = #{slidesExt,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnailUrl != null">
+				thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnailSize != null">
+				thumbnail_size = #{thumbnailSize,jdbcType=DOUBLE},
+			</if>
+			<if test="uploadDate != null">
+				upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="startDate != null">
+				start_date = #{startDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				end_date = #{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="seq != null">
+				seq = #{seq,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where slides_id = #{slidesId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TSlides">
+		update t_slides
+		set slides_type = #{slidesType,jdbcType=INTEGER},
+		slides_name = #{slidesName,jdbcType=VARCHAR},
+		slides_titile = #{slidesTitile,jdbcType=VARCHAR},
+		slides_url = #{slidesUrl,jdbcType=VARCHAR},
+		slides_size = #{slidesSize,jdbcType=DOUBLE},
+		slides_ext = #{slidesExt,jdbcType=VARCHAR},
+		thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+		thumbnail_size = #{thumbnailSize,jdbcType=DOUBLE},
+		upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+		start_date = #{startDate,jdbcType=TIMESTAMP},
+		end_date = #{endDate,jdbcType=TIMESTAMP},
+		seq = #{seq,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where slides_id = #{slidesId,jdbcType=INTEGER}
+	</update>
+
+
+	<insert id="addSlides" parameterType="com.soholy.dogmanager.entity.TSlides">
+		insert into t_slides
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="slidesId != null">
+				slides_id,
+			</if>
+			<if test="slidesType != null">
+				slides_type,
+			</if>
+			<if test="slidesName != null">
+				slides_name,
+			</if>
+			<if test="slidesTitile != null">
+				slides_titile,
+			</if>
+			<if test="slidesUrl != null">
+				slides_url,
+			</if>
+			<if test="slidesSize != null">
+				slides_size,
+			</if>
+			<if test="slidesExt != null">
+				slides_ext,
+			</if>
+			<if test="thumbnailUrl != null">
+				thumbnail_url,
+			</if>
+			<if test="thumbnailSize != null">
+				thumbnail_size,
+			</if>
+			<if test="uploadDate != null">
+				upload_date,
+			</if>
+			<if test="startDate != null">
+				start_date,
+			</if>
+			<if test="endDate != null">
+				end_date,
+			</if>
+			<if test="seq != null">
+				seq,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="slidesId != null">
+				#{slidesId,jdbcType=INTEGER},
+			</if>
+			<if test="slidesType != null">
+				#{slidesType,jdbcType=INTEGER},
+			</if>
+			<if test="slidesName != null">
+				#{slidesName,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesTitile != null">
+				#{slidesTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesUrl != null">
+				#{slidesUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="slidesSize != null">
+				#{slidesSize,jdbcType=DOUBLE},
+			</if>
+			<if test="slidesExt != null">
+				#{slidesExt,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnailUrl != null">
+				#{thumbnailUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnailSize != null">
+				#{thumbnailSize,jdbcType=DOUBLE},
+			</if>
+			<if test="uploadDate != null">
+				#{uploadDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="startDate != null">
+				#{startDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="seq != null">
+				#{seq,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateSlidesStatusForYes">
+		update t_slides
+		<set>
+			status = 1,
+			start_date = #{startDate},
+			<if test="seq != null and seq !=''">
+				seq = #{seq},
+			</if>
+		</set>
+		where slides_id = #{slidesId}
+	</update>
+
+	<update id="updateSlidesStatusForNo" parameterType="java.lang.Integer">
+		update t_slides
+		<set>
+			status = 1,
+			seq = 0,
+			end_date = #{endDate}
+		</set>
+		where slides_id = #{slidesId}
+	</update>
+
+	<delete id="deleteSlides" parameterType="java.lang.Integer">
+		delete from t_slides
+		where slides_id = #{slidesId}
+	</delete>
+	
+	<select id="selectSlides">
+		select	<include refid="Base_Column_List"/> from t_slides
+		<where>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	
+</mapper>

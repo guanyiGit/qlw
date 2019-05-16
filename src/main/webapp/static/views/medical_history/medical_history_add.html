@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--新增病历-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/Validform.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="./js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <!--本页面的css-->
+    <link rel="stylesheet" href="./views/medical_history/medical_history_add.css">
+
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <!--bootstrap table -->
+
+    <!--<link href="../../../static/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">-->
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="./utils/stringBuffer.js"></script>
+    <!--日期插件-->
+    <link rel="stylesheet" href="../../../static/css/dcalendar.picker.css"/>
+    <script type="text/javascript" src="../../../static/js/dcalendar.picker.js"></script>
+    <script type="text/javascript">
+        $('#issDate').dcalendarpicker({
+            format:'yyyy-mm-dd'
+            
+        }); 
+    </script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="./views/medical_history/medical_history_add.js"></script>
+</head>
+<body>
+    <div class="container-fluid" >
+        <div class="row nav-xuehua">病历记录&nbsp;>&nbsp;>&nbsp;新增病历  	
+                <div id="back" class="btn-save">返回</div>
+        </div>
+        <div class="row titile-nav">基本信息  </div>
+        <div class="row input">
+            <div class="col-sm-6">
+                <div>免疫证号：</div>
+                <input id="immNum" type="text" >
+                <span id="search" class="search"></span>
+            </div>
+            <div class="col-sm-6">
+                <div>犬证号：</div>
+                <input class="common" id="dogCardNum" type="text">
+            </div>
+        </div>
+        <div class="row input">
+            <div class="col-sm-6">
+                <div>犬主姓名：</div>
+                <input class="common" id="dogOwnerName" type="text">
+            </div>
+            <div class="col-sm-6">
+                <div>联系电话：</div>
+                <input class="common" id="dogOwnerPhone" type="text">
+            </div>
+        </div>
+        <div class="row input">
+            <div class="col-sm-6">
+                <div>犬只名称：</div>
+                <input class="common" id="dogName" type="text">
+            </div>
+            <div class="col-sm-6">
+                <div>犬只性别：</div>
+                <input class="common" id="dogGender" type="text">
+            </div>
+        </div>
+        <div class="row input">
+            <div class="col-sm-6">
+                <div>犬只品种：</div>
+                <input class="common" id="dogBreedType" type="text">
+            </div>
+            <div class="col-sm-6">
+                <div>犬出生年月：</div>
+                <input class="common" id="birthTime" type="text">
+            </div>
+        </div>
+        <div class="row input">
+            <div class="col-sm-6">
+                <div>毛色：</div>
+                <input class="common" id="dogColorType" type="text">
+            </div>
+        </div>
+        <!-- <div class="row btns">
+            <div class="col-sm-6">
+                <div id="save" class="btn-save">保存</div>
+            </div>
+            <div class="col-sm-6">
+                <div id="cancel" class="btn-reset">取消</div>
+            </div>
+        </div> -->
+        <div class="row  titile-nav">病历记录</div>
+        <div class="row icon-add-container">
+            <span></span><span id="add" class="add-icon">新增</span>
+        </div>
+        <!-- 引入bootstrap模态框插件 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">新增病历</h4>
+            </div>
+            <div class="modal-body">
+            		<div class="row">
+                      <label>时间:</label>
+                       <input id="issDate">
+                   </div>
+                   <div class="row">
+                      <label>症状:</label>
+                       <input id="symptom">
+                   </div>
+					<div class="row">
+                      <label>诊断:</label>
+                       <input id="diagnosis">
+                   </div>
+                   <div class="row">
+                      <label>治疗:</label>
+                       <input id="treatment">
+                   </div>
+                   <div class="row">
+                      <label>备注:</label>
+                       <input id="remarks">
+                   </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="submit" type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+	 <div class="row ">
+            <table border="2" width="100%">
+                <tr class="tab-head" style="background-color: #49C8DA;line-height: 50px;text-align: center;color: #fff;font-size: 20px;">
+                    <td width="15%">时间</td>
+                    <td width="30%">病历记录&诊断</td>
+                    <td width="30%">治疗</td>
+                    <td width="25%">备注</td>
+                </tr>
+                <!-- <tr class="tab-body" style="height: 120px;">
+                    <td>2018-25-14 00:00</td>
+                    <td>
+                        <p>
+                            <span>症状：</span>
+                            <span>流黄色鼻涕（黏在鼻子旁边），精神萎靡（一直趴在地上），食欲不振</span>
+                        </p>
+                        <p>
+                            <span>诊断：</span>
+                            <span>食欲不振</span>
+                        </p>
+                    </td>
+                    <td> 冲剂一天一包，阿奇霉素一天半颗，冲剂一天一包，阿奇霉素一天半颗</td>
+                    <td>三天后复查</td>
+                </tr>
+                <tr class="tab-body" style="height: 120px;"> 
+                    <td>2018-25-14 00:00</td>
+                    <td>
+                        <p>
+                            <span>症状：</span>
+                            <span>流黄色鼻涕（黏在鼻子旁边），精神萎靡（一直趴在地上），食欲不振</span>
+                        </p>
+                        <p>
+                            <span>诊断：</span>
+                            <span>食欲不振</span>
+                        </p>
+                    </td>
+                    <td> 冲剂一天一包，阿奇霉素一天半颗，冲剂一天一包，阿奇霉素一天半颗</td>
+                    <td>三天后复查</td>
+                </tr>
+                    <tr class="tab-body" style="height: 120px;"> 
+                    <td>2018-25-14 00:00</td>
+                    <td>
+                        <p>
+                            <span>症状：</span>
+                            <span>流黄色鼻涕（黏在鼻子旁边），精神萎靡（一直趴在地上），食欲不振</span>
+                        </p>
+                        <p>
+                            <span>诊断：</span>
+                            <span>食欲不振</span>
+                        </p>
+                    </td>
+                    <td> 冲剂一天一包，阿奇霉素一天半颗，冲剂一天一包，阿奇霉素一天半颗</td>
+                    <td>三天后复查</td>
+                </tr> -->
+            </table>
+        </div>
+    </div>
+</body>
+</html>

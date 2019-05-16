@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TInspectionsInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TInspectionsInfo" >
+    <id column="inspections_id" property="inspectionsId" jdbcType="BIGINT" />
+    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="result_type" property="resultType" jdbcType="INTEGER" />
+    <result column="inspections_date" property="inspectionsDate" jdbcType="TIMESTAMP" />
+    <result column="next_inspections_date" property="nextInspectionsDate" jdbcType="TIMESTAMP" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TInspectionsInfo" extends="BaseResultMap" >
+    <result column="remarks" property="remarks" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    inspections_id, dog_id, dog_owner_id, org_id, operator_id, result_type, inspections_date, 
+    next_inspections_date, creation_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    remarks
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TInspectionsInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_inspections_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TInspectionsInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_inspections_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_inspections_info
+    where inspections_id = #{inspectionsId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_inspections_info
+    where inspections_id = #{inspectionsId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TInspectionsInfoExample" >
+    delete from t_inspections_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TInspectionsInfo" >
+    insert into t_inspections_info (inspections_id, dog_id, dog_owner_id, 
+      org_id, operator_id, result_type, 
+      inspections_date, next_inspections_date, 
+      creation_time, remarks)
+    values (#{inspectionsId,jdbcType=BIGINT}, #{dogId,jdbcType=BIGINT}, #{dogOwnerId,jdbcType=BIGINT}, 
+      #{orgId,jdbcType=INTEGER}, #{operatorId,jdbcType=BIGINT}, #{resultType,jdbcType=INTEGER}, 
+      #{inspectionsDate,jdbcType=TIMESTAMP}, #{nextInspectionsDate,jdbcType=TIMESTAMP}, 
+      #{creationTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TInspectionsInfo" >
+    insert into t_inspections_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="inspectionsId != null" >
+        inspections_id,
+      </if>
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="resultType != null" >
+        result_type,
+      </if>
+      <if test="inspectionsDate != null" >
+        inspections_date,
+      </if>
+      <if test="nextInspectionsDate != null" >
+        next_inspections_date,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="inspectionsId != null" >
+        #{inspectionsId,jdbcType=BIGINT},
+      </if>
+      <if test="dogId != null" >
+        #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="resultType != null" >
+        #{resultType,jdbcType=INTEGER},
+      </if>
+      <if test="inspectionsDate != null" >
+        #{inspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextInspectionsDate != null" >
+        #{nextInspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TInspectionsInfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_inspections_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_inspections_info
+    <set >
+      <if test="record.inspectionsId != null" >
+        inspections_id = #{record.inspectionsId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogId != null" >
+        dog_id = #{record.dogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogOwnerId != null" >
+        dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.orgId != null" >
+        org_id = #{record.orgId,jdbcType=INTEGER},
+      </if>
+      <if test="record.operatorId != null" >
+        operator_id = #{record.operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.resultType != null" >
+        result_type = #{record.resultType,jdbcType=INTEGER},
+      </if>
+      <if test="record.inspectionsDate != null" >
+        inspections_date = #{record.inspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.nextInspectionsDate != null" >
+        next_inspections_date = #{record.nextInspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_inspections_info
+    set inspections_id = #{record.inspectionsId,jdbcType=BIGINT},
+      dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      org_id = #{record.orgId,jdbcType=INTEGER},
+      operator_id = #{record.operatorId,jdbcType=BIGINT},
+      result_type = #{record.resultType,jdbcType=INTEGER},
+      inspections_date = #{record.inspectionsDate,jdbcType=TIMESTAMP},
+      next_inspections_date = #{record.nextInspectionsDate,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      remarks = #{record.remarks,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_inspections_info
+    set inspections_id = #{record.inspectionsId,jdbcType=BIGINT},
+      dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      org_id = #{record.orgId,jdbcType=INTEGER},
+      operator_id = #{record.operatorId,jdbcType=BIGINT},
+      result_type = #{record.resultType,jdbcType=INTEGER},
+      inspections_date = #{record.inspectionsDate,jdbcType=TIMESTAMP},
+      next_inspections_date = #{record.nextInspectionsDate,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TInspectionsInfo" >
+    update t_inspections_info
+    <set >
+      <if test="dogId != null" >
+        dog_id = #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="resultType != null" >
+        result_type = #{resultType,jdbcType=INTEGER},
+      </if>
+      <if test="inspectionsDate != null" >
+        inspections_date = #{inspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextInspectionsDate != null" >
+        next_inspections_date = #{nextInspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where inspections_id = #{inspectionsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TInspectionsInfo" >
+    update t_inspections_info
+    set dog_id = #{dogId,jdbcType=BIGINT},
+      dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      org_id = #{orgId,jdbcType=INTEGER},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      result_type = #{resultType,jdbcType=INTEGER},
+      inspections_date = #{inspectionsDate,jdbcType=TIMESTAMP},
+      next_inspections_date = #{nextInspectionsDate,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=LONGVARCHAR}
+    where inspections_id = #{inspectionsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TInspectionsInfo" >
+    update t_inspections_info
+    set dog_id = #{dogId,jdbcType=BIGINT},
+      dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      org_id = #{orgId,jdbcType=INTEGER},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      result_type = #{resultType,jdbcType=INTEGER},
+      inspections_date = #{inspectionsDate,jdbcType=TIMESTAMP},
+      next_inspections_date = #{nextInspectionsDate,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where inspections_id = #{inspectionsId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TImmuneCardMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TImmuneCard" >
+    <id column="seq_id" property="seqId" jdbcType="BIGINT" />
+    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="member_card_id" property="memberCardId" jdbcType="BIGINT" />
+    <result column="immune_card_num" property="immuneCardNum" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="lssue_time" property="lssueTime" jdbcType="TIMESTAMP" />
+    <result column="lssue_org_id" property="lssueOrgId" jdbcType="INTEGER" />
+    <result column="lssuer_id" property="lssuerId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    seq_id, dog_id, dog_owner_id, member_card_id, immune_card_num, start_time, end_time, 
+    lssue_time, lssue_org_id, lssuer_id, status, creation_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TImmuneCardExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_immune_card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_immune_card
+    where seq_id = #{seqId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_immune_card
+    where seq_id = #{seqId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TImmuneCardExample" >
+    delete from t_immune_card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TImmuneCard" >
+    insert into t_immune_card (seq_id, dog_id, dog_owner_id, 
+      member_card_id, immune_card_num, start_time, 
+      end_time, lssue_time, lssue_org_id, 
+      lssuer_id, status, creation_time
+      )
+    values (#{seqId,jdbcType=BIGINT}, #{dogId,jdbcType=BIGINT}, #{dogOwnerId,jdbcType=BIGINT}, 
+      #{memberCardId,jdbcType=BIGINT}, #{immuneCardNum,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{lssueTime,jdbcType=TIMESTAMP}, #{lssueOrgId,jdbcType=INTEGER}, 
+      #{lssuerId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TImmuneCard" >
+    insert into t_immune_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="seqId != null" >
+        seq_id,
+      </if>
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id,
+      </if>
+      <if test="memberCardId != null" >
+        member_card_id,
+      </if>
+      <if test="immuneCardNum != null" >
+        immune_card_num,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="lssueTime != null" >
+        lssue_time,
+      </if>
+      <if test="lssueOrgId != null" >
+        lssue_org_id,
+      </if>
+      <if test="lssuerId != null" >
+        lssuer_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="seqId != null" >
+        #{seqId,jdbcType=BIGINT},
+      </if>
+      <if test="dogId != null" >
+        #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCardId != null" >
+        #{memberCardId,jdbcType=BIGINT},
+      </if>
+      <if test="immuneCardNum != null" >
+        #{immuneCardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lssueTime != null" >
+        #{lssueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lssueOrgId != null" >
+        #{lssueOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="lssuerId != null" >
+        #{lssuerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TImmuneCardExample" resultType="java.lang.Integer" >
+    select count(*) from t_immune_card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_immune_card
+    <set >
+      <if test="record.seqId != null" >
+        seq_id = #{record.seqId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogId != null" >
+        dog_id = #{record.dogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogOwnerId != null" >
+        dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.memberCardId != null" >
+        member_card_id = #{record.memberCardId,jdbcType=BIGINT},
+      </if>
+      <if test="record.immuneCardNum != null" >
+        immune_card_num = #{record.immuneCardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lssueTime != null" >
+        lssue_time = #{record.lssueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lssueOrgId != null" >
+        lssue_org_id = #{record.lssueOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lssuerId != null" >
+        lssuer_id = #{record.lssuerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_immune_card
+    set seq_id = #{record.seqId,jdbcType=BIGINT},
+      dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      member_card_id = #{record.memberCardId,jdbcType=BIGINT},
+      immune_card_num = #{record.immuneCardNum,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      lssue_time = #{record.lssueTime,jdbcType=TIMESTAMP},
+      lssue_org_id = #{record.lssueOrgId,jdbcType=INTEGER},
+      lssuer_id = #{record.lssuerId,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TImmuneCard" >
+    update t_immune_card
+    <set >
+      <if test="dogId != null" >
+        dog_id = #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCardId != null" >
+        member_card_id = #{memberCardId,jdbcType=BIGINT},
+      </if>
+      <if test="immuneCardNum != null" >
+        immune_card_num = #{immuneCardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lssueTime != null" >
+        lssue_time = #{lssueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lssueOrgId != null" >
+        lssue_org_id = #{lssueOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="lssuerId != null" >
+        lssuer_id = #{lssuerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where seq_id = #{seqId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TImmuneCard" >
+    update t_immune_card
+    set dog_id = #{dogId,jdbcType=BIGINT},
+      dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      member_card_id = #{memberCardId,jdbcType=BIGINT},
+      immune_card_num = #{immuneCardNum,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      lssue_time = #{lssueTime,jdbcType=TIMESTAMP},
+      lssue_org_id = #{lssueOrgId,jdbcType=INTEGER},
+      lssuer_id = #{lssuerId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where seq_id = #{seqId,jdbcType=BIGINT}
+  </update>
+
+  <!--查免疫证号前缀-->
+  <select id="selectImmunePre" resultType="java.lang.String">
+    select dictionary_describe from t_dictionary where dictionary_field='Immune_num_pre';
+  </select>
+  <!--查最新的免疫证号-->
+  <select id="selectImmuneCardNum" resultType="java.lang.String">
+    SELECT immune_card_num FROM t_immune_card
+    ORDER BY seq_id DESC
+    LIMIT 0,1
+  </select>
+  <!--根据犬只id查免疫证号-->
+  <select id="selectImmuneCardNumById" resultType="java.lang.String">
+    SELECT immune_card_num FROM t_immune_card WHERE dog_id=#{dogId}
+  </select>
+
+</mapper>

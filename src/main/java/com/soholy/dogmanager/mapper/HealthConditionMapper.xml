@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.soholy.dogmanager.mapper.HealthConditionMapper">
+
+	<select id="get" resultType="com.soholy.dogmanager.entity.HealthConditionDO">
+		select `h_id`,`dog_id`,`inspect_time`,`skin`,`anal_temperature`,`pulse`,`breathe`,`visible_mucous_membrane`,`skin_temperature`,`weight`,`inspect_org`,`operator`,`remark`,`create_time`,`status`,`expiration_time`,`next_inspect_time` from t_health_condition where h_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.soholy.dogmanager.pojo.statistic.HealthConditionVO">
+		SELECT `h_id` hId,`dog_id` dogId,`inspect_time` inspectTime,`skin`,`anal_temperature` analTemperature,`pulse`,`breathe`,
+		`visible_mucous_membrane` visibleMucousMembrane,`skin_temperature` skinTemperature,`weight`,
+		`inspect_org` inspectOrg,`operator`,`remark`,`create_time` createTime,hc.`status`,`expiration_time` expirationTime,
+		`next_inspect_time` nextInspectTime ,org.organization_name orgName,u.name userName
+		FROM t_health_condition hc
+		LEFT JOIN t_organization org
+		ON hc.inspect_org = org.organization_id
+		LEFT JOIN t_users u
+		ON hc.operator = u.user_id
+        <where>  
+		  		  <if test="hId != null and hId != ''"> and h_id = #{hId} </if>
+		  		  <if test="dogId != null and dogId != ''"> and dog_id = #{dogId} </if>
+		  		  <if test="inspectTime != null and inspectTime != ''"> and inspect_time = #{inspectTime} </if>
+		  		  <if test="skin != null and skin != ''"> and skin = #{skin} </if>
+		  		  <if test="analTemperature != null and analTemperature != ''"> and anal_temperature = #{analTemperature} </if>
+		  		  <if test="pulse != null and pulse != ''"> and pulse = #{pulse} </if>
+		  		  <if test="breathe != null and breathe != ''"> and breathe = #{breathe} </if>
+		  		  <if test="visibleMucousMembrane != null and visibleMucousMembrane != ''"> and visible_mucous_membrane = #{visibleMucousMembrane} </if>
+		  		  <if test="skinTemperature != null and skinTemperature != ''"> and skin_temperature = #{skinTemperature} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="inspectOrg != null and inspectOrg != ''"> and inspect_org = #{inspectOrg} </if>
+		  		  <if test="operator != null and operator != ''"> and operator = #{operator} </if>
+		  		  <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="expirationTime != null and expirationTime != ''"> and expiration_time = #{expirationTime} </if>
+		  		  <if test="nextInspectTime != null and nextInspectTime != ''"> and next_inspect_time = #{nextInspectTime} </if>
+		  		</where>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from t_health_condition
+		 <where>  
+		  		  <if test="hId != null and hId != ''"> and h_id = #{hId} </if>
+		  		  <if test="dogId != null and dogId != ''"> and dog_id = #{dogId} </if>
+		  		  <if test="inspectTime != null and inspectTime != ''"> and inspect_time = #{inspectTime} </if>
+		  		  <if test="skin != null and skin != ''"> and skin = #{skin} </if>
+		  		  <if test="analTemperature != null and analTemperature != ''"> and anal_temperature = #{analTemperature} </if>
+		  		  <if test="pulse != null and pulse != ''"> and pulse = #{pulse} </if>
+		  		  <if test="breathe != null and breathe != ''"> and breathe = #{breathe} </if>
+		  		  <if test="visibleMucousMembrane != null and visibleMucousMembrane != ''"> and visible_mucous_membrane = #{visibleMucousMembrane} </if>
+		  		  <if test="skinTemperature != null and skinTemperature != ''"> and skin_temperature = #{skinTemperature} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="inspectOrg != null and inspectOrg != ''"> and inspect_org = #{inspectOrg} </if>
+		  		  <if test="operator != null and operator != ''"> and operator = #{operator} </if>
+		  		  <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="expirationTime != null and expirationTime != ''"> and expiration_time = #{expirationTime} </if>
+		  		  <if test="nextInspectTime != null and nextInspectTime != ''"> and next_inspect_time = #{nextInspectTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.soholy.dogmanager.entity.HealthConditionDO" useGeneratedKeys="true" keyProperty="hId">
+		insert into t_health_condition
+		(
+			`dog_id`, 
+			`inspect_time`, 
+			`skin`, 
+			`anal_temperature`, 
+			`pulse`, 
+			`breathe`, 
+			`visible_mucous_membrane`, 
+			`skin_temperature`, 
+			`weight`, 
+			`inspect_org`, 
+			`operator`, 
+			`remark`, 
+			`create_time`, 
+			`status`, 
+			`expiration_time`, 
+			`next_inspect_time`
+		)
+		values
+		(
+			#{dogId}, 
+			#{inspectTime}, 
+			#{skin}, 
+			#{analTemperature}, 
+			#{pulse}, 
+			#{breathe}, 
+			#{visibleMucousMembrane}, 
+			#{skinTemperature}, 
+			#{weight}, 
+			#{inspectOrg}, 
+			#{operator}, 
+			#{remark}, 
+			#{createTime}, 
+			#{status}, 
+			#{expirationTime}, 
+			#{nextInspectTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.soholy.dogmanager.entity.HealthConditionDO">
+		update t_health_condition 
+		<set>
+			<if test="dogId != null">`dog_id` = #{dogId}, </if>
+			<if test="inspectTime != null">`inspect_time` = #{inspectTime}, </if>
+			<if test="skin != null">`skin` = #{skin}, </if>
+			<if test="analTemperature != null">`anal_temperature` = #{analTemperature}, </if>
+			<if test="pulse != null">`pulse` = #{pulse}, </if>
+			<if test="breathe != null">`breathe` = #{breathe}, </if>
+			<if test="visibleMucousMembrane != null">`visible_mucous_membrane` = #{visibleMucousMembrane}, </if>
+			<if test="skinTemperature != null">`skin_temperature` = #{skinTemperature}, </if>
+			<if test="weight != null">`weight` = #{weight}, </if>
+			<if test="inspectOrg != null">`inspect_org` = #{inspectOrg}, </if>
+			<if test="operator != null">`operator` = #{operator}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="expirationTime != null">`expiration_time` = #{expirationTime}, </if>
+			<if test="nextInspectTime != null">`next_inspect_time` = #{nextInspectTime}</if>
+		</set>
+		where h_id = #{hId}
+	</update>
+	
+	<delete id="remove">
+		delete from t_health_condition where h_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from t_health_condition where h_id in 
+		<foreach item="hId" collection="array" open="(" separator="," close=")">
+			#{hId}
+		</foreach>
+	</delete>
+
+</mapper>

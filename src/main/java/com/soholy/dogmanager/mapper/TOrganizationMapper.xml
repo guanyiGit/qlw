@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TOrganizationMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TOrganization" >
+    <id column="organization_id" property="organizationId" jdbcType="INTEGER" />
+    <result column="organization_name" property="organizationName" jdbcType="VARCHAR" />
+    <result column="organization_capital" property="organizationCapital" jdbcType="VARCHAR" />
+    <result column="register_number" property="registerNumber" jdbcType="VARCHAR" />
+    <result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+    <result column="establish_date" property="establishDate" jdbcType="TIMESTAMP" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="owned_city_id" property="ownedCityId" jdbcType="INTEGER" />
+    <result column="district_id" property="districtId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="person_liable" property="personLiable" jdbcType="VARCHAR" />
+    <result column="org_type" property="orgType" jdbcType="INTEGER" />
+    <result column="scope_of_operation" property="scopeOfOperation" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="fail_reason" property="failReason" jdbcType="VARCHAR" />
+    <result column="power" property="power" jdbcType="INTEGER" />
+    <result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    organization_id, organization_name, organization_capital, register_number, credit_code, 
+    establish_date, province_id, owned_city_id, district_id, phone, person_liable, org_type, 
+    scope_of_operation, address, longitude, latitude, status, fail_reason, power, approval_time, 
+    creation_time,username,password
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TOrganizationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_organization
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_organization
+    where organization_id = #{organizationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_organization
+    where organization_id = #{organizationId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TOrganizationExample" >
+    delete from t_organization
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TOrganization" >
+    insert into t_organization (organization_id, organization_name, 
+      organization_capital, register_number, credit_code, 
+      establish_date, province_id, owned_city_id, 
+      district_id, phone, person_liable, 
+      org_type, scope_of_operation, address, 
+      longitude, latitude, status, 
+      fail_reason, power, approval_time, 
+      creation_time,username,password)
+    values (#{organizationId,jdbcType=INTEGER}, #{organizationName,jdbcType=VARCHAR}, 
+      #{organizationCapital,jdbcType=VARCHAR}, #{registerNumber,jdbcType=VARCHAR}, #{creditCode,jdbcType=VARCHAR}, 
+      #{establishDate,jdbcType=TIMESTAMP}, #{provinceId,jdbcType=INTEGER}, #{ownedCityId,jdbcType=INTEGER}, 
+      #{districtId,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{personLiable,jdbcType=VARCHAR}, 
+      #{orgType,jdbcType=INTEGER}, #{scopeOfOperation,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
+      #{failReason,jdbcType=VARCHAR}, #{power,jdbcType=INTEGER}, #{approvalTime,jdbcType=TIMESTAMP}, 
+      #{creationTime,jdbcType=TIMESTAMP},#{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TOrganization" >
+    <selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="organizationId">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+    insert into t_organization
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="organizationId != null" >
+        organization_id,
+      </if>
+      <if test="organizationName != null" >
+        organization_name,
+      </if>
+      <if test="organizationCapital != null" >
+        organization_capital,
+      </if>
+      <if test="registerNumber != null" >
+        register_number,
+      </if>
+      <if test="creditCode != null" >
+        credit_code,
+      </if>
+      <if test="establishDate != null" >
+        establish_date,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="ownedCityId != null" >
+        owned_city_id,
+      </if>
+      <if test="districtId != null" >
+        district_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="personLiable != null" >
+        person_liable,
+      </if>
+      <if test="orgType != null" >
+        org_type,
+      </if>
+      <if test="scopeOfOperation != null" >
+        scope_of_operation,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="failReason != null" >
+        fail_reason,
+      </if>
+      <if test="power != null" >
+        power,
+      </if>
+      <if test="approvalTime != null" >
+        approval_time,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="fixedPhone != null" >
+        fixedPhone,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="organizationId != null" >
+        #{organizationId,jdbcType=INTEGER},
+      </if>
+      <if test="organizationName != null" >
+        #{organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCapital != null" >
+        #{organizationCapital,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNumber != null" >
+        #{registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null" >
+        #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="establishDate != null" >
+        #{establishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="ownedCityId != null" >
+        #{ownedCityId,jdbcType=INTEGER},
+      </if>
+      <if test="districtId != null" >
+        #{districtId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="personLiable != null" >
+        #{personLiable,jdbcType=VARCHAR},
+      </if>
+      <if test="orgType != null" >
+        #{orgType,jdbcType=INTEGER},
+      </if>
+      <if test="scopeOfOperation != null" >
+        #{scopeOfOperation,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="failReason != null" >
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="power != null" >
+        #{power,jdbcType=INTEGER},
+      </if>
+      <if test="approvalTime != null" >
+        #{approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fixedPhone != null" >
+        #{fixedPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TOrganizationExample" resultType="java.lang.Integer" >
+    select count(*) from t_organization
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_organization
+    <set >
+      <if test="record.organizationId != null" >
+        organization_id = #{record.organizationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.organizationName != null" >
+        organization_name = #{record.organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationCapital != null" >
+        organization_capital = #{record.organizationCapital,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerNumber != null" >
+        register_number = #{record.registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creditCode != null" >
+        credit_code = #{record.creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.establishDate != null" >
+        establish_date = #{record.establishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.provinceId != null" >
+        province_id = #{record.provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.ownedCityId != null" >
+        owned_city_id = #{record.ownedCityId,jdbcType=INTEGER},
+      </if>
+      <if test="record.districtId != null" >
+        district_id = #{record.districtId,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personLiable != null" >
+        person_liable = #{record.personLiable,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgType != null" >
+        org_type = #{record.orgType,jdbcType=INTEGER},
+      </if>
+      <if test="record.scopeOfOperation != null" >
+        scope_of_operation = #{record.scopeOfOperation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.failReason != null" >
+        fail_reason = #{record.failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.power != null" >
+        power = #{record.power,jdbcType=INTEGER},
+      </if>
+      <if test="record.approvalTime != null" >
+        approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_organization
+    set organization_id = #{record.organizationId,jdbcType=INTEGER},
+      organization_name = #{record.organizationName,jdbcType=VARCHAR},
+      organization_capital = #{record.organizationCapital,jdbcType=VARCHAR},
+      register_number = #{record.registerNumber,jdbcType=VARCHAR},
+      credit_code = #{record.creditCode,jdbcType=VARCHAR},
+      establish_date = #{record.establishDate,jdbcType=TIMESTAMP},
+      province_id = #{record.provinceId,jdbcType=INTEGER},
+      owned_city_id = #{record.ownedCityId,jdbcType=INTEGER},
+      district_id = #{record.districtId,jdbcType=INTEGER},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      person_liable = #{record.personLiable,jdbcType=VARCHAR},
+      org_type = #{record.orgType,jdbcType=INTEGER},
+      scope_of_operation = #{record.scopeOfOperation,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      longitude = #{record.longitude,jdbcType=DECIMAL},
+      latitude = #{record.latitude,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=INTEGER},
+      fail_reason = #{record.failReason,jdbcType=VARCHAR},
+      power = #{record.power,jdbcType=INTEGER},
+      approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TOrganization" >
+    update t_organization
+    <set >
+      <if test="organizationName != null" >
+        organization_name = #{organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationCapital != null" >
+        organization_capital = #{organizationCapital,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNumber != null" >
+        register_number = #{registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null" >
+        credit_code = #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="establishDate != null" >
+        establish_date = #{establishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="ownedCityId != null" >
+        owned_city_id = #{ownedCityId,jdbcType=INTEGER},
+      </if>
+      <if test="districtId != null" >
+        district_id = #{districtId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="personLiable != null" >
+        person_liable = #{personLiable,jdbcType=VARCHAR},
+      </if>
+      <if test="orgType != null" >
+        org_type = #{orgType,jdbcType=INTEGER},
+      </if>
+      <if test="scopeOfOperation != null" >
+        scope_of_operation = #{scopeOfOperation,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="failReason != null" >
+        fail_reason = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="power != null" >
+        power = #{power,jdbcType=INTEGER},
+      </if>
+      <if test="approvalTime != null" >
+        approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where organization_id = #{organizationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TOrganization" >
+    update t_organization
+    set organization_name = #{organizationName,jdbcType=VARCHAR},
+      organization_capital = #{organizationCapital,jdbcType=VARCHAR},
+      register_number = #{registerNumber,jdbcType=VARCHAR},
+      credit_code = #{creditCode,jdbcType=VARCHAR},
+      establish_date = #{establishDate,jdbcType=TIMESTAMP},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      owned_city_id = #{ownedCityId,jdbcType=INTEGER},
+      district_id = #{districtId,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      person_liable = #{personLiable,jdbcType=VARCHAR},
+      org_type = #{orgType,jdbcType=INTEGER},
+      scope_of_operation = #{scopeOfOperation,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DECIMAL},
+      latitude = #{latitude,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      fail_reason = #{failReason,jdbcType=VARCHAR},
+      power = #{power,jdbcType=INTEGER},
+      approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR}
+    where organization_id = #{organizationId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateStatusForYes">
+		update t_organization
+		<set>
+			status = 1,
+			<if test="power != null and power != -1">
+				power = #{power},
+			</if>
+			<if test="approvalTime != null and approvalTime != ''">
+				approval_time = #{approvalTime}
+			</if>
+		</set>
+		where organization_id = #{organizationId}
+	</update>
+
+	<update id="updateStatusForNo">
+		update t_organization
+		<set>
+			status = 2,
+			<if test="failreason != null">
+				fail_reason = #{failreason},
+			</if>
+			<if test="approvalTime != null and approvalTime != ''">
+				approval_time = #{approvalTime}
+			</if>
+		</set>
+		where organization_id = #{organizationId}
+	</update>
+
+	<delete id="deleteServiceSiteById" parameterType="java.lang.Integer">
+		delete from t_organization
+		where organization_id = #{organizationId}
+	</delete>
+
+	<select id="selectOrganizationList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_organization o
+		<where>
+			<if test="status != null and status != -1">
+				o.status = #{status}
+			</if>
+			<if test="orgType != null and orgType != -1">
+				and o.org_type = #{orgType}
+			</if>
+		</where>
+	</select>
+
+  <!--查询服务网点电话名称-->
+  <select id="selectPhone" resultType="java.util.Map">
+    SELECT phone,organization_name orgName FROM t_organization WHERE organization_id=#{orgId}
+  </select>
+</mapper>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.findpetnotice.FindPetMapper">
+    <insert id="insertNotice" useGeneratedKeys="true" keyProperty="notice.id" keyColumn="id">
+        INSERT INTO t_miss_dog
+        (dog_breed,dog_age,dog_color,dog_sex,dog_weight,area_code,address,longitude,latitude,description,owner,owner_phone,reward
+          ,find_person,find_person_phone,reward_type,dog_status,type,create_time,create_by,missing_time)
+        VALUES
+        (#{notice.dogBreed},#{notice.dogAge},#{notice.dogColor},#{notice.dogSex},#{notice.dogWeight},#{notice.areaCode},#{notice.address},#{notice.longitude},#{notice.latitude}
+        ,#{notice.description},#{notice.owner},#{notice.ownerPhone},#{notice.reward},#{notice.findPerson},#{notice.findPersonPhone},#{notice.rewardType},#{notice.dogStatus},#{notice.type},#{notice.createTime},#{notice.createBy},#{notice.missingTime})
+    </insert>
+</mapper>

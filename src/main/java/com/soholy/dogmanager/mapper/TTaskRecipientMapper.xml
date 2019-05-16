@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TTaskRecipientMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TTaskRecipient" >
+    <id column="t_task_recipient_id" property="tTaskRecipientId" jdbcType="INTEGER" />
+    <result column="recipient_type" property="recipientType" jdbcType="INTEGER" />
+    <result column="recipient_id" property="recipientId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    t_task_recipient_id, recipient_type, recipient_id, task_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TTaskRecipientExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_task_recipient
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_task_recipient
+    where t_task_recipient_id = #{tTaskRecipientId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_task_recipient
+    where t_task_recipient_id = #{tTaskRecipientId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TTaskRecipientExample" >
+    delete from t_task_recipient
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TTaskRecipient" >
+    insert into t_task_recipient (t_task_recipient_id, recipient_type, 
+      recipient_id, task_id)
+    values (#{tTaskRecipientId,jdbcType=INTEGER}, #{recipientType,jdbcType=INTEGER}, 
+      #{recipientId,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TTaskRecipient" >
+    insert into t_task_recipient
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tTaskRecipientId != null" >
+        t_task_recipient_id,
+      </if>
+      <if test="recipientType != null" >
+        recipient_type,
+      </if>
+      <if test="recipientId != null" >
+        recipient_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tTaskRecipientId != null" >
+        #{tTaskRecipientId,jdbcType=INTEGER},
+      </if>
+      <if test="recipientType != null" >
+        #{recipientType,jdbcType=INTEGER},
+      </if>
+      <if test="recipientId != null" >
+        #{recipientId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TTaskRecipientExample" resultType="java.lang.Integer" >
+    select count(*) from t_task_recipient
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_task_recipient
+    <set >
+      <if test="record.tTaskRecipientId != null" >
+        t_task_recipient_id = #{record.tTaskRecipientId,jdbcType=INTEGER},
+      </if>
+      <if test="record.recipientType != null" >
+        recipient_type = #{record.recipientType,jdbcType=INTEGER},
+      </if>
+      <if test="record.recipientId != null" >
+        recipient_id = #{record.recipientId,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskId != null" >
+        task_id = #{record.taskId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_task_recipient
+    set t_task_recipient_id = #{record.tTaskRecipientId,jdbcType=INTEGER},
+      recipient_type = #{record.recipientType,jdbcType=INTEGER},
+      recipient_id = #{record.recipientId,jdbcType=INTEGER},
+      task_id = #{record.taskId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TTaskRecipient" >
+    update t_task_recipient
+    <set >
+      <if test="recipientType != null" >
+        recipient_type = #{recipientType,jdbcType=INTEGER},
+      </if>
+      <if test="recipientId != null" >
+        recipient_id = #{recipientId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where t_task_recipient_id = #{tTaskRecipientId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TTaskRecipient" >
+    update t_task_recipient
+    set recipient_type = #{recipientType,jdbcType=INTEGER},
+      recipient_id = #{recipientId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=INTEGER}
+    where t_task_recipient_id = #{tTaskRecipientId,jdbcType=INTEGER}
+  </update>
+</mapper>

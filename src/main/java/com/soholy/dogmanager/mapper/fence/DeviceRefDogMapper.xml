@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.fence.DeviceRefDogMapper">
+	
+	<select id="selectDogInfoByDeviceId" parameterType="java.lang.Long"
+		resultType="com.soholy.dogmanager.pojo.fence.DeviceRefDog">
+		select
+		di.dog_id dogId,
+		di.dog_name dogname,
+		do.dog_owner_id dogOwnId,
+		do.dog_owner_name OwnName,
+		do.dog_owner_phone OwnPhone
+		from t_device d
+		left join t_device_ref_dog dd on d.device_id =
+		dd.device_id
+		left join t_dog_info di on dd.dog_id = di.dog_id
+		left join t_dog_owner do on do.dog_owner_id = di.dog_id
+		where d.device_id = #{deviceId}
+	</select>
+
+
+</mapper>

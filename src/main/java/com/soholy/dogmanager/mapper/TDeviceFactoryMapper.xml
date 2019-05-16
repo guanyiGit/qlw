@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDeviceFactoryMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDeviceFactory" >
+    <id column="device_factory_id" property="deviceFactoryId" jdbcType="INTEGER" />
+    <result column="device_factory_name" property="deviceFactoryName" jdbcType="VARCHAR" />
+    <result column="device_factory_num" property="deviceFactoryNum" jdbcType="VARCHAR" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!--插入记录并返回id-->
+  <insert id="save" useGeneratedKeys="true" keyProperty="tDeviceFactory.deviceFactoryId" keyColumn="device_factory_id">
+    INSERT INTO `t_device_factory`
+    ( `device_factory_name`, `device_factory_num`, `creation_time`)
+    VALUES
+    (#{tDeviceFactory.deviceFactoryName}, #{tDeviceFactory.deviceFactoryNum}, #{tDeviceFactory.creationTime});
+  </insert>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    device_factory_id, device_factory_name, device_factory_num, creation_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TDeviceFactoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_device_factory
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_device_factory
+    where device_factory_id = #{deviceFactoryId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_device_factory
+    where device_factory_id = #{deviceFactoryId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDeviceFactoryExample" >
+    delete from t_device_factory
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TDeviceFactory" >
+    insert into t_device_factory (device_factory_id, device_factory_name, 
+      device_factory_num, creation_time)
+    values (#{deviceFactoryId,jdbcType=INTEGER}, #{deviceFactoryName,jdbcType=VARCHAR}, 
+      #{deviceFactoryNum,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDeviceFactory" >
+    insert into t_device_factory
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceFactoryId != null" >
+        device_factory_id,
+      </if>
+      <if test="deviceFactoryName != null" >
+        device_factory_name,
+      </if>
+      <if test="deviceFactoryNum != null" >
+        device_factory_num,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceFactoryId != null" >
+        #{deviceFactoryId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceFactoryName != null" >
+        #{deviceFactoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceFactoryNum != null" >
+        #{deviceFactoryNum,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDeviceFactoryExample" resultType="java.lang.Integer" >
+    select count(*) from t_device_factory
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_device_factory
+    <set >
+      <if test="record.deviceFactoryId != null" >
+        device_factory_id = #{record.deviceFactoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.deviceFactoryName != null" >
+        device_factory_name = #{record.deviceFactoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceFactoryNum != null" >
+        device_factory_num = #{record.deviceFactoryNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_device_factory
+    set device_factory_id = #{record.deviceFactoryId,jdbcType=INTEGER},
+      device_factory_name = #{record.deviceFactoryName,jdbcType=VARCHAR},
+      device_factory_num = #{record.deviceFactoryNum,jdbcType=INTEGER},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDeviceFactory" >
+    update t_device_factory
+    <set >
+      <if test="deviceFactoryName != null" >
+        device_factory_name = #{deviceFactoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceFactoryNum != null" >
+        device_factory_num = #{deviceFactoryNum,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where device_factory_id = #{deviceFactoryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDeviceFactory" >
+    update t_device_factory
+    set device_factory_name = #{deviceFactoryName,jdbcType=VARCHAR},
+      device_factory_num = #{deviceFactoryNum,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where device_factory_id = #{deviceFactoryId,jdbcType=INTEGER}
+  </update>
+</mapper>

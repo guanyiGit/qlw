@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TVaccineInjectionMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TVaccineInjection" >
+    <id column="vaccine_injection_id" property="vaccineInjectionId" jdbcType="BIGINT" />
+    <result column="vaccine_register_id" property="vaccineRegisterId" jdbcType="BIGINT" />
+    <result column="vaccine_injection_count" property="vaccineInjectionCount" jdbcType="INTEGER" />
+    <result column="injection_date" property="injectionDate" jdbcType="TIMESTAMP" />
+    <result column="fact_injection_date" property="factInjectionDate" jdbcType="TIMESTAMP" />
+    <result column="next_injection_date" property="nextInjectionDate" jdbcType="TIMESTAMP" />
+    <result column="injection_status" property="injectionStatus" jdbcType="BIGINT" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="vaccine_name" property="vaccineName" jdbcType="VARCHAR" />
+    <result column="vaccine_producer" property="vaccineProducer" jdbcType="VARCHAR" />
+    <result column="vaccine_num" property="vaccineNum" jdbcType="VARCHAR" />
+    <result column="send" property="send" jdbcType="INTEGER" />
+    <result column="vac_org" property="vacOrg" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    vaccine_injection_id, vaccine_register_id, vaccine_injection_count, injection_date, 
+    fact_injection_date, next_injection_date, injection_status, operator_id, create_date, 
+    remarks, vaccine_name, vaccine_producer, vaccine_num, send
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TVaccineInjectionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_vaccine_injection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_vaccine_injection
+    where vaccine_injection_id = #{vaccineInjectionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_vaccine_injection
+    where vaccine_injection_id = #{vaccineInjectionId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TVaccineInjectionExample" >
+    delete from t_vaccine_injection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TVaccineInjection" >
+    insert into t_vaccine_injection (vaccine_injection_id, vaccine_register_id, 
+      vaccine_injection_count, injection_date, 
+      fact_injection_date, next_injection_date, 
+      injection_status, operator_id, create_date, 
+      remarks, vaccine_name, vaccine_producer, 
+      vaccine_num, send)
+    values (#{vaccineInjectionId,jdbcType=BIGINT}, #{vaccineRegisterId,jdbcType=BIGINT}, 
+      #{vaccineInjectionCount,jdbcType=INTEGER}, #{injectionDate,jdbcType=TIMESTAMP}, 
+      #{factInjectionDate,jdbcType=TIMESTAMP}, #{nextInjectionDate,jdbcType=TIMESTAMP}, 
+      #{injectionStatus,jdbcType=BIGINT}, #{operatorId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{remarks,jdbcType=VARCHAR}, #{vaccineName,jdbcType=VARCHAR}, #{vaccineProducer,jdbcType=VARCHAR}, 
+      #{vaccineNum,jdbcType=VARCHAR}, #{send,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TVaccineInjection" >
+    insert into t_vaccine_injection
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vaccineInjectionId != null" >
+        vaccine_injection_id,
+      </if>
+      <if test="vaccineRegisterId != null" >
+        vaccine_register_id,
+      </if>
+      <if test="vaccineInjectionCount != null" >
+        vaccine_injection_count,
+      </if>
+      <if test="injectionDate != null" >
+        injection_date,
+      </if>
+      <if test="factInjectionDate != null" >
+        fact_injection_date,
+      </if>
+      <if test="nextInjectionDate != null" >
+        next_injection_date,
+      </if>
+      <if test="injectionStatus != null" >
+        injection_status,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="vaccineName != null" >
+        vaccine_name,
+      </if>
+      <if test="vaccineProducer != null" >
+        vaccine_producer,
+      </if>
+      <if test="vaccineNum != null" >
+        vaccine_num,
+      </if>
+      <if test="send != null" >
+        send,
+      </if>
+      <if test="vacOrg != null" >
+        vac_org,
+      </if>
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vaccineInjectionId != null" >
+        #{vaccineInjectionId,jdbcType=BIGINT},
+      </if>
+      <if test="vaccineRegisterId != null" >
+        #{vaccineRegisterId,jdbcType=BIGINT},
+      </if>
+      <if test="vaccineInjectionCount != null" >
+        #{vaccineInjectionCount,jdbcType=INTEGER},
+      </if>
+      <if test="injectionDate != null" >
+        #{injectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="factInjectionDate != null" >
+        #{factInjectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextInjectionDate != null" >
+        #{nextInjectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="injectionStatus != null" >
+        #{injectionStatus,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="vaccineName != null" >
+        #{vaccineName,jdbcType=VARCHAR},
+      </if>
+      <if test="vaccineProducer != null" >
+        #{vaccineProducer,jdbcType=VARCHAR},
+      </if>
+      <if test="vaccineNum != null" >
+        #{vaccineNum,jdbcType=VARCHAR},
+      </if>
+      <if test="send != null" >
+        #{send,jdbcType=INTEGER},
+      </if>
+      <if test="vacOrg != null" >
+        #{vacOrg,jdbcType=INTEGER},
+      </if>
+      <if test="dogId != null" >
+        #{dogId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TVaccineInjectionExample" resultType="java.lang.Integer" >
+    select count(*) from t_vaccine_injection
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_vaccine_injection
+    <set >
+      <if test="record.vaccineInjectionId != null" >
+        vaccine_injection_id = #{record.vaccineInjectionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.vaccineRegisterId != null" >
+        vaccine_register_id = #{record.vaccineRegisterId,jdbcType=BIGINT},
+      </if>
+      <if test="record.vaccineInjectionCount != null" >
+        vaccine_injection_count = #{record.vaccineInjectionCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.injectionDate != null" >
+        injection_date = #{record.injectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.factInjectionDate != null" >
+        fact_injection_date = #{record.factInjectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.nextInjectionDate != null" >
+        next_injection_date = #{record.nextInjectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.injectionStatus != null" >
+        injection_status = #{record.injectionStatus,jdbcType=BIGINT},
+      </if>
+      <if test="record.operatorId != null" >
+        operator_id = #{record.operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vaccineName != null" >
+        vaccine_name = #{record.vaccineName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vaccineProducer != null" >
+        vaccine_producer = #{record.vaccineProducer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vaccineNum != null" >
+        vaccine_num = #{record.vaccineNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.send != null" >
+        send = #{record.send,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_vaccine_injection
+    set vaccine_injection_id = #{record.vaccineInjectionId,jdbcType=BIGINT},
+      vaccine_register_id = #{record.vaccineRegisterId,jdbcType=BIGINT},
+      vaccine_injection_count = #{record.vaccineInjectionCount,jdbcType=INTEGER},
+      injection_date = #{record.injectionDate,jdbcType=TIMESTAMP},
+      fact_injection_date = #{record.factInjectionDate,jdbcType=TIMESTAMP},
+      next_injection_date = #{record.nextInjectionDate,jdbcType=TIMESTAMP},
+      injection_status = #{record.injectionStatus,jdbcType=BIGINT},
+      operator_id = #{record.operatorId,jdbcType=BIGINT},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      vaccine_name = #{record.vaccineName,jdbcType=VARCHAR},
+      vaccine_producer = #{record.vaccineProducer,jdbcType=VARCHAR},
+      vaccine_num = #{record.vaccineNum,jdbcType=VARCHAR},
+      send = #{record.send,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TVaccineInjection" >
+    update t_vaccine_injection
+    <set >
+      <if test="vaccineRegisterId != null" >
+        vaccine_register_id = #{vaccineRegisterId,jdbcType=BIGINT},
+      </if>
+      <if test="vaccineInjectionCount != null" >
+        vaccine_injection_count = #{vaccineInjectionCount,jdbcType=INTEGER},
+      </if>
+      <if test="injectionDate != null" >
+        injection_date = #{injectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="factInjectionDate != null" >
+        fact_injection_date = #{factInjectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextInjectionDate != null" >
+        next_injection_date = #{nextInjectionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="injectionStatus != null" >
+        injection_status = #{injectionStatus,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="vaccineName != null" >
+        vaccine_name = #{vaccineName,jdbcType=VARCHAR},
+      </if>
+      <if test="vaccineProducer != null" >
+        vaccine_producer = #{vaccineProducer,jdbcType=VARCHAR},
+      </if>
+      <if test="vaccineNum != null" >
+        vaccine_num = #{vaccineNum,jdbcType=VARCHAR},
+      </if>
+      <if test="send != null" >
+        send = #{send,jdbcType=INTEGER},
+      </if>
+    </set>
+    where vaccine_injection_id = #{vaccineInjectionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TVaccineInjection" >
+    update t_vaccine_injection
+    set vaccine_register_id = #{vaccineRegisterId,jdbcType=BIGINT},
+      vaccine_injection_count = #{vaccineInjectionCount,jdbcType=INTEGER},
+      injection_date = #{injectionDate,jdbcType=TIMESTAMP},
+      fact_injection_date = #{factInjectionDate,jdbcType=TIMESTAMP},
+      next_injection_date = #{nextInjectionDate,jdbcType=TIMESTAMP},
+      injection_status = #{injectionStatus,jdbcType=BIGINT},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      vaccine_name = #{vaccineName,jdbcType=VARCHAR},
+      vaccine_producer = #{vaccineProducer,jdbcType=VARCHAR},
+      vaccine_num = #{vaccineNum,jdbcType=VARCHAR},
+      send = #{send,jdbcType=INTEGER}
+    where vaccine_injection_id = #{vaccineInjectionId,jdbcType=BIGINT}
+  </update>
+</mapper>

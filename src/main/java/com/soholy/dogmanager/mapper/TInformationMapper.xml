@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TInformationMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TInformation">
+		<id column="information_id" property="informationId" jdbcType="BIGINT" />
+		<result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+		<result column="information_type" property="informationType"
+			jdbcType="INTEGER" />
+		<result column="info_titile" property="infoTitile" jdbcType="VARCHAR" />
+		<result column="child_titile" property="childTitile" jdbcType="VARCHAR" />
+		<result column="view_count" property="viewCount" jdbcType="INTEGER" />
+		<result column="hot" property="hot" jdbcType="INTEGER" />
+		<result column="seq" property="seq" jdbcType="INTEGER" />
+		<result column="info_state" property="infoState" jdbcType="INTEGER" />
+		<result column="fail_reason" property="failReason" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="TIMESTAMP" />
+		<result column="approval_mark" property="mark"/>
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TInformation"
+		extends="BaseResultMap">
+		<result column="info_content" property="infoContent" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="InforMationDetailResuleMap" type="com.soholy.dogmanager.entity.notice.InforMationDetail" extends="com.soholy.dogmanager.mapper.TInformationMapper.ResultMapWithBLOBs">
+		<association property="infoType" javaType="com.soholy.dogmanager.entity.TDictionary" resultMap="com.soholy.dogmanager.mapper.TDictionaryMapper.BaseResultMap"></association>
+		<association property="tOrganization" javaType="com.soholy.dogmanager.entity.TOrganization" resultMap="com.soholy.dogmanager.mapper.TOrganizationMapper.BaseResultMap"></association>
+		<association property="userOrgType" javaType="com.soholy.dogmanager.entity.TDictionary" columnPrefix="dio_" resultMap="com.soholy.dogmanager.mapper.TDictionaryMapper.BaseResultMap"></association>
+		<association property="tUsers" javaType="com.soholy.dogmanager.entity.TUsers" resultMap="com.soholy.dogmanager.mapper.TUsersMapper.BaseResultMap"></association>
+		<collection property="tImagesList" ofType="com.soholy.dogmanager.entity.TImages" resultMap="com.soholy.dogmanager.mapper.TImagesMapper.BaseResultMap"></collection>
+	</resultMap>
+	<!--查询资讯详情-->
+	<select id="findInforMationDetailById" resultMap="InforMationDetailResuleMap" parameterType="java.lang.Long">
+		SELECT
+            inf.*, d.*, img.*, u.*, o.*,
+            dio.creation_time dio_creation_time,dio.dictionary_describe dio_dictionary_describe,
+            dio.dictionary_field dio_dictionary_field,dio.dictionary_id dio_dictionary_id,dio.dictionary_value dio_dictionary_value
+        FROM t_information inf
+		LEFT JOIN t_dictionary d ON inf.information_type = d.dictionary_value AND dictionary_field = "information_type"
+		LEFT JOIN (
+			SELECT
+			iref.ref_id,iref.creation_time,iref.image_ref_id,iref.target_type,
+			i.cration_time,i.image_ext,i.image_id,i.image_name,i.image_size,i.image_titile,i.image_url,i.thumbnail_size,i.thumbnail_url
+			FROM t_images_ref iref,t_images i
+			WHERE i.image_id = iref.image_id AND target_type IN  (1)
+		) img ON img.ref_id = inf.information_id
+		LEFT JOIN t_users u ON u.user_id = inf.operator_id
+		LEFT JOIN t_organization o ON o.organization_id = u.organization_id
+		LEFT JOIN t_dictionary dio ON dio.dictionary_value = o.org_type AND dio.dictionary_field = 'org_type'
+		<if test="_parameter != null">
+			WHERE inf.information_id = #{_parameter}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		information_id, operator_id, information_type, info_titile, child_titile, view_count,
+		hot, seq, info_state, fail_reason, update_time, creation_time,approval_time,approval_mark
+	</sql>
+	<sql id="Blob_Column_List">
+		info_content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.soholy.dogmanager.entity.TInformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TInformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_information
+		where information_id = #{informationId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from t_information
+		where information_id = #{informationId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TInformationExample">
+		delete from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.soholy.dogmanager.entity.TInformation">
+		insert into t_information (information_id, operator_id,
+		information_type,
+		info_titile, child_titile, view_count,
+		hot, seq, info_state,
+		fail_reason, update_time, creation_time,
+		info_content)
+		values (#{informationId,jdbcType=BIGINT}, #{operatorId,jdbcType=BIGINT},
+		#{informationType,jdbcType=INTEGER},
+		#{infoTitile,jdbcType=VARCHAR}, #{childTitile,jdbcType=VARCHAR}, #{viewCount,jdbcType=INTEGER},
+		#{hot,jdbcType=INTEGER}, #{seq,jdbcType=INTEGER},
+		#{infoState,jdbcType=INTEGER},
+		#{failReason,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{creationTime,jdbcType=TIMESTAMP},
+		#{infoContent,jdbcType=LONGVARCHAR})
+	</insert>
+
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TInformationExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_information
+		<set>
+			<if test="record.informationId != null">
+				information_id = #{record.informationId,jdbcType=BIGINT},
+			</if>
+			<if test="record.operatorId != null">
+				operator_id = #{record.operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="record.informationType != null">
+				information_type = #{record.informationType,jdbcType=INTEGER},
+			</if>
+			<if test="record.infoTitile != null">
+				info_titile = #{record.infoTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.childTitile != null">
+				child_titile = #{record.childTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.viewCount != null">
+				view_count = #{record.viewCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.hot != null">
+				hot = #{record.hot,jdbcType=INTEGER},
+			</if>
+			<if test="record.seq != null">
+				seq = #{record.seq,jdbcType=INTEGER},
+			</if>
+			<if test="record.infoState != null">
+				info_state = #{record.infoState,jdbcType=INTEGER},
+			</if>
+			<if test="record.failReason != null">
+				fail_reason = #{record.failReason,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.creationTime != null">
+				creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.infoContent != null">
+				info_content = #{record.infoContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update t_information
+		set information_id = #{record.informationId,jdbcType=BIGINT},
+		operator_id = #{record.operatorId,jdbcType=BIGINT},
+		information_type = #{record.informationType,jdbcType=INTEGER},
+		info_titile = #{record.infoTitile,jdbcType=VARCHAR},
+		child_titile = #{record.childTitile,jdbcType=VARCHAR},
+		view_count = #{record.viewCount,jdbcType=INTEGER},
+		hot = #{record.hot,jdbcType=INTEGER},
+		seq = #{record.seq,jdbcType=INTEGER},
+		info_state = #{record.infoState,jdbcType=INTEGER},
+		fail_reason = #{record.failReason,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+		info_content = #{record.infoContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_information
+		set information_id = #{record.informationId,jdbcType=BIGINT},
+		operator_id = #{record.operatorId,jdbcType=BIGINT},
+		information_type = #{record.informationType,jdbcType=INTEGER},
+		info_titile = #{record.infoTitile,jdbcType=VARCHAR},
+		child_titile = #{record.childTitile,jdbcType=VARCHAR},
+		view_count = #{record.viewCount,jdbcType=INTEGER},
+		hot = #{record.hot,jdbcType=INTEGER},
+		seq = #{record.seq,jdbcType=INTEGER},
+		info_state = #{record.infoState,jdbcType=INTEGER},
+		fail_reason = #{record.failReason,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TInformation">
+		update t_information
+		set operator_id = #{operatorId,jdbcType=BIGINT},
+		information_type = #{informationType,jdbcType=INTEGER},
+		info_titile = #{infoTitile,jdbcType=VARCHAR},
+		child_titile = #{childTitile,jdbcType=VARCHAR},
+		view_count = #{viewCount,jdbcType=INTEGER},
+		hot = #{hot,jdbcType=INTEGER},
+		seq = #{seq,jdbcType=INTEGER},
+		info_state = #{infoState,jdbcType=INTEGER},
+		fail_reason = #{failReason,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		creation_time = #{creationTime,jdbcType=TIMESTAMP},
+		info_content = #{infoContent,jdbcType=LONGVARCHAR}
+		where information_id = #{informationId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TInformation">
+		update t_information
+		set operator_id = #{operatorId,jdbcType=BIGINT},
+		information_type = #{informationType,jdbcType=INTEGER},
+		info_titile = #{infoTitile,jdbcType=VARCHAR},
+		child_titile = #{childTitile,jdbcType=VARCHAR},
+		view_count = #{viewCount,jdbcType=INTEGER},
+		hot = #{hot,jdbcType=INTEGER},
+		seq = #{seq,jdbcType=INTEGER},
+		info_state = #{infoState,jdbcType=INTEGER},
+		fail_reason = #{failReason,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		creation_time = #{creationTime,jdbcType=TIMESTAMP}
+		where information_id = #{informationId,jdbcType=BIGINT}
+	</update>
+
+	<insert id="addInformation" parameterType="com.soholy.dogmanager.entity.TInformation">
+		<selectKey resultType="java.lang.Long" order="AFTER"
+			keyProperty="informationId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="informationId != null">
+				information_id,
+			</if>
+			<if test="operatorId != null">
+				operator_id,
+			</if>
+			<if test="informationType != null">
+				information_type,
+			</if>
+			<if test="infoTitile != null">
+				info_titile,
+			</if>
+			<if test="childTitile != null">
+				child_titile,
+			</if>
+			<if test="viewCount != null">
+				view_count,
+			</if>
+			<if test="hot != null">
+				hot,
+			</if>
+			<if test="seq != null">
+				seq,
+			</if>
+			<if test="infoState != null">
+				info_state,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="creationTime != null">
+				creation_time,
+			</if>
+			<if test="infoContent != null">
+				info_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="informationId != null">
+				#{informationId,jdbcType=BIGINT},
+			</if>
+			<if test="operatorId != null">
+				#{operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="informationType != null">
+				#{informationType,jdbcType=INTEGER},
+			</if>
+			<if test="infoTitile != null">
+				#{infoTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="childTitile != null">
+				#{childTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="viewCount != null">
+				#{viewCount,jdbcType=INTEGER},
+			</if>
+			<if test="hot != null">
+				#{hot,jdbcType=INTEGER},
+			</if>
+			<if test="seq != null">
+				#{seq,jdbcType=INTEGER},
+			</if>
+			<if test="infoState != null">
+				#{infoState,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creationTime != null">
+				#{creationTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="infoContent != null">
+				#{infoContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateInformationCount" parameterType="java.lang.Long">
+		update
+		t_information
+		set view_count = view_count+1
+		where information_id =
+		#{informationId}
+	</update>
+
+	<update id="updateInformation" parameterType="com.soholy.dogmanager.entity.TInformation">
+		update t_information
+		<set>
+			<if test="operatorId != null">
+				operator_id = #{operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="informationType != null">
+				information_type = #{informationType,jdbcType=INTEGER},
+			</if>
+			<if test="infoTitile != null">
+				info_titile = #{infoTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="childTitile != null">
+				child_titile = #{childTitile,jdbcType=VARCHAR},
+			</if>
+			<if test="viewCount != null">
+				view_count = #{viewCount,jdbcType=INTEGER},
+			</if>
+			<if test="hot != null">
+				hot = #{hot,jdbcType=INTEGER},
+			</if>
+			<if test="seq != null">
+				seq = #{seq,jdbcType=INTEGER},
+			</if>
+			<if test="infoState != null">
+				info_state = #{infoState,jdbcType=INTEGER},
+			</if>
+			<if test="failReason != null">
+				fail_reason = #{failReason,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creationTime != null">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="infoContent != null">
+				info_content = #{infoContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where information_id = #{informationId,jdbcType=BIGINT}
+	</update>
+
+	<delete id="deleteInformation" parameterType="java.lang.Long">
+		delete from
+		t_information
+		where information_id = #{informationId,jdbcType=BIGINT}
+	</delete>
+
+	<select id="selectInformation" parameterType="java.lang.Long"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_information
+		where information_id = #{informationId}
+	</select>
+
+	<update id="updatehot" parameterType="java.lang.Long">
+		update t_information
+		set view_count = view_count+1
+		where information_id =
+		#{informationId}
+	</update>
+
+
+	<select id="selectInformations" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		<!--,
+		<include refid="Blob_Column_List" />-->
+		from t_information
+		<where>
+			<if test="TypeNumber != null">
+				information_type = #{TypeNumber}
+			</if>
+			<if test="mark != null">
+				approval_mark = #{mark}
+			</if>
+			<if test="status != null and status != 3">
+				and info_state = #{status}
+			</if>
+			<if test="status == 3">
+				and info_state in (1,2)
+			</if>
+			<if test="query != null and query != ''">
+				and info_titile like concat('%',#{query},'%')
+			</if>
+		</where>
+		order by creation_time desc
+	</select>
+
+	<update id="updateInformationForYes" parameterType="java.lang.Long">
+		update t_information
+		set info_state = 1,
+		approval_mark = 1
+		where information_id = #{informationId}
+	</update>
+
+	<update id="updateInformationForNo">
+		update t_information
+		<set>
+			info_state = 2,
+			approval_mark = 2,
+			<if test="failReason != null and failReason != '' ">
+				fail_reason = #{failReason},
+			</if>
+		</set>
+		where information_id = #{informationId}
+	</update>
+
+
+	<!--查资讯列表-->
+	<select id="findList" resultMap="InforMationDetailResuleMap">
+		SELECT
+			inf.information_id,inf.operator_id,inf.information_type,inf.info_titile,inf.child_titile,inf.view_count,inf.hot,inf.seq,inf.info_state,inf.fail_reason,inf.update_time,
+			inf.creation_time,inf.approval_time,inf.approval_mark,
+-- 			inf.*,
+		    d.*, img.*, u.*, o.*,
+			dio.creation_time dio_creation_time,dio.dictionary_describe dio_dictionary_describe,
+			dio.dictionary_field dio_dictionary_field,dio.dictionary_id dio_dictionary_id,dio.dictionary_value dio_dictionary_value
+		FROM (
+			SELECT * FROM t_information
+			<where>
+				<if test="type != null">
+					AND information_type = #{type}
+				</if>
+				<if test="searchkey != null and searchkey != ''">
+					AND inf.info_titile LIKE CONCAT('%',#{searchkey},'%')
+				</if>
+				<if test="mark != null">
+					AND inf.info_state = #{mark}
+				</if>
+			</where>
+			<if test="pageNum != null and pageSize != null">
+				LIMIT #{pageNum}, #{pageSize}
+			</if>
+		) inf
+		LEFT JOIN t_dictionary d ON inf.information_type = d.dictionary_value AND dictionary_field = "information_type"
+		LEFT JOIN (
+			SELECT
+				iref.ref_id,iref.creation_time,iref.image_ref_id,iref.target_type,
+				i.cration_time,i.image_ext,i.image_id,i.image_name,i.image_size,i.image_titile,i.image_url,i.thumbnail_size,i.thumbnail_url
+			FROM t_images_ref iref,t_images i
+			WHERE i.image_id = iref.image_id AND target_type IN  (1)
+		) img ON img.ref_id = inf.information_id
+		LEFT JOIN t_users u ON u.user_id = inf.operator_id
+		LEFT JOIN t_organization o ON o.organization_id = u.organization_id
+		LEFT JOIN t_dictionary dio ON dio.dictionary_value = o.org_type AND dio.dictionary_field = 'org_type'
+		ORDER BY inf.creation_time DESC, inf.hot DESC
+	</select>
+
+	<!--查总条数-->
+	<select id="findListTotalCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM t_information
+		<where>
+			<if test="type != null">
+				AND information_type = #{type}
+			</if>
+			<if test="searchkey != null and searchkey != ''">
+				AND inf.info_titile LIKE CONCAT('%',#{searchkey},'%')
+			</if>
+			<if test="mark != null">
+				AND inf.info_state = #{mark}
+			</if>
+		</where>
+	</select>
+
+</mapper>

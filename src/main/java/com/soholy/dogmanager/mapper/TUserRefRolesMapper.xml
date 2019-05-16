@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TUserRefRolesMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TUserRefRoles">
+		<id column="user_ref_role_id" property="userRefRoleId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="role_id" property="roleId" jdbcType="VARCHAR" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		user_ref_role_id, user_id, role_id, creation_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TUserRefRolesExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_user_ref_roles
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_ref_roles
+		where user_ref_role_id =
+		#{userRefRoleId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		t_user_ref_roles
+		where user_ref_role_id =
+		#{userRefRoleId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TUserRefRolesExample">
+		delete from t_user_ref_roles
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.soholy.dogmanager.entity.TUserRefRoles">
+		insert into t_user_ref_roles
+		(user_ref_role_id, user_id, role_id,
+		creation_time)
+		values
+		(#{userRefRoleId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR},
+		#{roleId,jdbcType=VARCHAR},
+		#{creationTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TUserRefRoles">
+		insert into t_user_ref_roles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userRefRoleId != null">
+				user_ref_role_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="roleId != null">
+				role_id,
+			</if>
+			<if test="creationTime != null">
+				creation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userRefRoleId != null">
+				#{userRefRoleId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime != null">
+				#{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TUserRefRolesExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_user_ref_roles
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_user_ref_roles
+		<set>
+			<if test="record.userRefRoleId != null">
+				user_ref_role_id =
+				#{record.userRefRoleId,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.roleId != null">
+				role_id = #{record.roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.creationTime != null">
+				creation_time =
+				#{record.creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_user_ref_roles
+		set user_ref_role_id =
+		#{record.userRefRoleId,jdbcType=INTEGER},
+		user_id =
+		#{record.userId,jdbcType=VARCHAR},
+		role_id =
+		#{record.roleId,jdbcType=VARCHAR},
+		creation_time =
+		#{record.creationTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TUserRefRoles">
+		update t_user_ref_roles
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				role_id = #{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime != null">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where user_ref_role_id = #{userRefRoleId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TUserRefRoles">
+		update
+		t_user_ref_roles
+		set user_id = #{userId,jdbcType=VARCHAR},
+		role_id =
+		#{roleId,jdbcType=VARCHAR},
+		creation_time =
+		#{creationTime,jdbcType=TIMESTAMP}
+		where user_ref_role_id =
+		#{userRefRoleId,jdbcType=INTEGER}
+	</update>
+
+	<insert id="addUserRefRole" parameterType="java.util.List">
+		insert into t_user_ref_roles (user_id, role_id,
+		creation_time)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.userId},
+			#{item.roleId},
+			#{item.creationTime}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteUserRefRoleByUserId" parameterType="java.lang.Long">
+		delete from t_user_ref_roles
+		<where>
+			user_id = #{userId}
+		</where>
+	</delete>
+	
+	<delete id="deleteUserRefRoleByRoleId" parameterType="java.lang.Integer">
+		delete from t_user_ref_roles
+		<where>
+			role_id = #{roleId}
+		</where>
+	</delete>
+	
+	<select id="selectByUserId" parameterType="java.lang.Long">
+		select <include refid="Base_Column_List"/> from t_user_ref_roles
+		<where>
+			user_id = #{userId}
+		</where> 
+	</select>
+	
+	<select id="selectByRoleId" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List"/> from t_user_ref_roles
+		<where>
+			user_id = #{userId}
+		</where> 
+	</select>
+
+</mapper>

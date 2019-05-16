@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TTask" >
+    <id column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="task_level" property="taskLevel" jdbcType="INTEGER" />
+    <result column="task_type" property="taskType" jdbcType="INTEGER" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="submit_user_id" property="submitUserId" jdbcType="BIGINT" />
+    <result column="comp_user_id" property="compUserId" jdbcType="BIGINT" />
+    <result column="task_status" property="taskStatus" jdbcType="INTEGER" />
+    <result column="task_titile" property="taskTitile" jdbcType="VARCHAR" />
+    <result column="task_details" property="taskDetails" jdbcType="VARCHAR" />
+    <result column="comp_time" property="compTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TTask" extends="BaseResultMap" >
+    <result column="task_details" property="taskDetails" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <resultMap id="TaskDetailResultMap" type="com.soholy.dogmanager.entity.notice.TaskDetail" extends="BaseResultMap">
+    <collection property="tTaskRecipients" ofType="com.soholy.dogmanager.entity.TTaskRecipient" resultMap="com.soholy.dogmanager.mapper.TTaskRecipientMapper.BaseResultMap"></collection>
+  </resultMap>
+
+  <!--根据结构id查询机构的任务-->
+  <select id="findCollNotsByOrgId" resultMap="TaskDetailResultMap">
+    SELECT *
+    FROM  t_task t,t_task_recipient tr
+    WHERE t.task_id = tr.task_id
+    AND tr.recipient_type = 1
+    <if test="taskStatus != null">
+      AND t.task_status
+      <foreach collection="taskStatus" item="item" open="IN (" separator="," close=")">#{item}</foreach>
+    </if>
+    AND tr.recipient_id = #{orgId}
+    ORDER BY t.create_time DESC
+  </select>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    task_id, task_level, task_type, task_name, submit_user_id, comp_user_id, task_status, 
+    task_titile, comp_time, create_time,task_details
+  </sql>
+  <sql id="Blob_Column_List" >
+    task_details
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TTaskExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TTaskExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_task
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_task
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TTaskExample" >
+    delete from t_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TTask" >
+    insert into t_task (task_id, task_level, task_type, 
+      task_name, submit_user_id, comp_user_id, 
+      task_status, task_titile, comp_time, 
+      create_time, task_details)
+    values (#{taskId,jdbcType=INTEGER}, #{taskLevel,jdbcType=INTEGER}, #{taskType,jdbcType=INTEGER}, 
+      #{taskName,jdbcType=VARCHAR}, #{submitUserId,jdbcType=BIGINT}, #{compUserId,jdbcType=BIGINT}, 
+      #{taskStatus,jdbcType=INTEGER}, #{taskTitile,jdbcType=VARCHAR}, #{compTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{taskDetails,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TTask" >
+    <selectKey resultType ="java.lang.Integer" keyProperty= "taskId" order= "AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey >
+    insert into t_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="taskLevel != null" >
+        task_level,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="taskName != null" >
+        task_name,
+      </if>
+      <if test="submitUserId != null" >
+        submit_user_id,
+      </if>
+      <if test="compUserId != null" >
+        comp_user_id,
+      </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
+      <if test="taskTitile != null" >
+        task_titile,
+      </if>
+      <if test="compTime != null" >
+        comp_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="taskDetails != null" >
+        task_details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="taskId != null" >
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="taskLevel != null" >
+        #{taskLevel,jdbcType=INTEGER},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="submitUserId != null" >
+        #{submitUserId,jdbcType=BIGINT},
+      </if>
+      <if test="compUserId != null" >
+        #{compUserId,jdbcType=BIGINT},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskTitile != null" >
+        #{taskTitile,jdbcType=VARCHAR},
+      </if>
+      <if test="compTime != null" >
+        #{compTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskDetails != null" >
+        #{taskDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TTaskExample" resultType="java.lang.Integer" >
+    select count(*) from t_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_task
+    <set >
+      <if test="record.taskId != null" >
+        task_id = #{record.taskId,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskLevel != null" >
+        task_level = #{record.taskLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskType != null" >
+        task_type = #{record.taskType,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskName != null" >
+        task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitUserId != null" >
+        submit_user_id = #{record.submitUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.compUserId != null" >
+        comp_user_id = #{record.compUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.taskStatus != null" >
+        task_status = #{record.taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskTitile != null" >
+        task_titile = #{record.taskTitile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compTime != null" >
+        comp_time = #{record.compTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taskDetails != null" >
+        task_details = #{record.taskDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_task
+    set task_id = #{record.taskId,jdbcType=INTEGER},
+      task_level = #{record.taskLevel,jdbcType=INTEGER},
+      task_type = #{record.taskType,jdbcType=INTEGER},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      submit_user_id = #{record.submitUserId,jdbcType=BIGINT},
+      comp_user_id = #{record.compUserId,jdbcType=BIGINT},
+      task_status = #{record.taskStatus,jdbcType=INTEGER},
+      task_titile = #{record.taskTitile,jdbcType=VARCHAR},
+      comp_time = #{record.compTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      task_details = #{record.taskDetails,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_task
+    set task_id = #{record.taskId,jdbcType=INTEGER},
+      task_level = #{record.taskLevel,jdbcType=INTEGER},
+      task_type = #{record.taskType,jdbcType=INTEGER},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      submit_user_id = #{record.submitUserId,jdbcType=BIGINT},
+      comp_user_id = #{record.compUserId,jdbcType=BIGINT},
+      task_status = #{record.taskStatus,jdbcType=INTEGER},
+      task_titile = #{record.taskTitile,jdbcType=VARCHAR},
+      comp_time = #{record.compTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TTask" >
+    update t_task
+    <set >
+      <if test="taskLevel != null" >
+        task_level = #{taskLevel,jdbcType=INTEGER},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null" >
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="submitUserId != null" >
+        submit_user_id = #{submitUserId,jdbcType=BIGINT},
+      </if>
+      <if test="compUserId != null" >
+        comp_user_id = #{compUserId,jdbcType=BIGINT},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskTitile != null" >
+        task_titile = #{taskTitile,jdbcType=VARCHAR},
+      </if>
+      <if test="compTime != null" >
+        comp_time = #{compTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskDetails != null" >
+        task_details = #{taskDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TTask" >
+    update t_task
+    set task_level = #{taskLevel,jdbcType=INTEGER},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      submit_user_id = #{submitUserId,jdbcType=BIGINT},
+      comp_user_id = #{compUserId,jdbcType=BIGINT},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      task_titile = #{taskTitile,jdbcType=VARCHAR},
+      comp_time = #{compTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      task_details = #{taskDetails,jdbcType=LONGVARCHAR}
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TTask" >
+    update t_task
+    set task_level = #{taskLevel,jdbcType=INTEGER},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      submit_user_id = #{submitUserId,jdbcType=BIGINT},
+      comp_user_id = #{compUserId,jdbcType=BIGINT},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      task_titile = #{taskTitile,jdbcType=VARCHAR},
+      comp_time = #{compTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+</mapper>

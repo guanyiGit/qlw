@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>服务网点注册</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <script type="text/javascript" src="../../../static/js/dateformat.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--引入webuploader相关组件-->
+    <link href="../../../static/webuploader/webuploader.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--城市组件-->
+    <link rel="stylesheet" type="text/css" href="../../../static/cityPicker/css/index.css">
+    <!--<script type="text/javascript" src="https://lquan529.github.io/cityPicker/js/citydata.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/citydata.js"></script>
+    <script type="text/javascript" src="../../../static/cityPicker/js/cityPicker-2.0.3.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/headPage/serviceNetworkRegistration.js"></script>
+    <style>
+        /*table tr:nth-child(even){*/
+        /*background: #ccc;*/
+        /*}*/
+        .table thead {
+            background: rgb(65, 199, 214);
+        }
+
+        .back {
+            /*BACKGROUND:url(../../../static/images/beijin.jpg) no-repeat center top #000;*/
+            /*MARGIN:0px;*/
+            /*padding:0;*/
+            /*height: 1500px;*/
+            /*width:1300px;*/
+            /*margin-top: -25px*/
+        }
+
+        @-webkit-keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg)
+            }
+            to {
+                -webkit-transform: rotate(-360deg)
+            }
+        }
+
+        @-moz-keyframes rotate {
+            from {
+                -moz-transform: rotate(0deg)
+            }
+            to {
+                -moz-transform: rotate(-359deg)
+            }
+        }
+
+        @-o-keyframes rotate {
+            from {
+                -o-transform: rotate(0deg)
+            }
+            to {
+                -o-transform: rotate(-359deg)
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg)
+            }
+            to {
+                transform: rotate(-359deg)
+            }
+        }
+
+        .schedule-nav {
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .schedule-nav > div {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+        }
+
+        .schedule-nav > div > span:first-child {
+            height: 25px;
+            width: 25px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            margin-bottom: 10px;
+        }
+
+        .schedule-nav > div:first-child > span:first-child {
+            background-image: url("../../../static/views/message_moderation/image/nav-02.png");
+            -webkit-transition-property: -webkit-transform;
+            -webkit-transition-duration: 1s;
+            -moz-transition-property: -moz-transform;
+            -moz-transition-duration: 1s;
+            -webkit-animation: rotate 3s linear infinite;
+            -moz-animation: rotate 3s linear infinite;
+            -o-animation: rotate 3s linear infinite;
+            animation: rotate 3s linear infinite;
+        }
+
+        .schedule-nav > div:nth-child(2) > span:first-child {
+            background-image: url("../../../static/images/wei.png");
+        }
+
+        .schedule-nav > div:last-child > span:first-child {
+            background-image: url("../../../static/images/wei.png");
+        }
+
+        .context {
+            margin: 40px 0;
+            color: rgb(255, 102, 85);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .context:hover {
+            cursor: pointer;
+        }
+
+        ctx-main
+    </style>
+</head>
+<body>
+<!--详情-->
+<div class="container-fluid info-container back">
+    <div style="z-index: 14;">
+        <!--<div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label"-->
+        <!--style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);">-->
+        <div class="context" style="">
+            服务网点注册&gt;&gt;
+        </div>
+        <!--<div style="width: auto; height: auto; text-align: left;">-->
+        <!--<div style="width: auto; height: auto;">-->
+        <!--&lt;!&ndash;<label class="mav-text" style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);margin-left: 49px">&ndash;&gt;-->
+        <!--<label class="mav-text" >-->
+        <!--服务网点注册&gt;&gt;-->
+        <!--</label>-->
+        <!--&lt;!&ndash;<button id="return" class="btn btn-sm btn-info"&ndash;&gt;-->
+        <!--&lt;!&ndash;style="margin-left: 1100px;margin-top: -50px;width: 80px" onclick="returnn();">返回&ndash;&gt;-->
+        <!--&lt;!&ndash;</button>&ndash;&gt;-->
+        <!--</div>-->
+
+        <!--</div>-->
+        <div style="display: none;"></div>
+    </div>
+</div>
+
+<div class="panel panel-default ctx-main">
+    <!--<div class="panel panel-default">-->
+    <div style="">
+        <!--<p>-->
+        <!--<img src="../../../static/images/wancheng.png" style="width: 32px;height: 32px;"/>-->
+        <!--<b style="color: #989898;">&nbsp&nbsp&nbsp&nbsp-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&nbsp&nbsp&nbsp&nbsp</b>-->
+        <!--<img src="../../../static/images/jiazai.png" style="width: 30px;height: 30px;"/>-->
+        <!--<b style="color: #989898;">&nbsp&nbsp&nbsp&nbsp-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&nbsp&nbsp&nbsp&nbsp</b>-->
+        <!--<img src="../../../static/images/wei.png" style="width: 32px;height: 32px;"/>-->
+        <!--</p>-->
+        <!--<p style="font-size: 16px">-->
+        <!--<span style="margin-left: -50px">宠物医院提交申请</span>-->
+        <!--<span style="margin-left: 235px">平台审核</span>-->
+        <!--<span style="margin-left: 285px">结束</span>-->
+        <!--</p>-->
+        <div class="row schedule-nav">
+            <div class="col-sm-4"><span></span><span>单位发布信息</span></div>
+            <div class="col-sm-4"><span></span><span>平台审核</span></div>
+            <div class="col-sm-4"><span></span><span>结束</span></div>
+        </div>
+    </div>
+    <div style="height: 10px"></div>
+    <!--form 表单-->
+    <form id="add" method="post">
+        <div class="form-group">
+            <!--基本信息-->
+            <div class="panel panel-info" style="margin: 0 auto;width:100%">
+                <p style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;color: #FFFFFF;font-size: 14px;vertical-align:auto">
+                    &nbsp&nbsp&nbsp&nbsp<b>基本信息</b></p>
+                <div class="row">
+                    <span class="col-sm-6 col-sm-offset-1">
+                        <label>医院名称:</label>
+                        <input id="yymc">
+                    </span>
+                    <span class="col-sm-5">
+                        <label>注册资本:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="zczb">
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-6 col-sm-offset-1">
+                        <label>注册号:</label>
+                        <input id="zch">
+                    </span>
+                    <span class="col-sm-5">
+                        <label>统一社会信用代码:&nbsp;&nbsp;</label>
+                        <input id="xydm">
+                    </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-sm-offset-1">
+                                <label>成立时间:</label>
+                                <input id="clsj" type="date">
+                            </span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <label>所属城市:</label>
+                        <div class="city-picker-selector  " id="city-picker-selector2" style="">
+
+                        </div>
+                    </div>
+                    <!--<p>-->
+                    <!--<label class="col-sm-6 col-sm-offset-1">所属城市:&nbsp;&nbsp;&nbsp;&nbsp;</label>-->
+                    <!--<div class="city-picker-selector" id="city-picker-selector2"-->
+                    <!--style=""></div>-->
+                    <!--</p>-->
+                </div>
+                <div class="row">
+                    <span class="col-sm-6 col-sm-offset-1">
+                        <label>详细地址:</label>
+                        <!--<input class="col-sm-8" type="date" class="form-control" >-->
+                        <input id="address">
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-6 col-sm-offset-1">
+                            <label>联系人:</label>
+                            <input id="lxr">
+                    </span>
+                    <span class="col-sm-5 ">
+                            <label>联系电话:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input id="phone">
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11 col-sm-offset-1 ">
+                        <label>经营范围:</label>
+                        <textarea rows="5" id="jyfw"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <label>店铺照片:</label>
+                        <div id="dg" class="panel panel-default img-ctx ">
+                            <div class="uploader-demo">
+                                <!--用来存放item-->
+                                <ul id="fileList" class="list-unstyled list-inline "></ul>
+                                <div id="filePicker"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--证件信息-->
+        <!--<div class="form-group " style="margin: 0 auto;width:100%">-->
+        <!--证件信息-->
+        <div class="panel panel-info">
+            <p style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;color: #FFFFFF;font-size: 14px;vertical-align:auto">
+                <b>&nbsp&nbsp&nbsp&nbsp证件信息</b>
+            </p>
+            <div class="row" style="font-size: 16px;"><span class="col-sm-11 titile-text">1、动物诊疗许可证</span></div>
+            <div class="row">
+                    <span class="col-sm-4 col-sm-offset-1">
+                        <label>证件号码:</label>
+                        <input id="petHCardNum1">
+                    </span>
+                <span class="col-sm-7">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input id="startDate1" type="date" name="upTime">
+                         <input id="endDate1" type="date" name="expireTime">
+                    </span>
+            </div>
+            <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                    <label>照片:</label>
+                    <div id="dg1" class="panel panel-default img-ctx ">
+                        <div class="uploader-demo">
+                            <!--用来存放item-->
+                            <ul id="fileList1" class="list-unstyled list-inline "></ul>
+                            <div id="filePicker1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="font-size: 16px;"><span class="col-sm-11 titile-text">2、动物防疫合格证</span></div>
+            <div class="row">
+                    <span class="col-sm-4 col-sm-offset-1">
+                        <label>证件号码:</label>
+                        <input id="petHCardNum2">
+                    </span>
+                <span class="col-sm-7">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input id="startDate2" type="date" name="upTime">
+                         <input id="endDate2" type="date" name="expireTime">
+                    </span>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                    <label>照片:</label>
+                    <div id="dg2" class="panel panel-default img-ctx ">
+                        <div class="uploader-demo">
+                            <!--用来存放item-->
+                            <ul id="fileList2" class="list-unstyled list-inline "></ul>
+                            <div id="filePicker2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="font-size: 16px;"><span class="col-sm-11 titile-text">3、工商营业执照</span></div>
+            <div class="row">
+                    <span class="col-sm-4 col-sm-offset-1">
+                        <label>证件号码:</label>
+                        <input id="petHCardNum3">
+                    </span>
+                <span class="col-sm-7">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input id="startDate3" type="date" name="upTime">
+                         <input id="endDate3" type="date" name="expireTime">
+                    </span>
+            </div>
+            <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                    <label>照片:</label>
+                    <div id="dg3" class="panel panel-default img-ctx ">
+                        <div class="uploader-demo">
+                            <!--用来存放item-->
+                            <ul id="fileList3" class="list-unstyled list-inline "></ul>
+                            <div id="filePicker3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row" style="font-size: 16px;"><span class="col-sm-11 titile-text">4、兽医资格证</span></div>
+            <div class="row">
+                        <span class="col-sm-4 col-sm-offset-1">
+                            <label>证件号码:</label>
+                            <input id="petHCardNum4">
+                        </span>
+                <span class="col-sm-7">
+                            <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                             <input id="startDate4" type="date" name="upTime">
+                             <input id="endDate4" type="date" name="expireTime">
+                        </span>
+            </div>
+            <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                    <label>照片:</label>
+                    <div id="dg4" class="panel panel-default img-ctx ">
+                        <div class="uploader-demo">
+                            <!--用来存放item-->
+                            <ul id="fileList4" class="list-unstyled list-inline "></ul>
+                            <div id="filePicker4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--</div>-->
+
+    </form>
+    <!--工具按钮-->
+    <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-4">
+            <button id="insert" class="btn btn-sm btn-info an" style="margin-right: 50px;width: 80px"
+                    onclick="obtainParms();">
+                提交
+            </button>
+            <button id="que" class="btn btn-sm btn-default an" style="width: 80px">取消</button>
+        </div>
+        <div class="col-sm-4">
+        </div>
+        <div style="height: 50px"></div>
+    </div>
+</div>
+<div style="height: 25px"></div>
+</div>
+</body>
+<style type="text/css">
+    .panel-info > div, .info-01 > div {
+        border-bottom: dashed 1px #ccc;
+        padding: 10px 0;
+    }
+
+    .panel-default {
+        padding: 40px 0;
+    }
+
+    label {
+        width: 100px;
+        padding: 0;
+        vertical-align: top;
+    }
+
+    input, select {
+        width: 200px;
+    }
+
+    form-control {
+        display: inline-block;
+    }
+
+    .list-inline {
+        margin-left: 5px;
+    }
+
+    .city-picker-selector {
+        display: inline-block;
+    }
+
+    textarea {
+        width: 850px;
+    }
+
+    .img-ctx {
+        margin-top: 20px;
+        width: 850px;
+        display: inline-block;
+        padding: 10px 0;
+    }
+
+    .titile-text {
+        padding-left: 50px;
+        line-height: 33px;
+    }
+
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+
+</style>
+</html>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TOpinionMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TOpinion" >
+    <id column="opinion_id" property="opinionId" jdbcType="BIGINT" />
+    <result column="opinion_type" property="opinionType" jdbcType="INTEGER" />
+    <result column="violation_type" property="violationType" jdbcType="INTEGER" />
+    <result column="violation_place" property="violationPlace" jdbcType="VARCHAR" />
+    <result column="res_status" property="resStatus" jdbcType="INTEGER" />
+    <result column="res_user_id" property="resUserId" jdbcType="BIGINT" />
+    <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
+    <result column="applicant_phone" property="applicantPhone" jdbcType="VARCHAR" />
+    <result column="applicant_date" property="applicantDate" jdbcType="TIMESTAMP" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TOpinionWithBLOBs" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="res_content" property="resContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    opinion_id, opinion_type, violation_type, violation_place, res_status, res_user_id, 
+    applicant_name, applicant_phone, applicant_date, creation_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    content, res_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TOpinionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_opinion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TOpinionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_opinion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_opinion
+    where opinion_id = #{opinionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_opinion
+    where opinion_id = #{opinionId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TOpinionExample" >
+    delete from t_opinion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TOpinionWithBLOBs" >
+    insert into t_opinion (opinion_id, opinion_type, violation_type, 
+      violation_place, res_status, res_user_id, 
+      applicant_name, applicant_phone, applicant_date, 
+      creation_time, content, res_content
+      )
+    values (#{opinionId,jdbcType=BIGINT}, #{opinionType,jdbcType=INTEGER}, #{violationType,jdbcType=INTEGER}, 
+      #{violationPlace,jdbcType=VARCHAR}, #{resStatus,jdbcType=INTEGER}, #{resUserId,jdbcType=BIGINT}, 
+      #{applicantName,jdbcType=VARCHAR}, #{applicantPhone,jdbcType=VARCHAR}, #{applicantDate,jdbcType=TIMESTAMP}, 
+      #{creationTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{resContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TOpinionWithBLOBs" >
+    insert into t_opinion
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="opinionId != null" >
+        opinion_id,
+      </if>
+      <if test="opinionType != null" >
+        opinion_type,
+      </if>
+      <if test="violationType != null" >
+        violation_type,
+      </if>
+      <if test="violationPlace != null" >
+        violation_place,
+      </if>
+      <if test="resStatus != null" >
+        res_status,
+      </if>
+      <if test="resUserId != null" >
+        res_user_id,
+      </if>
+      <if test="applicantName != null" >
+        applicant_name,
+      </if>
+      <if test="applicantPhone != null" >
+        applicant_phone,
+      </if>
+      <if test="applicantDate != null" >
+        applicant_date,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="resContent != null" >
+        res_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="opinionId != null" >
+        #{opinionId,jdbcType=BIGINT},
+      </if>
+      <if test="opinionType != null" >
+        #{opinionType,jdbcType=INTEGER},
+      </if>
+      <if test="violationType != null" >
+        #{violationType,jdbcType=INTEGER},
+      </if>
+      <if test="violationPlace != null" >
+        #{violationPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="resStatus != null" >
+        #{resStatus,jdbcType=INTEGER},
+      </if>
+      <if test="resUserId != null" >
+        #{resUserId,jdbcType=BIGINT},
+      </if>
+      <if test="applicantName != null" >
+        #{applicantName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantPhone != null" >
+        #{applicantPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantDate != null" >
+        #{applicantDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resContent != null" >
+        #{resContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TOpinionExample" resultType="java.lang.Integer" >
+    select count(*) from t_opinion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_opinion
+    <set >
+      <if test="record.opinionId != null" >
+        opinion_id = #{record.opinionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.opinionType != null" >
+        opinion_type = #{record.opinionType,jdbcType=INTEGER},
+      </if>
+      <if test="record.violationType != null" >
+        violation_type = #{record.violationType,jdbcType=INTEGER},
+      </if>
+      <if test="record.violationPlace != null" >
+        violation_place = #{record.violationPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resStatus != null" >
+        res_status = #{record.resStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.resUserId != null" >
+        res_user_id = #{record.resUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.applicantName != null" >
+        applicant_name = #{record.applicantName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicantPhone != null" >
+        applicant_phone = #{record.applicantPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicantDate != null" >
+        applicant_date = #{record.applicantDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.resContent != null" >
+        res_content = #{record.resContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_opinion
+    set opinion_id = #{record.opinionId,jdbcType=BIGINT},
+      opinion_type = #{record.opinionType,jdbcType=INTEGER},
+      violation_type = #{record.violationType,jdbcType=INTEGER},
+      violation_place = #{record.violationPlace,jdbcType=VARCHAR},
+      res_status = #{record.resStatus,jdbcType=INTEGER},
+      res_user_id = #{record.resUserId,jdbcType=BIGINT},
+      applicant_name = #{record.applicantName,jdbcType=VARCHAR},
+      applicant_phone = #{record.applicantPhone,jdbcType=VARCHAR},
+      applicant_date = #{record.applicantDate,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      content = #{record.content,jdbcType=LONGVARCHAR},
+      res_content = #{record.resContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_opinion
+    set opinion_id = #{record.opinionId,jdbcType=BIGINT},
+      opinion_type = #{record.opinionType,jdbcType=INTEGER},
+      violation_type = #{record.violationType,jdbcType=INTEGER},
+      violation_place = #{record.violationPlace,jdbcType=VARCHAR},
+      res_status = #{record.resStatus,jdbcType=INTEGER},
+      res_user_id = #{record.resUserId,jdbcType=BIGINT},
+      applicant_name = #{record.applicantName,jdbcType=VARCHAR},
+      applicant_phone = #{record.applicantPhone,jdbcType=VARCHAR},
+      applicant_date = #{record.applicantDate,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TOpinionWithBLOBs" >
+    update t_opinion
+    <set >
+      <if test="opinionType != null" >
+        opinion_type = #{opinionType,jdbcType=INTEGER},
+      </if>
+      <if test="violationType != null" >
+        violation_type = #{violationType,jdbcType=INTEGER},
+      </if>
+      <if test="violationPlace != null" >
+        violation_place = #{violationPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="resStatus != null" >
+        res_status = #{resStatus,jdbcType=INTEGER},
+      </if>
+      <if test="resUserId != null" >
+        res_user_id = #{resUserId,jdbcType=BIGINT},
+      </if>
+      <if test="applicantName != null" >
+        applicant_name = #{applicantName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantPhone != null" >
+        applicant_phone = #{applicantPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantDate != null" >
+        applicant_date = #{applicantDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resContent != null" >
+        res_content = #{resContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where opinion_id = #{opinionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TOpinionWithBLOBs" >
+    update t_opinion
+    set opinion_type = #{opinionType,jdbcType=INTEGER},
+      violation_type = #{violationType,jdbcType=INTEGER},
+      violation_place = #{violationPlace,jdbcType=VARCHAR},
+      res_status = #{resStatus,jdbcType=INTEGER},
+      res_user_id = #{resUserId,jdbcType=BIGINT},
+      applicant_name = #{applicantName,jdbcType=VARCHAR},
+      applicant_phone = #{applicantPhone,jdbcType=VARCHAR},
+      applicant_date = #{applicantDate,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR},
+      res_content = #{resContent,jdbcType=LONGVARCHAR}
+    where opinion_id = #{opinionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TOpinion" >
+    update t_opinion
+    set opinion_type = #{opinionType,jdbcType=INTEGER},
+      violation_type = #{violationType,jdbcType=INTEGER},
+      violation_place = #{violationPlace,jdbcType=VARCHAR},
+      res_status = #{resStatus,jdbcType=INTEGER},
+      res_user_id = #{resUserId,jdbcType=BIGINT},
+      applicant_name = #{applicantName,jdbcType=VARCHAR},
+      applicant_phone = #{applicantPhone,jdbcType=VARCHAR},
+      applicant_date = #{applicantDate,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where opinion_id = #{opinionId,jdbcType=BIGINT}
+  </update>
+</mapper>

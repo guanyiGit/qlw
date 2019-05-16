@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.violation.CollectionMapper" >
+  <resultMap type="com.soholy.dogmanager.pojo.violation.CollectionVO" id="BaseResultMap">
+	 <id column="collection_id" property="collectionId" jdbcType="BIGINT" />
+    <result column="dog_code" property="dogCode" jdbcType="VARCHAR" />
+    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="adoption_publicity_id" property="adoptionPublicityId" jdbcType="BIGINT" />
+    <result column="signboard_code" property="signboardCode" jdbcType="VARCHAR" />
+    <result column="dog_name" property="dogName" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="collection_time" property="collectionTime" jdbcType="TIMESTAMP" />
+    <result column="doghouse_num" property="doghouseNum" jdbcType="VARCHAR" />
+    <result column="dog_gender" property="dogGender" jdbcType="INTEGER" />
+    <result column="dog_character" property="dogCharacter" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="dog_age" property="dogAge" jdbcType="INTEGER" />
+    <result column="health_status" property="healthStatus" jdbcType="INTEGER" />
+    <result column="coll_dog" property="collDogReason" jdbcType="VARCHAR" />
+    <result column="dog_breed" property="dogBreed" jdbcType="VARCHAR" />
+    <result column="dog_color" property="dogColor" jdbcType="VARCHAR" />
+   	<result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+   	  
+ </resultMap>
+ 
+ <resultMap type="com.soholy.dogmanager.pojo.violation.AdoptionCollectionVO" id="AdoptionCollectionMap" extends="BaseResultMap">
+	    <result column="publish_date" property="publishDate" jdbcType="TIMESTAMP" />
+ </resultMap>
+ 
+ <resultMap type="com.soholy.dogmanager.pojo.violation.AdoptionVO" id="AdoptionVOMap" extends="BaseResultMap">
+ 		<result column="adoption_records_id" property="adoptionRecordsId" jdbcType="BIGINT" />
+	    <result column="applyer_name" property="applyerName" jdbcType="VARCHAR" />
+	    <result column="applyer_sex" property="applyerSex" jdbcType="INTEGER" />
+	    <result column="applyer_phone" property="applyerPhone" jdbcType="VARCHAR" />
+	    <result column="card_type" property="cardType" jdbcType="INTEGER" />
+	    <result column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+	    <result column="adoption_time" property="adoptionTime" jdbcType="TIMESTAMP" />
+	    <result column="creation_time" property="applyTime" jdbcType="TIMESTAMP" />
+	    <result column="adoption_address" property="adoptionAddress" jdbcType="VARCHAR" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+ </resultMap>
+ 
+ <resultMap type="com.soholy.dogmanager.pojo.violation.HandleCollection2VO" id="handleCollectVOMap" extends="BaseResultMap">
+	<result column="handle_id" property="handleId" jdbcType="BIGINT" />
+ 	<result column="claim_name" property="claimName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="handle_reason" property="handleReason" jdbcType="VARCHAR" />
+    <result column="handle_time" property="handleTime" jdbcType="TIMESTAMP" />
+    <result column="card_type" property="cardType" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="adress" property="adress" jdbcType="VARCHAR" />
+    <result column="handle_way" property="handleWay" jdbcType="VARCHAR" />
+ </resultMap>
+ 
+		<!-- 查收容中列表 -->
+	<select id="findCollectionList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		SELECT 		
+			c.*,
+			ap.`adoption_publicity_id`,
+			im.thumbnail_url,
+			dic1.dictionary_describe dog_breed,
+			dic2.dictionary_describe dog_color,
+			dic3.dictionary_describe coll_dog
+			FROM t_collection c
+			LEFT JOIN t_dictionary dic1
+			ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+			LEFT JOIN t_dictionary dic2
+			ON c.dog_color_type=dic2.dictionary_value AND dic2.dictionary_field='dog_color_type'
+			LEFT JOIN t_dictionary dic3
+			ON c.coll_dog_type=dic3.dictionary_value AND dic3.dictionary_field='coll_dog_type'
+			LEFT JOIN t_images_ref ir 
+			ON c.`collection_id`=ir.`ref_id` AND ir.`target_type`=3
+			LEFT JOIN t_images im
+			ON im.`image_id`=ir.`image_id`
+			LEFT JOIN t_adoption_publicity ap
+			ON  ap.`collection_id` = c.`collection_id` AND ap.`dog_status`=0
+		<where>
+			result_type=#{status}
+			<if test=" string !=null and string !='' ">
+				and	(dog_code=#{string}
+					<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+					</if>
+					or
+					dic1.dictionary_describe like "%"#{string}"%"
+					or
+					dic3.dictionary_describe like "%"#{string}"%")
+			</if>
+		
+		</where>
+		GROUP BY c.`collection_id` ORDER BY c.creation_time DESC LIMIT #{index},#{pageSize}
+	</select>
+	<select id="findCollectionListCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM  t_collection c
+		LEFT JOIN t_dictionary dic1
+		ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+		LEFT JOIN t_dictionary dic3
+		ON c.coll_dog_type=dic3.dictionary_value AND dic3.dictionary_field='coll_dog_type'
+		<where>
+			c.result_type=#{status}
+			<if test=" string !=null and string !='' ">
+				and	(dog_code=#{string}
+					<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+					</if>
+					or
+					dic1.dictionary_describe like "%"#{string}"%"
+					or
+					dic3.dictionary_describe like "%"#{string}"%"
+					)
+			</if>
+		</where>
+	</select>
+	
+	<!-- 爱心领养平台 -->
+	<select id="findAdoptionCollectionVOs" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		SELECT 		
+			c.*,
+			ap.`adoption_publicity_id`,
+			im.thumbnail_url,
+			dic1.dictionary_describe dog_breed,
+			dic2.dictionary_describe dog_color,
+			dic3.dictionary_describe coll_dog
+			FROM t_collection c
+			LEFT JOIN t_dictionary dic1
+			ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+			LEFT JOIN t_dictionary dic2
+			ON c.dog_color_type=dic2.dictionary_value AND dic2.dictionary_field='dog_color_type'
+			LEFT JOIN t_dictionary dic3
+			ON c.coll_dog_type=dic3.dictionary_value AND dic3.dictionary_field='coll_dog_type'
+			LEFT JOIN t_images_ref ir 
+			ON c.`collection_id`=ir.`ref_id` AND ir.`target_type`=3
+			LEFT JOIN t_images im
+			ON im.`image_id`=ir.`image_id`
+			LEFT JOIN t_adoption_publicity ap
+			ON  ap.`collection_id` = c.`collection_id` <!--AND ap.`dog_status`=0-->
+		<where>
+			ap.`dog_status`=0
+			AND
+			result_type=#{status}
+			<if test=" breed !=null and breed !='' ">
+				and c.dog_breed_type =#{breed}
+			</if>
+			<if test=" gender !=null and gender !='' ">
+				and c.dog_gender=#{gender}
+			</if>
+			<if test=" beginAge !=null and beginAge !='' ">
+				and dog_age >= #{beginAge}
+			</if>
+			<if test=" endAge !=null and endAge !='' ">
+				and dog_age &lt;= #{endAge}
+			</if>
+			<if test=" color !=null and color !='' ">
+				and c.dog_color_type =#{color}
+			</if>
+		</where>
+		GROUP BY c.`collection_id` ORDER BY c.creation_time DESC LIMIT #{index},#{pageSize}
+	</select>
+	<select id="findAdoptionCollectionVOsCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM  t_collection c
+		LEFT JOIN t_adoption_publicity ap
+		ON  ap.`collection_id` = c.`collection_id` <!--AND ap.`dog_status`=0-->
+		<where>
+			ap.`dog_status`=0
+			AND
+			result_type=#{status}
+			<if test=" breed !=null and breed !='' ">
+				and c.dog_breed_type =#{breed}
+			</if>
+			<if test=" gender !=null and gender !='' ">
+				and c.dog_gender=#{gender}
+			</if>
+			<if test=" beginAge !=null and beginAge !='' ">
+				and dog_age >= #{beginAge}
+			</if>
+			<if test=" endAge !=null and endAge !='' ">
+				and dog_age &lt;= #{endAge}
+			</if>
+			<if test=" color !=null and color !='' ">
+				and c.dog_color_type =#{color}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查详情 -->
+	<select id="findCollectionById" parameterType="long" resultMap="BaseResultMap">
+		SELECT 		
+			c.*,
+			ap.`adoption_publicity_id`,
+			im.image_url thumbnail_url,
+			dic1.dictionary_describe dog_breed,
+			dic2.dictionary_describe dog_color,
+			dic3.dictionary_describe coll_dog
+			FROM t_collection c
+			LEFT JOIN t_dictionary dic1
+			ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+			LEFT JOIN t_dictionary dic2
+			ON c.dog_color_type=dic2.dictionary_value AND dic2.dictionary_field='dog_color_type'
+			LEFT JOIN t_dictionary dic3
+			ON c.coll_dog_type=dic3.dictionary_value AND dic3.dictionary_field='coll_dog_type'
+			LEFT JOIN t_images_ref ir 
+			ON c.`collection_id`=ir.`ref_id` AND ir.`target_type`=3
+			LEFT JOIN t_images im
+			ON im.`image_id`=ir.`image_id`
+			LEFT JOIN t_adoption_publicity ap
+			ON  ap.`collection_id` = c.`collection_id` AND ap.`dog_status`=0
+			where  c.`collection_id`=#{id}
+	</select>
+	
+	<!-- 查看发布中列表 -->
+	<select id="findAdoptionCollectionVOList" parameterType="java.util.HashMap" resultMap="AdoptionCollectionMap">
+		SELECT 
+			c.*,
+			ap.`adoption_publicity_id`,
+			im.thumbnail_url,
+			ap.publish_date,
+			dic1.dictionary_describe dog_breed,
+			dic2.dictionary_describe dog_color,
+			dic3.dictionary_describe coll_dog
+		FROM t_adoption_publicity ap
+		LEFT JOIN t_collection c
+		ON ap.`collection_id` = c.`collection_id`
+		LEFT JOIN t_dictionary dic1
+		ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+		LEFT JOIN t_dictionary dic2
+		ON c.dog_color_type=dic2.dictionary_value AND dic2.dictionary_field='dog_color_type'
+		LEFT JOIN t_dictionary dic3
+		ON c.coll_dog_type=dic3.dictionary_value AND dic3.dictionary_field='coll_dog_type'
+		LEFT JOIN t_images_ref ir 
+		ON c.`collection_id`=ir.`ref_id` AND ir.`target_type`=3
+		LEFT JOIN t_images im
+		ON im.`image_id`=ir.`image_id`
+		<where>
+			ap.dog_status = 0
+			<if test=" string !=null and string !='' ">
+				and	(dog_code=#{string}
+					<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+					</if>
+					or
+					dic1.dictionary_describe like "%"#{string}"%"
+					)
+			</if>
+		</where>
+		GROUP BY ap.`adoption_publicity_id` ORDER BY ap.publish_date DESC LIMIT #{index},#{pageSize}
+	</select>
+	<select id="findAdoptionCollectionVOListCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM t_adoption_publicity ap
+		LEFT JOIN t_collection c
+		ON ap.`collection_id` = c.`collection_id`
+		LEFT JOIN t_dictionary dic1
+		ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+		<where>
+			ap.dog_status= 0
+			<if test=" string !=null and string !='' ">
+				and	(
+					dog_code=#{string}
+					<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+					</if>
+					or
+					dic1.dictionary_describe like "%"#{string}"%"
+					)
+			</if>
+		</where>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- （申请）已领养列表 -->
+	<select id="findAdoptionVOList" parameterType="java.util.HashMap" resultMap="AdoptionVOMap">
+		SELECT 
+			ac.*,
+			c.*,
+			im.thumbnail_url,
+			ap.publish_date,
+			ap.adoption_publicity_id,
+			dic1.dictionary_describe dog_breed,
+			dic2.dictionary_describe dog_color,
+			dic3.dictionary_describe coll_dog
+			FROM
+			  t_adoption_records ac 
+			  LEFT JOIN t_adoption_publicity ap 
+			    ON ac.`dog_publicity_id` = ap.`adoption_publicity_id` 
+			  LEFT JOIN t_collection c 
+			    ON ap.`collection_id` = c.`collection_id` 
+			  LEFT JOIN t_dictionary dic1 
+			    ON c.dog_breed_type = dic1.dictionary_value 
+			    AND dic1.dictionary_field = 'dog_breed_type' 
+			  LEFT JOIN t_dictionary dic2 
+			    ON c.dog_color_type = dic2.dictionary_value 
+			    AND dic2.dictionary_field = 'dog_color_type' 
+			  LEFT JOIN t_dictionary dic3 
+			    ON c.coll_dog_type = dic3.dictionary_value 
+			    AND dic3.dictionary_field = 'coll_dog_type' 
+			  LEFT JOIN t_images_ref ir 
+			    ON c.`collection_id` = ir.`ref_id` 
+			    AND ir.`target_type` = 3
+			  LEFT JOIN t_images im 
+			    ON im.`image_id` = ir.`image_id` 
+		 <where>
+			ap.dog_status = #{status} and  ac.adoption_status=#{type}
+			<if test=" string !=null and string !='' ">
+				and	
+					( 
+					c.dog_code=#{string}
+					<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+					</if>
+					or
+					dic1.dictionary_describe like "%"#{string}"%"
+					)
+			</if>
+		</where>
+		GROUP BY ac.`adoption_records_id` ORDER BY ac.`creation_time` DESC LIMIT #{index},#{pageSize}
+	</select>
+	<select id="findAdoptionVOListCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT 
+			COUNT(*)
+			FROM
+			  t_adoption_records ac 
+			  LEFT JOIN t_adoption_publicity ap 
+			    ON ac.`dog_publicity_id` = ap.`adoption_publicity_id` 
+			  LEFT JOIN t_collection c 
+			    ON ap.`collection_id` = c.`collection_id` 
+			  LEFT JOIN t_dictionary dic1 
+			    ON c.dog_breed_type = dic1.dictionary_value 
+			    AND dic1.dictionary_field = 'dog_breed_type' 
+		 <where>
+			ap.dog_status = #{status} and ac.adoption_status=#{type}
+			<if test=" string !=null and string !='' ">
+				and	( 
+					c.dog_code=#{string}
+					<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+					</if>
+					or
+					dic1.dictionary_describe like "%"#{string}"%"
+					)
+			</if>
+		</where>
+	</select>
+	
+	<!-- 已领养详情 -->
+	<select id="findAdoptionVOByAdoptionRecordsId"  parameterType="long"  resultMap="AdoptionVOMap">
+		SELECT 
+			ac.*,
+		 	c.*,
+			ap.*,
+			im.*,
+			dic1.dictionary_id dictionary_id1,
+			dic1.dictionary_describe dictionary_describe1,
+			dic2.dictionary_id dictionary_id2,
+			dic2.dictionary_describe dictionary_describe2,
+			dic3.dictionary_id dictionary_id3,
+			dic3.dictionary_describe dictionary_describe3
+			FROM
+			  t_adoption_records ac 
+			  LEFT JOIN t_adoption_publicity ap 
+			    ON ac.`dog_publicity_id` = ap.`adoption_publicity_id` 
+			  LEFT JOIN t_collection c 
+			    ON ap.`collection_id` = c.`collection_id` 
+			  LEFT JOIN t_dictionary dic1 
+			    ON c.dog_breed_type = dic1.dictionary_value 
+			    AND dic1.dictionary_field = 'dog_breed_type' 
+			  LEFT JOIN t_dictionary dic2 
+			    ON c.dog_color_type = dic2.dictionary_value 
+			    AND dic2.dictionary_field = 'dog_color_type' 
+			  LEFT JOIN t_dictionary dic3 
+			    ON c.coll_dog_type = dic3.dictionary_value 
+			    AND dic3.dictionary_field = 'coll_dog_type' 
+			  LEFT JOIN t_images_ref ir 
+			    ON c.`collection_id` = ir.`ref_id` 
+			    AND ir.`target_type` = 3
+			  LEFT JOIN t_images im 
+			    ON im.`image_id` = ir.`image_id` 
+			WHERE ac.`adoption_records_id` = #{id}
+	</select>
+	
+	
+	<!-- 认领处理列表 -->
+	<select id="findHandleCollectionList" parameterType="java.util.HashMap" resultMap="handleCollectVOMap">
+		SELECT 
+			c.*,
+			hr.*,
+			im.thumbnail_url,
+			dic1.dictionary_describe dog_breed,
+			dic2.dictionary_describe dog_color,
+			dic3.dictionary_describe coll_dog
+		FROM t_handle_record hr
+		LEFT JOIN t_collection c
+		ON hr.`collection_id`=c.`collection_id`
+		LEFT JOIN t_dictionary dic1
+		ON c.dog_breed_type=dic1.dictionary_value AND dic1.dictionary_field='dog_breed_type'
+		LEFT JOIN t_dictionary dic2
+		ON c.dog_color_type=dic2.dictionary_value AND dic2.dictionary_field='dog_color_type'
+		LEFT JOIN t_dictionary dic3
+		ON c.coll_dog_type=dic3.dictionary_value AND dic3.dictionary_field='coll_dog_type'
+		LEFT JOIN t_images_ref ir 
+		ON c.`collection_id`=ir.`ref_id` AND ir.`target_type`=3
+		LEFT JOIN t_images im
+		ON im.`image_id`=ir.`image_id`
+     <where>
+		hr.`handle_type` = #{type}
+		<if test=" string !=null and string !='' ">
+			and	( 
+				c.dog_code=#{string}
+				<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+				</if>
+				or
+				dic1.dictionary_describe like "%"#{string}"%"
+				)
+		</if>
+	</where>
+	GROUP BY hr.`handle_id` ORDER BY hr.`handle_time` DESC LIMIT #{index},#{pageSize}
+	</select>
+	<select id="findHandleCollectionListCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*)
+		FROM t_handle_record hr
+		LEFT JOIN t_collection c
+		ON hr.`collection_id`=c.`collection_id`
+		LEFT JOIN t_dictionary dic1 
+	    ON c.dog_breed_type = dic1.dictionary_value 
+	    AND dic1.dictionary_field = 'dog_breed_type' 
+	    <where>
+		hr.`handle_type` = #{type}
+		<if test=" string !=null and string !='' ">
+			and	( 
+				c.dog_code=#{string}
+				<if test="string=='1'.toString() or string=='0'.toString()">
+					or 	dog_gender=#{string}
+				</if>
+				or
+				dic1.dictionary_describe like "%"#{string}"%"
+				)
+		</if>
+	</where>
+	</select>
+	
+	<!-- 查询详情 -->
+	<select id="findHandleCollectionByHandId" parameterType="long"  resultMap="handleCollectVOMap">
+		SELECT 
+		hr.*,
+		c.*,
+		im.*,
+		dic1.dictionary_id dictionary_id1,
+		dic1.dictionary_describe dictionary_describe1,
+		dic2.dictionary_id dictionary_id2,
+		dic2.dictionary_describe dictionary_describe2,
+		dic3.dictionary_id dictionary_id3,
+		dic3.dictionary_describe dictionary_describe3
+		FROM t_handle_record hr
+		LEFT JOIN t_collection c
+		ON hr.`collection_id`=c.`collection_id`
+		LEFT JOIN t_dictionary dic1 
+	    ON c.dog_breed_type = dic1.dictionary_value 
+	    AND dic1.dictionary_field = 'dog_breed_type' 
+	  LEFT JOIN t_dictionary dic2 
+	    ON c.dog_color_type = dic2.dictionary_value 
+	    AND dic2.dictionary_field = 'dog_color_type' 
+	  LEFT JOIN t_dictionary dic3 
+	    ON c.coll_dog_type = dic3.dictionary_value 
+	    AND dic3.dictionary_field = 'coll_dog_type' 
+	  LEFT JOIN t_images_ref ir 
+	    ON c.`collection_id` = ir.`ref_id` 
+	    AND ir.`target_type` = 3
+	  LEFT JOIN t_images im 
+	    ON im.`image_id` = ir.`image_id` 
+	   WHERE hr.`handle_id`=#{id}
+	</select>
+	
+</mapper>

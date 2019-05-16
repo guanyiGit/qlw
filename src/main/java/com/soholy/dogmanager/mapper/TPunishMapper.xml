@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TPunishMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TPunish" >
+    <id column="punish_id" property="punishId" jdbcType="BIGINT" />
+    <result column="violation_id" property="violationId" jdbcType="BIGINT" />
+    <result column="points" property="points" jdbcType="INTEGER" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="is_collection" property="isCollection" jdbcType="INTEGER" />
+    <result column="punish_time" property="punishTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    punish_id, violation_id, points, remarks, creation_time, is_collection, punish_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TPunishExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_punish
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_punish
+    where punish_id = #{punishId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_punish
+    where punish_id = #{punishId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TPunishExample" >
+    delete from t_punish
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TPunish" >
+    insert into t_punish (punish_id, violation_id, points, 
+      remarks, creation_time, is_collection, 
+      punish_time)
+    values (#{punishId,jdbcType=BIGINT}, #{violationId,jdbcType=BIGINT}, #{points,jdbcType=INTEGER}, 
+      #{remarks,jdbcType=VARCHAR}, #{creationTime,jdbcType=TIMESTAMP}, #{isCollection,jdbcType=INTEGER}, 
+      #{punishTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TPunish" >
+    insert into t_punish
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="punishId != null" >
+        punish_id,
+      </if>
+      <if test="violationId != null" >
+        violation_id,
+      </if>
+      <if test="points != null" >
+        points,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="isCollection != null" >
+        is_collection,
+      </if>
+      <if test="punishTime != null" >
+        punish_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="punishId != null" >
+        #{punishId,jdbcType=BIGINT},
+      </if>
+      <if test="violationId != null" >
+        #{violationId,jdbcType=BIGINT},
+      </if>
+      <if test="points != null" >
+        #{points,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isCollection != null" >
+        #{isCollection,jdbcType=INTEGER},
+      </if>
+      <if test="punishTime != null" >
+        #{punishTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TPunishExample" resultType="java.lang.Integer" >
+    select count(*) from t_punish
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_punish
+    <set >
+      <if test="record.punishId != null" >
+        punish_id = #{record.punishId,jdbcType=BIGINT},
+      </if>
+      <if test="record.violationId != null" >
+        violation_id = #{record.violationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.points != null" >
+        points = #{record.points,jdbcType=INTEGER},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isCollection != null" >
+        is_collection = #{record.isCollection,jdbcType=INTEGER},
+      </if>
+      <if test="record.punishTime != null" >
+        punish_time = #{record.punishTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_punish
+    set punish_id = #{record.punishId,jdbcType=BIGINT},
+      violation_id = #{record.violationId,jdbcType=BIGINT},
+      points = #{record.points,jdbcType=INTEGER},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      is_collection = #{record.isCollection,jdbcType=INTEGER},
+      punish_time = #{record.punishTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TPunish" >
+    update t_punish
+    <set >
+      <if test="violationId != null" >
+        violation_id = #{violationId,jdbcType=BIGINT},
+      </if>
+      <if test="points != null" >
+        points = #{points,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isCollection != null" >
+        is_collection = #{isCollection,jdbcType=INTEGER},
+      </if>
+      <if test="punishTime != null" >
+        punish_time = #{punishTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where punish_id = #{punishId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TPunish" >
+    update t_punish
+    set violation_id = #{violationId,jdbcType=BIGINT},
+      points = #{points,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      is_collection = #{isCollection,jdbcType=INTEGER},
+      punish_time = #{punishTime,jdbcType=TIMESTAMP}
+    where punish_id = #{punishId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDogOwnerCardMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDogOwnerCard" >
+    <id column="dog_owner_card_id" property="dogOwnerCardId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="card_type" property="cardType" jdbcType="INTEGER" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    dog_owner_card_id, dog_owner_id, card_type, card_num, start_time, end_time, creation_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TDogOwnerCardExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_dog_owner_card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_dog_owner_card
+    where dog_owner_card_id = #{dogOwnerCardId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_dog_owner_card
+    where dog_owner_card_id = #{dogOwnerCardId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDogOwnerCardExample" >
+    delete from t_dog_owner_card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TDogOwnerCard" >
+    insert into t_dog_owner_card (dog_owner_card_id, dog_owner_id, card_type, 
+      card_num, start_time, end_time, 
+      creation_time)
+    values (#{dogOwnerCardId,jdbcType=BIGINT}, #{dogOwnerId,jdbcType=BIGINT}, #{cardType,jdbcType=INTEGER}, 
+      #{cardNum,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDogOwnerCard" >
+    insert into t_dog_owner_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dogOwnerCardId != null" >
+        dog_owner_card_id,
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dogOwnerCardId != null" >
+        #{dogOwnerCardId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDogOwnerCardExample" resultType="java.lang.Integer" >
+    select count(*) from t_dog_owner_card
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_dog_owner_card
+    <set >
+      <if test="record.dogOwnerCardId != null" >
+        dog_owner_card_id = #{record.dogOwnerCardId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogOwnerId != null" >
+        dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.cardType != null" >
+        card_type = #{record.cardType,jdbcType=INTEGER},
+      </if>
+      <if test="record.cardNum != null" >
+        card_num = #{record.cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_dog_owner_card
+    set dog_owner_card_id = #{record.dogOwnerCardId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      card_type = #{record.cardType,jdbcType=INTEGER},
+      card_num = #{record.cardNum,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDogOwnerCard" >
+    update t_dog_owner_card
+    <set >
+      <if test="dogOwnerId != null" >
+        dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dog_owner_card_id = #{dogOwnerCardId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDogOwnerCard" >
+    update t_dog_owner_card
+    set dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      card_type = #{cardType,jdbcType=INTEGER},
+      card_num = #{cardNum,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where dog_owner_card_id = #{dogOwnerCardId,jdbcType=BIGINT}
+  </update>
+</mapper>

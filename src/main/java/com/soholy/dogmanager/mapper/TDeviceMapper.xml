@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDeviceMapper">
+
+    <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDevice">
+        <id column="device_id" property="deviceId" jdbcType="BIGINT"/>
+        <result column="device_number" property="deviceNumber" jdbcType="VARCHAR"/>
+        <result column="device_status" property="deviceStatus" jdbcType="INTEGER"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="device_brand" property="deviceBrand" jdbcType="VARCHAR"/>
+        <result column="device_model_id" property="deviceModelId" jdbcType="INTEGER"/>
+        <result column="production_time" property="productionTime" jdbcType="TIMESTAMP"/>
+        <result column="device_remarks" property="deviceRemarks" jdbcType="VARCHAR"/>
+        <result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+        <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP"/>
+        <result column="org_id" property="orgId" jdbcType="INTEGER"/>
+        <result column="device_work_pattern" property="deviceWorkPattern" jdbcType="INTEGER"/>
+        <result column="upload_interval_time" property="uploadIntervalTime" jdbcType="INTEGER"/>
+        <result column="imei" property="imei" jdbcType="VARCHAR"/>
+        <result column="device_pwd" property="devicePwd" jdbcType="VARCHAR"/>
+        <result column="device_factory_id" property="deviceFactoryId" jdbcType="INTEGER"/>
+        <result column="device_name" property="deviceName" jdbcType="VARCHAR"/>
+        <result column="verify_code" property="verifyCode" jdbcType="VARCHAR"/>
+        <result column="psk" property="psk" jdbcType="VARCHAR"/>
+        <result column="device_batch" property="deviceBatch" jdbcType="VARCHAR"/>
+        <result column="device_id_iot" property="deviceIdIot" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="deviceInfoResultMap" type="com.soholy.dogmanager.entity.device.DeviceRefModelInfo" extends="BaseResultMap">
+        <association property="tDeviceModel" javaType="com.soholy.dogmanager.entity.TDeviceModel" resultMap="com.soholy.dogmanager.mapper.TDeviceModelMapper.BaseResultMap"></association>
+        <association property="tDeviceFactory" javaType="com.soholy.dogmanager.entity.TDeviceFactory" resultMap="com.soholy.dogmanager.mapper.TDeviceFactoryMapper.BaseResultMap"> </association>
+        <association property="tOrganization" javaType="com.soholy.dogmanager.entity.TOrganization" resultMap="com.soholy.dogmanager.mapper.TOrganizationMapper.BaseResultMap"> </association>
+    </resultMap>
+
+    <resultMap id="dogRefDevice" type="com.soholy.dogmanager.pojo.device.DogRefDevice"
+               extends="com.soholy.dogmanager.mapper.TDogInfoMapper.BaseResultMap">
+        <association property="device" javaType="com.soholy.dogmanager.entity.TDevice" resultMap="BaseResultMap"/>
+    </resultMap>
+
+    <resultMap id="DeviceRefDogResultMap" type="com.soholy.dogmanager.pojo.dogCard.DeviceRefDog"
+               extends="com.soholy.dogmanager.mapper.TDeviceMapper.BaseResultMap">
+        <collection property="tDeviceRefDogs" ofType="com.soholy.dogmanager.entity.TDeviceRefDog" resultMap="com.soholy.dogmanager.mapper.TDeviceRefDogMapper.BaseResultMap"></collection>
+    </resultMap>
+
+    <resultMap id="DeviceRefOrgResultMap" type="com.soholy.dogmanager.entity.device.DeviceRefOrg" extends="com.soholy.dogmanager.mapper.TDeviceMapper.BaseResultMap">
+        <association property="tOrganization" resultMap="com.soholy.dogmanager.mapper.TOrganizationMapper.BaseResultMap"></association>
+    </resultMap>
+
+    <!--根据设备编号模糊查询设备列表-->
+    <select id="findDevicesLikeDeviceNum" resultMap="DeviceRefOrgResultMap">
+        SELECT d.*,o.* FROM t_device d
+        LEFT JOIN t_organization o on o.organization_id = d.org_id
+        <if test="isActive">
+            LEFT JOIN t_device_ref_dog dd on d.device_id = dd.device_id
+        </if>
+         <where>
+             <if test="isActive">
+                 AND dd.device_id is null
+             </if>
+             <if test="keyWord != null and keyWord != ''">
+                 AND d.device_number LIKE CONCAT('%',#{keyWord},'%')
+             </if>
+         </where>
+    </select>
+
+    <!--根据设备验证码获取设备信息-->
+    <select id="findDeviceInfoByDeviceidIot" resultMap="BaseResultMap" parameterType="java.lang.String">
+        <if test="_parameter != null and _parameter != ''">
+            SELECT d.* FROM t_device d WHERE d.device_id_iot = #{_parameter}
+        </if>
+    </select>
+
+    <!-- 批量插入设备信息 -->
+    <insert id="saveDeviceList">
+        INSERT INTO `t_device` (
+        device_number, device_brand, device_model_id, production_time,
+        device_remarks, device_type, creation_time, imei,device_pwd, device_factory_id,
+        device_name,org_id, verify_code, psk, device_batch, device_id_iot
+        ) VALUES
+        <foreach collection="tdeviceList" item="item" open="(" separator="),(" close=")">
+            #{item.deviceNumber}, #{item.deviceBrand}, #{item.deviceModelId},
+            #{item.productionTime}, #{item.deviceRemarks}, #{item.deviceType}, #{item.creationTime},
+            #{item.imei},#{item.device_pwd}, #{item.deviceFactoryId}, #{item.deviceName}, #{item.orgId},
+            #{item.verifyCode}, #{item.psk}, #{item.deviceBatch}, #{item.deviceIdIot}
+        </foreach>
+    </insert>
+
+    <!-- 根据犬主id查询设备信息 -->
+    <select id="findDeviceByDogOwnerId">
+        <if test="dogOwnerId != null">
+            SELECT
+            d.creation_time,d.device_batch,d.device_brand,d.device_factory_id,d.device_id_iot,
+            d.device_id,d.device_model_id,d.device_name,d.device_number,d.device_remarks,
+            d.device_status,d.device_type,d.device_work_pattern,d.imei,
+            d.org_id,d.production_time, d.psk,d.start_time,d.upload_interval_time,d.verify_code
+            FROM
+            t_device d,t_device_ref_dog drd,t_dog_info di,t_dog_owner dow
+            WHERE
+            d.device_id = drd.device_id and drd.dog_id = di.dog_id
+            AND di.dog_owner_id = dow.dog_owner_id
+            AND dow.dog_owner_id = #{dogOwnerId}
+        </if>
+    </select>
+
+
+    <!-- 根据设备id查询设备信息 -->
+    <select id="findDeviceListByIds" resultMap="BaseResultMap">
+        <if test="deviceIdList != null">
+            SELECT * FROM t_device d
+            <foreach collection="deviceIdList" item="deviceId" open="WHERE d.device_id IN (" separator="," close=")">
+                #{deviceId}
+            </foreach>
+        </if>
+    </select>
+
+
+    <!-- 根据设备状态和关键字查询设备列表 -->
+    <select id="findDeviceListByStatusAndKeyWord" resultMap="deviceInfoResultMap">
+        SELECT
+        d.creation_time,d.device_batch,d.device_brand,d.device_factory_id,d.device_id,d.device_model_id,
+        d.device_name,d.device_number,d.device_remarks,d.device_type,d.device_work_pattern,d.imei,d.device_status,
+        d.org_id,d.production_time,d.psk,d.start_time,d.upload_interval_time,d.verify_code, d.device_id_iot,
+
+        df.creation_time,df.device_factory_id,df.device_factory_name device_factory_name,df.device_factory_num,
+
+        dm.creation_time, dm.device_model_id,dm.device_model_name,dm.device_model_number
+        from t_device d
+        LEFT JOIN t_device_factory df ON df.device_factory_id = d.device_factory_id
+        LEFT JOIN t_device_model dm ON dm.device_model_id = d.device_model_id
+        <where>
+            <if test="deviceStatus !=null">
+                AND d.device_status = #{deviceStatus}
+            </if>
+            <if test="deviceType !=null">
+                AND d.device_type = #{deviceType}
+            </if>
+            <trim prefix="AND (" suffix=")">
+                <if test="serchKey !=null and serchKey != ''">
+                    d.device_number LIKE CONCAT('%',#{serchKey},'%') OR
+                    d.device_brand LIKE CONCAT('%',#{serchKey},'%')
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    device_id, device_number, device_status, start_time, device_brand, device_model_id,
+    production_time, device_remarks, device_type, creation_time, org_id, device_work_pattern,
+    upload_interval_time, imei, device_factory_id, device_name, verify_code, psk, device_batch,
+    device_id_iot
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TDeviceExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_device
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_device
+        where device_id = #{deviceId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_device
+    where device_id = #{deviceId,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDeviceExample">
+        delete from t_device
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.soholy.dogmanager.entity.TDevice">
+    insert into t_device (device_id, device_number, device_status,
+    start_time, device_brand, device_model_id,
+    production_time, device_remarks, device_type,
+    creation_time, org_id, device_work_pattern,
+    upload_interval_time, imei,device_pwd, device_factory_id,
+    device_name, verify_code, psk,
+    device_batch, device_id_iot)
+    values (#{deviceId,jdbcType=BIGINT}, #{deviceNumber,jdbcType=VARCHAR}, #{deviceStatus,jdbcType=INTEGER},
+    #{startTime,jdbcType=TIMESTAMP}, #{deviceBrand,jdbcType=VARCHAR}, #{deviceModelId,jdbcType=INTEGER},
+    #{productionTime,jdbcType=TIMESTAMP}, #{deviceRemarks,jdbcType=VARCHAR}, #{deviceType,jdbcType=INTEGER},
+    #{creationTime,jdbcType=TIMESTAMP}, #{orgId,jdbcType=INTEGER}, #{deviceWorkPattern,jdbcType=INTEGER},
+    #{uploadIntervalTime,jdbcType=INTEGER}, #{imei,jdbcType=VARCHAR},#{devicePwd,jdbcType=VARCHAR}, #{deviceFactoryId,jdbcType=INTEGER},
+    #{deviceName,jdbcType=VARCHAR}, #{verifyCode,jdbcType=VARCHAR}, #{psk,jdbcType=VARCHAR},
+    #{deviceBatch,jdbcType=VARCHAR}, #{deviceIdIot,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDevice">
+        insert into t_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null">
+                device_id,
+            </if>
+            <if test="deviceNumber != null">
+                device_number,
+            </if>
+            <if test="deviceStatus != null">
+                device_status,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="deviceBrand != null">
+                device_brand,
+            </if>
+            <if test="deviceModelId != null">
+                device_model_id,
+            </if>
+            <if test="productionTime != null">
+                production_time,
+            </if>
+            <if test="deviceRemarks != null">
+                device_remarks,
+            </if>
+            <if test="deviceType != null">
+                device_type,
+            </if>
+            <if test="creationTime != null">
+                creation_time,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="deviceWorkPattern != null">
+                device_work_pattern,
+            </if>
+            <if test="uploadIntervalTime != null">
+                upload_interval_time,
+            </if>
+            <if test="imei != null">
+                imei,
+            </if>
+            <if test="devicePwd != null">
+                device_pwd,
+            </if>
+            <if test="deviceFactoryId != null">
+                device_factory_id,
+            </if>
+            <if test="deviceName != null">
+                device_name,
+            </if>
+            <if test="verifyCode != null">
+                verify_code,
+            </if>
+            <if test="psk != null">
+                psk,
+            </if>
+            <if test="deviceBatch != null">
+                device_batch,
+            </if>
+            <if test="deviceIdIot != null">
+                device_id_iot,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null">
+                #{deviceId,jdbcType=BIGINT},
+            </if>
+            <if test="deviceNumber != null">
+                #{deviceNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceStatus != null">
+                #{deviceStatus,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deviceBrand != null">
+                #{deviceBrand,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceModelId != null">
+                #{deviceModelId,jdbcType=INTEGER},
+            </if>
+            <if test="productionTime != null">
+                #{productionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deviceRemarks != null">
+                #{deviceRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceType != null">
+                #{deviceType,jdbcType=INTEGER},
+            </if>
+            <if test="creationTime != null">
+                #{creationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceWorkPattern != null">
+                #{deviceWorkPattern,jdbcType=INTEGER},
+            </if>
+            <if test="uploadIntervalTime != null">
+                #{uploadIntervalTime,jdbcType=INTEGER},
+            </if>
+            <if test="imei != null">
+                #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="devicePwd != null">
+               #{devicePwd,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceFactoryId != null">
+                #{deviceFactoryId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceName != null">
+                #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="verifyCode != null">
+                #{verifyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="psk != null">
+                #{psk,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceBatch != null">
+                #{deviceBatch,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceIdIot != null">
+                #{deviceIdIot,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDeviceExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_device
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_device
+        <set>
+            <if test="record.deviceId != null">
+                device_id = #{record.deviceId,jdbcType=BIGINT},
+            </if>
+            <if test="record.deviceNumber != null">
+                device_number = #{record.deviceNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceStatus != null">
+                device_status = #{record.deviceStatus,jdbcType=INTEGER},
+            </if>
+            <if test="record.startTime != null">
+                start_time = #{record.startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.deviceBrand != null">
+                device_brand = #{record.deviceBrand,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceModelId != null">
+                device_model_id = #{record.deviceModelId,jdbcType=INTEGER},
+            </if>
+            <if test="record.productionTime != null">
+                production_time = #{record.productionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.deviceRemarks != null">
+                device_remarks = #{record.deviceRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceType != null">
+                device_type = #{record.deviceType,jdbcType=INTEGER},
+            </if>
+            <if test="record.creationTime != null">
+                creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.orgId != null">
+                org_id = #{record.orgId,jdbcType=INTEGER},
+            </if>
+            <if test="record.deviceWorkPattern != null">
+                device_work_pattern = #{record.deviceWorkPattern,jdbcType=INTEGER},
+            </if>
+            <if test="record.uploadIntervalTime != null">
+                upload_interval_time = #{record.uploadIntervalTime,jdbcType=INTEGER},
+            </if>
+            <if test="record.imei != null">
+                imei = #{record.imei,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceFactoryId != null">
+                device_factory_id = #{record.deviceFactoryId,jdbcType=INTEGER},
+            </if>
+            <if test="record.deviceName != null">
+                device_name = #{record.deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.verifyCode != null">
+                verify_code = #{record.verifyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.psk != null">
+                psk = #{record.psk,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceBatch != null">
+                device_batch = #{record.deviceBatch,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceIdIot != null">
+                device_id_iot = #{record.deviceIdIot,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map">
+        update t_device
+        set device_id = #{record.deviceId,jdbcType=BIGINT},
+        device_number = #{record.deviceNumber,jdbcType=VARCHAR},
+        device_status = #{record.deviceStatus,jdbcType=INTEGER},
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+        device_brand = #{record.deviceBrand,jdbcType=VARCHAR},
+        device_model_id = #{record.deviceModelId,jdbcType=INTEGER},
+        production_time = #{record.productionTime,jdbcType=TIMESTAMP},
+        device_remarks = #{record.deviceRemarks,jdbcType=VARCHAR},
+        device_type = #{record.deviceType,jdbcType=INTEGER},
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+        org_id = #{record.orgId,jdbcType=INTEGER},
+        device_work_pattern = #{record.deviceWorkPattern,jdbcType=INTEGER},
+        upload_interval_time = #{record.uploadIntervalTime,jdbcType=INTEGER},
+        imei = #{record.imei,jdbcType=VARCHAR},
+        device_factory_id = #{record.deviceFactoryId,jdbcType=INTEGER},
+        device_name = #{record.deviceName,jdbcType=VARCHAR},
+        verify_code = #{record.verifyCode,jdbcType=VARCHAR},
+        psk = #{record.psk,jdbcType=VARCHAR},
+        device_batch = #{record.deviceBatch,jdbcType=VARCHAR},
+        device_id_iot = #{record.deviceIdIot,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDevice">
+        update t_device
+        <set>
+            <if test="deviceNumber != null">
+                device_number = #{deviceNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceStatus != null">
+                device_status = #{deviceStatus,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deviceBrand != null">
+                device_brand = #{deviceBrand,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceModelId != null">
+                device_model_id = #{deviceModelId,jdbcType=INTEGER},
+            </if>
+            <if test="productionTime != null">
+                production_time = #{productionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deviceRemarks != null">
+                device_remarks = #{deviceRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType,jdbcType=INTEGER},
+            </if>
+            <if test="creationTime != null">
+                creation_time = #{creationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orgId != null">
+                org_id = #{orgId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceWorkPattern != null">
+                device_work_pattern = #{deviceWorkPattern,jdbcType=INTEGER},
+            </if>
+            <if test="uploadIntervalTime != null">
+                upload_interval_time = #{uploadIntervalTime,jdbcType=INTEGER},
+            </if>
+            <if test="imei != null">
+                imei = #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceFactoryId != null">
+                device_factory_id = #{deviceFactoryId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceName != null">
+                device_name = #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="verifyCode != null">
+                verify_code = #{verifyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="psk != null">
+                psk = #{psk,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceBatch != null">
+                device_batch = #{deviceBatch,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceIdIot != null">
+                device_id_iot = #{deviceIdIot,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where device_id = #{deviceId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDevice">
+    update t_device
+    set device_number = #{deviceNumber,jdbcType=VARCHAR},
+    device_status = #{deviceStatus,jdbcType=INTEGER},
+    start_time = #{startTime,jdbcType=TIMESTAMP},
+    device_brand = #{deviceBrand,jdbcType=VARCHAR},
+    device_model_id = #{deviceModelId,jdbcType=INTEGER},
+    production_time = #{productionTime,jdbcType=TIMESTAMP},
+    device_remarks = #{deviceRemarks,jdbcType=VARCHAR},
+    device_type = #{deviceType,jdbcType=INTEGER},
+    creation_time = #{creationTime,jdbcType=TIMESTAMP},
+    org_id = #{orgId,jdbcType=INTEGER},
+    device_work_pattern = #{deviceWorkPattern,jdbcType=INTEGER},
+    upload_interval_time = #{uploadIntervalTime,jdbcType=INTEGER},
+    imei = #{imei,jdbcType=VARCHAR},
+    device_factory_id = #{deviceFactoryId,jdbcType=INTEGER},
+    device_name = #{deviceName,jdbcType=VARCHAR},
+    verify_code = #{verifyCode,jdbcType=VARCHAR},
+    psk = #{psk,jdbcType=VARCHAR},
+    device_batch = #{deviceBatch,jdbcType=VARCHAR},
+    device_id_iot = #{deviceIdIot,jdbcType=VARCHAR}
+    where device_id = #{deviceId,jdbcType=BIGINT}
+  </update>
+
+    <!--根据设备id查询设备厂商和型号信息设备-->
+    <select id="findDeviceOtherInfoByid" parameterType="java.lang.Long" resultMap="deviceInfoResultMap">
+        SELECT
+        df.creation_time,df.device_factory_id,df.device_factory_name,df.device_factory_num,
+        dm.creation_time,dm.device_model_id,dm.device_model_name,dm.device_model_number,
+        d.creation_time,d.device_batch,d.device_brand,d.device_factory_id,d.device_id,d.device_id_iot,
+        d.device_model_id, d.device_name,d.device_number,d.device_remarks,d.device_status,d.device_type,
+        d.device_work_pattern,d.imei,d.org_id, d.production_time,d.psk,d.start_time,d.upload_interval_time,d.verify_code,
+        o.*
+        FROM t_device d
+        LEFT JOIN t_device_factory df ON df.device_factory_id = d.device_factory_id
+        LEFT JOIN t_device_model dm ON dm.device_model_id = d.device_model_id
+        LEFT JOIN t_organization o ON o.organization_id = d.org_id
+        WHERE d.device_id=#{_parameter}
+    </select>
+
+    <!--根据设备查询设备绑定情况-->
+    <select id="findDeviceRefDogByDeviceImei" resultMap="DeviceRefDogResultMap">
+        SELECT * FROM t_device d
+        LEFT JOIN t_device_ref_dog drd ON d.device_id = drd.device_id
+        WHERE d.imei = #{imei}
+        <!--AND d.device_status = 0-->
+    </select>
+</mapper>

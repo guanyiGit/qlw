@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.statistic.DogInspectionMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.statistic.DogInspection" >
+    <id column="inspections_id" property="inspectionsId" jdbcType="BIGINT" />
+	    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+	    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+	    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+	    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+	    <result column="result_type" property="resultType" jdbcType="INTEGER" />
+	    <result column="inspections_date" property="inspectionsDate" jdbcType="TIMESTAMP" />
+	    <result column="next_inspections_date" property="nextInspectionsDate" jdbcType="TIMESTAMP" />
+	    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+	    <result column="remarks" property="remarks" jdbcType="LONGVARCHAR" />
+    <!-- 一对一关联狗 -->
+    <association property="tDogInfo" javaType="com.soholy.dogmanager.entity.statistic.DogInfo">
+    	<id column="dog_id1" property="dogId" jdbcType="BIGINT" />
+	    <result column="dog_owner_id1" property="dogOwnerId" jdbcType="BIGINT" />
+	    <result column="dog_name" property="dogName" jdbcType="VARCHAR" />
+	    <result column="dog_breed_type" property="dogBreedType" jdbcType="INTEGER" />
+	    <result column="dog_color_type" property="dogColorType" jdbcType="INTEGER" />
+	    <result column="birth_time" property="birthTime" jdbcType="TIMESTAMP" />
+	    <result column="dog_gender" property="dogGender" jdbcType="INTEGER" />
+	       <!-- 1对1关联字典表 犬品种-->
+		<association property="dogBreedDictionary" javaType="com.soholy.dogmanager.entity.TDictionary">
+			<id column="dictionary_id" property="dictionaryId" jdbcType="INTEGER" />
+		    <result column="dictionary_field" property="dictionaryField" jdbcType="VARCHAR" />
+		    <result column="dictionary_value" property="dictionaryValue" jdbcType="VARCHAR" />
+		    <result column="dictionary_describe1" property="dictionaryDescribe" jdbcType="VARCHAR" />
+		    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+		</association>
+		<!-- 1对1关联字典表 犬毛色-->
+		<association property="dogColorDictionary" javaType="com.soholy.dogmanager.entity.TDictionary">
+			<id column="dictionary_id" property="dictionaryId" jdbcType="INTEGER" />
+		    <result column="dictionary_field" property="dictionaryField" jdbcType="VARCHAR" />
+		    <result column="dictionary_value" property="dictionaryValue" jdbcType="VARCHAR" />
+		    <result column="dictionary_describe2" property="dictionaryDescribe" jdbcType="VARCHAR" />
+		    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+		</association>
+	</association>
+		<!-- 一对一关联免疫证   -->
+		    <association property="tImmuneCard" javaType="com.soholy.dogmanager.entity.TImmuneCard">
+		    	<id column="seq_id" property="seqId" jdbcType="BIGINT" />
+			    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+			    <result column="immune_card_num" property="immuneCardNum" jdbcType="VARCHAR" />
+		    </association>
+		    <!-- 一对一关联犬证 -->
+		    <association property="tDogCard" javaType="com.soholy.dogmanager.entity.TDogCard">
+		    	<id column="seq_num" property="seqNum" jdbcType="BIGINT" />
+			    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+			    <result column="dog_card_num" property="dogCardNum" jdbcType="VARCHAR" />
+		    </association>
+		<!-- 一对一关联犬主-->
+		    <association property="tDogOwner" javaType="com.soholy.dogmanager.entity.TDogOwner">
+		    	<id column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+			    <result column="dog_owner_name" property="dogOwnerName" jdbcType="VARCHAR" />
+			    <result column="dog_owner_phone" property="dogOwnerPhone" jdbcType="VARCHAR" />
+			    <result column="address" property="address" jdbcType="VARCHAR" />
+			    <result column="status" property="status" jdbcType="INTEGER" />
+		    </association>
+    	<!-- 一对一关联用户 -->
+		    <association property="tUsers" javaType="com.soholy.dogmanager.entity.TUsers">
+		    	<id column="user_id" property="userId" jdbcType="BIGINT" />
+			    <result column="username" property="username" jdbcType="VARCHAR" />
+			    <result column="name" property="name" jdbcType="VARCHAR" />
+		    </association>
+		 
+  </resultMap>
+  
+  <!-- 根据免疫证号查询犬只信息,犬主信息,犬证号 -->
+  <select id="findDogInspectionByImmuneCode" resultMap="BaseResultMap">
+  		SELECT  tic.seq_id,
+				tdc.dog_card_num,
+				tdo.dog_owner_name,tdo.dog_owner_phone,tdo.address,
+				tdog.birth_time,td1.dictionary_describe dictionary_describe1,
+				td2.dictionary_describe dictionary_describe2,tdog.dog_gender,
+				tdog.dog_name,tdog.dog_id dog_id1,tdog.dog_owner_id dog_owner_id1
+		 FROM t_immune_card tic
+			LEFT JOIN t_dog_info tdog ON tic.dog_id=tdog.dog_id 
+			LEFT JOIN t_dog_card tdc ON tic.dog_id=tdc.dog_id
+		    LEFT JOIN t_dog_owner tdo ON tic.dog_owner_id=tdo.dog_owner_id 
+			LEFT JOIN t_dictionary td1 ON tdog.dog_breed_type=td1.dictionary_value AND td1.dictionary_field='dog_breed_type'
+			LEFT JOIN t_dictionary td2 ON tdog.dog_color_type=td2.dictionary_value AND td2.dictionary_field='dog_color_type'
+		 WHERE tic.immune_card_num=#{immuneCardNum} 
+  </select>
+  
+  <!-- 查看年检记录详情 -->
+  <select id="findDogInspectionDetail" resultMap="BaseResultMap">
+  		SELECT  tif.result_type,tif.inspections_date,tif.next_inspections_date,tif.remarks,
+				tic.immune_card_num,
+				tdc.dog_card_num,
+				tdo.dog_owner_name,tdo.dog_owner_phone,tdo.address,
+				tdog.birth_time,tdog.dog_breed_type,tdog.dog_color_type,tdog.dog_gender
+		FROM t_inspections_info tif 
+			LEFT JOIN t_dog_info tdog ON tif.dog_id=tdog.dog_id 
+			LEFT JOIN t_immune_card tic ON tif.dog_id=tic.dog_id
+			LEFT JOIN t_dog_card tdc ON tif.dog_id=tdc.dog_id
+		  	LEFT JOIN t_dog_owner tdo ON tif.dog_owner_id=tdo.dog_owner_id
+					
+		WHERE tif.inspections_id=#{inspectionsId}
+  </select>
+  
+  
+  
+   <!-- 查看年检记录列表 -->
+  <select id="findDogInspectionList" resultMap="BaseResultMap">
+  		SELECT  tif.result_type,tif.inspections_date,
+				tic.immune_card_num,
+				tdc.dog_card_num,
+				tdo.dog_owner_name,tdo.dog_owner_phone,
+				tdog.birth_time,tdog.dog_breed_type,tdog.dog_color_type,tdog.dog_gender
+		FROM t_inspections_info tif 
+			LEFT JOIN t_dog_info tdog ON tif.dog_id=tdog.dog_id 
+			LEFT JOIN t_immune_card tic ON tif.dog_id=tic.dog_id
+			LEFT JOIN t_dog_card tdc ON tif.dog_id=tdc.dog_id
+		  	LEFT JOIN t_dog_owner tdo ON tif.dog_owner_id=tdo.dog_owner_id
+		 <where>
+		 	<if test="searchKey !=null and searchKey !=''">
+		 		tic.immune_card_num like "%"#{searchKey}"%" or tdc.dog_card_num like "%"#{searchKey}"%"
+		 	</if>
+		 	<if test="orgType !=null and orgType !=''">
+				and tif.org_id=#{orgId}
+		 	</if>
+		 </where>
+		LIMIT #{index},#{pageSize}
+  </select>
+  
+  
+  <!-- 查看年检总记录-->
+  <select id="findDogInspectionListRecord" resultType="java.lang.Integer">
+  		SELECT  
+  			count(*)
+		FROM t_inspections_info tif 
+			LEFT JOIN t_immune_card tic ON tif.dog_id=tic.dog_id
+			LEFT JOIN t_dog_card tdc ON tif.dog_id=tdc.dog_id
+		  	LEFT JOIN t_organization o ON tif.org_id=o.organization_id
+		 <where>
+		 	<if test="searchKey !=null and searchKey !=''">
+		 		tic.immune_card_num like "%"#{searchKey}"%" or tdc.dog_card_num like "%"#{searchKey}"%"
+		 	</if>
+		 	<if test="orgType !=null and orgType !=''">
+				and o.organization_id=#{orgId}
+		 	</if>
+		 </where>
+  </select>
+  
+  
+   <!-- 保存年检信息 -->
+  <select id="insertDogInspectionSelective" parameterType="com.soholy.dogmanager.entity.statistic.DogInspection">
+		insert into t_inspections_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="inspectionsId != null" >
+        inspections_id,
+      </if>
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="resultType != null" >
+        result_type,
+      </if>
+      <if test="inspectionsDate != null" >
+        inspections_date,
+      </if>
+      <if test="nextInspectionsDate != null" >
+        next_inspections_date,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="inspectionsId != null" >
+        #{inspectionsId,jdbcType=BIGINT},
+      </if>
+      <if test="dogId != null" >
+        #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="resultType != null" >
+        #{resultType,jdbcType=INTEGER},
+      </if>
+      <if test="inspectionsDate != null" >
+        #{inspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nextInspectionsDate != null" >
+        #{nextInspectionsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </select>
+  
+</mapper>

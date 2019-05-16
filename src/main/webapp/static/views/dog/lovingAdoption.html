@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>爱心领养</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <!--<script type="text/javascript" src="../../../static/js/common.js"></script>-->
+    <!--<script type="text/javascript" src="../../../static/js/cookie_util.js"></script>-->
+    <!--<script type="text/javascript" src="../../../static/js/Validform.min.js"></script>-->
+    <!--<script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!--<script type="text/javascript" src="../../../static/js/bootbox.js"></script>-->
+    <!-- 引入 bootstrap -->
+    <!--<link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">-->
+    <!--<link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">-->
+    <!--<script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>-->
+    <!--<script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>-->
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <!--<script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>-->
+    <!--<script type="text/javascript" src="../../../static/js/YLUtils.js"></script>-->
+    <link href="../../../static/ImgPageGrid/css/imggrid.css" rel="stylesheet" />
+    <script src="../../../static/ImgPageGrid/js/imggrid.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/lovingAdoption.js"></script>
+    <style>
+        .divMargin{
+            /*margin-right: 97px;*/
+            width: 25%;
+        }
+        .tb1 tr td{
+           width: 180px;
+           text-align: center;
+           height: 45px;
+       }
+       .tb2  tr td{
+           width: 249px;
+           text-align: center;
+           height: 60px;
+       }
+        .singleinput{
+            width: 230px;
+            height: 40px;
+        }
+        .biginput{
+            width: 730px;
+            height: 40px;
+        }
+        td {
+
+            white-space:nowrap;overflow:hidden;text-overflow: ellipsis;
+
+        }
+    </style>
+</head>
+<body>
+<!--<div id="imggrid">-->
+<!--</div>-->
+    <div class="container-fluid" style="width: 1200px;" id="master">
+        <div class="row" style="width: 1200px;position: relative;margin-right: auto;margin-left: auto;">
+            <div class="col-sm-12">
+                <div class="row" style="margin-top: 20px">
+                    <span style="">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);"><a href="#" style="color:rgb(255, 102, 85);">爱心领养&gt;&gt;</a></label>
+                        <label>共有<B style="color: red;margin-left: 5px;margin-right: 5px" id="total">0</B>只狗狗可以领养哦！</label>
+                    </span>
+                </div>
+                <hr style="border: 1px dashed #ccc;width:103%;height:0px;position: relative;left: -14px;">
+                <div class="row" style="margin-top: 20px">
+                    <form class="form-inline" role="form">
+                        <div class="form-group divMargin">
+                            <label class="" for="breedSelect">品种:</label>
+                            <!-- <input id="breedSelect" style="width:140px" > -->
+                            <select id="breedSelect" style="width:140px;">
+                            	<option value="-1">全部</option>
+                            </select>
+                            
+                        </div>
+                        <div class="form-group divMargin">
+                            <label class="" for="sexSelect">性别:</label>
+                            <!-- <input id="sexSelect" style="width:140px"> -->
+                            <select id="sexSelect" style="width:140px">
+                            	<option value="-1">全部</option>
+                            	<option value="0">雄</option>
+                            	<option value="1">雌</option>
+                            </select>
+                            
+                        </div>
+                        <div class="form-group divMargin">
+                            <label class="" for="dogAgeSelect">犬龄:</label>
+                            <!-- <input id="dogAgeSelect" style="width:140px"> -->
+                             <select id="dogAgeSelect" style="width:140px">
+                            	<option value="0">全部</option>
+                            	<option value="1">3岁以下</option>
+                            	<option value="2">3~8岁</option>
+                            	<option value="3">8~12岁</option>
+                            	<option value="4">12岁以上</option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label class="" for="hairColorSelect">毛色:</label>
+                            <!-- <input id="hairColorSelect" style="width:140px"> -->
+                            <select id="colorSelect" style="width:140px">
+                            	<option value="-1">全部</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="row" style="margin-top: 20px">
+                    <div id="imggrid"  style=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    .form-inline{
+        font-size: 17px;
+    }
+    .form-inline>div>label{
+        height: 50px;
+        width: 50px;
+    }
+    .form-inline>div>select{
+        height: 30px;
+    }
+</style>
+
+</html>

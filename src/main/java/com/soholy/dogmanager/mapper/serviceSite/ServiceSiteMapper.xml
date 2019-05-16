@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.serviceSite.ServiceSiteMapper">
+
+	<sql id="Base_Column_List">
+		organization_id, organization_name, organization_capital,
+		register_number,
+		credit_code,
+		establish_date, province_id,
+		owned_city_id, district_id, phone, person_liable,
+		org_type,
+		scope_of_operation, address, longitude, latitude, status, fail_reason,
+		creation_time,fixedPhone
+	</sql>
+
+	<!--查询最近的服务网点信息-->
+	<select id="selectServiceSiteByDistance" resultType="com.soholy.dogmanager.pojo.servicesite.ServiceSite">
+		select
+		o.organization_id organizationId, o.organization_name organizationName, o.organization_capital organizationCapital,
+		o.register_number registerNumber,
+		o.credit_code creditCode,
+		o.establish_date establishDate,
+		o.fixedPhone fixedPhone,
+		td.district_name province,t.district_name ownedCity,d.district_name district,o.phone,o.person_liable personLiable,
+		o.org_type orgType,o.scope_of_operation scopeOfOperation,
+		CAST(o.longitude AS CHAR) longitude,CAST(o.latitude AS CHAR) latitude,
+		o.address,o.`status`,o.fail_reason failReason,o.creation_time creationTime,
+		o.power,
+		ACOS(SIN((#{lat} * 3.1415) / 180) * SIN((o.latitude * 3.1415) / 180 ) + COS((#{lat} * 3.1415) / 180 ) * COS((o.latitude * 3.1415) / 180 ) *COS((#{lng} * 3.1415) / 180 - (o.longitude * 3.1415) / 180 ) ) * 6380 as distance
+		from t_organization o
+		left join t_district td on o.province_id =
+		td.district_id
+		left join
+		t_district d on o.district_id = d.district_id
+		left join t_district t on
+		o.owned_city_id = t.district_id
+		<where>
+			o.test_type = 0
+			<choose>
+				<when test="status != null and status != -1">
+					and o.`status` = #{status}
+				</when>
+				<otherwise>
+					and o.`status` in (1,2)
+				</otherwise>
+			</choose>
+			<if test="provinceId != null and provinceId != -1">
+				and o.province_id = #{provinceId}
+			</if>
+			<if test="ownedCityId != null  and provinceId != -1">
+				and o.owned_city_id = #{ownedCityId}
+			</if>
+			<if test="districtId != null  and provinceId != -1">
+				and o.district_id = #{districtId}
+			</if>
+			<choose>
+				<when test="orgtype != null and orgtype != -1">
+					and o.org_type = #{orgtype}
+				</when>
+				<otherwise>
+					and o.org_type = 2
+				</otherwise>
+			</choose>
+			<if test="power != null and power != -1">
+				and o.power = #{power}
+			</if>
+			<if test="searchKey != null and searchKey != ''">
+				and o.organization_name LIKE concat('%',#{searchKey},'%')
+			</if>
+		</where>
+		order by distance asc
+	</select>
+
+	<select id="selectServiceSite" resultType="com.soholy.dogmanager.pojo.servicesite.ServiceSite">
+		select
+		o.organization_id organizationId, o.organization_name organizationName, o.organization_capital organizationCapital,
+		o.register_number registerNumber,
+		o.credit_code creditCode,
+		o.establish_date establishDate,
+		o.fixedPhone fixedPhone,
+		td.district_name province,t.district_name ownedCity,d.district_name district,o.phone,o.person_liable personLiable,
+		o.org_type orgType,o.scope_of_operation scopeOfOperation,o.longitude,o.latitude,o.address,o.`status`,o.fail_reason failReason,o.creation_time creationTime,
+		o.power
+		from t_organization o
+		left join t_district td on o.province_id =
+		td.district_id
+		left join
+		t_district d on o.district_id = d.district_id
+		left join t_district t on
+		o.owned_city_id = t.district_id
+		<where>
+			o.test_type = 0
+			<choose>
+				<when test="status != null and status != -1">
+					and o.`status` = #{status}
+				</when>
+				<otherwise>
+					and o.`status` in (1,2)
+				</otherwise>
+			</choose>
+			<if test="provinceId != null and provinceId != -1">
+				and o.province_id = #{provinceId}
+			</if>
+			<if test="ownedCityId != null  and provinceId != -1">
+				and o.owned_city_id = #{ownedCityId}
+			</if>
+			<if test="districtId != null  and provinceId != -1">
+				and o.district_id = #{districtId}
+			</if>
+			<choose>
+				<when test="orgtype != null and orgtype != -1">
+					and o.org_type = #{orgtype}
+				</when>
+				<otherwise>
+					and o.org_type = 2
+				</otherwise>
+			</choose>
+			<if test="power != null and power != -1">
+				and o.power = #{power}
+			</if>
+			<if test="searchKey != null and searchKey != ''">
+				and o.organization_name LIKE concat('%',#{searchKey},'%')
+			</if>
+		</where>
+		<if test="tType != 0">
+			order by o.creation_time desc
+		</if>
+		<if test="tType == 0">
+			order by rand()
+		</if>
+	</select>
+
+	<select id="selectServiceSiteById" parameterType="java.lang.Integer"
+		resultType="com.soholy.dogmanager.pojo.servicesite.ServiceSite">
+		select
+		o.organization_id organizationId, o.organization_name organizationName, o.organization_capital organizationCapital,
+		o.register_number registerNumber,
+		o.credit_code creditCode,
+		o.establish_date establishDate,
+		o.fixedPhone fixedPhone,
+		o.district_id districtId,o.province_id provinceId,o.owned_city_id ownedCityId,
+		o.province_id province,o.owned_city_id ownedCity,o.district_id district,o.phone,o.person_liable personLiable,
+		o.org_type orgType,o.scope_of_operation scopeOfOperation,o.longitude,o.latitude,o.address,o.`status`,o.fail_reason failReason,o.creation_time creationTime
+		from t_organization o
+		left join t_district td on o.province_id = td.district_id
+		left join
+		t_district d on o.district_id = d.district_id
+		left join t_district t on
+		o.owned_city_id = t.district_id
+		where
+		o.organization_id = #{organizationId}
+	</select>
+
+	<update id="updateSite" parameterType="com.soholy.dogmanager.pojo.servicesite.ServiceSite">
+		update t_organization
+		<set >
+			<if test="organizationName != null" >
+				organization_name = #{organizationName,jdbcType=VARCHAR},
+			</if>
+			<if test="organizationCapital != null" >
+				organization_capital = #{organizationCapital,jdbcType=VARCHAR},
+			</if>
+			<if test="registerNumber != null" >
+				register_number = #{registerNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="creditCode != null" >
+				credit_code = #{creditCode,jdbcType=VARCHAR},
+			</if>
+			<if test="establishDate != null" >
+				establish_date = #{establishDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="provinceId != null" >
+				province_id = #{provinceId,jdbcType=INTEGER},
+			</if>
+			<if test="ownedCityId != null" >
+				owned_city_id = #{ownedCityId,jdbcType=INTEGER},
+			</if>
+			<if test="districtId != null" >
+				district_id = #{districtId,jdbcType=INTEGER},
+			</if>
+			<if test="phone != null" >
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="personLiable != null" >
+				person_liable = #{personLiable,jdbcType=VARCHAR},
+			</if>
+			<if test="orgType != null" >
+				org_type = #{orgType,jdbcType=INTEGER},
+			</if>
+			<if test="scopeOfOperation != null" >
+				scope_of_operation = #{scopeOfOperation,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null" >
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="longitude != null" >
+				longitude = #{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude != null" >
+				latitude = #{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="status != null" >
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="failReason != null" >
+				fail_reason = #{failReason,jdbcType=VARCHAR},
+			</if>
+			<if test="power != null" >
+				power = #{power,jdbcType=INTEGER},
+			</if>
+			<if test="approvalTime != null" >
+				approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creationTime != null" >
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fixedPhone != null" >
+				fixedPhone = #{fixedPhone,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where organization_id = #{organizationId,jdbcType=INTEGER}
+	</update>
+
+
+</mapper>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发布</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入bootstrap table 组件-->
+    <!--<link href="../../bootstrap-table/dist/bootstrap-table.css" rel="stylesheet"> -->
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!-- <script type="text/javascript" src="../../../static/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script> -->
+    <!-- 引入utils -->
+    <script type="text/javascript" src="../../../static/js/YLUtils.js"></script>
+    <!--导入在线HTML编辑器-->
+    <script type="text/javascript" src="../../../static/wangEditor-3.1.1/release/wangEditor.min.js"></script>
+    <link href="../../../static/wangEditor-3.1.1/release/wangEditor.css" rel="stylesheet">
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/info/release.js"></script>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px">
+    <div style="z-index: 14;">
+        <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label" style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);"><div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+            <div style="width: auto; height: auto; text-align: left;">
+                <div style="width: auto; height: auto;">
+                    <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                        信息发布&gt;&gt;<span id="tital">信息发布</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+            <div style="display: none;"></div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="margin-top: 20px;height: 500px">
+        <div class="row" style="margin-right: 20px;margin-left: 20px;margin-top: 5px;">
+            <!--<div style="background-color: rgb(65, 199, 219);height: 27px;line-height: 24px">&nbsp&nbsp&nbsp&nbsp犬只信息</div>-->
+            <div class="row" style="margin-top: 30px;margin-bottom: 30px;">
+               <div class="col-sm-5 col-sm-offset-1">
+                    <b class="">标题:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b>
+                    <input id="title" type="text" style="width: 200px;height: 30px;">
+               </div>
+                <div class="col-sm-5">
+                    <b>类型:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b>
+                    <select id="infoType" style="width: 200px;height: 30px;">
+                        <option>全部</option>
+                        <option value=0>政策法规</option>
+                        <option value=1>动态资讯</option>
+                        <option value=2>养犬宣传</option>
+                        <option value=3>服务指南</option>
+                    </select>
+               </div>
+            </div>
+            <div class="row" >
+                <div class="col-sm-12">
+                    <div id="editor" style=""></div>
+                </div>
+            </div>
+            <div class="row" style="margin: 30px 0;">
+                <div class="col-lg-6 text-right">
+                    <button class="btn btn-sm btn-info" type="button" id="save" onclick="save();" style="width: 80px">保存</button>
+                    &nbsp&nbsp&nbsp&nbsp
+                </div>
+                <div class="col-lg-6">
+                    <button type="button" id="cansle" style="width: 80px" class="btn btn-sm btn-default" onclick="que();">返回</button>
+                </div>
+            </div>
+            <!--<div class="col-sm-8" style="height: 100%;">-->
+                <!--&lt;!&ndash;<div style="margin-top: 30px">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div style="margin-left: 61px;margin-top: -16px">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div id="editor" style="height:300px;"></div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--<div style="position: absolute;left: 298px;margin-top: 50px">-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

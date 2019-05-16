@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Home</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <!-- VENDOR CSS -->
+        <link href="bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+        <!--<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">-->
+        <!--<link rel="stylesheet" href="assets/vendor/linearicons/style.css">-->
+        <!--<link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">-->
+        <!-- MAIN CSS -->
+        <link rel="stylesheet" href="assets/css/main.css">
+        <!-- GOOGLE FONTS -->
+        <!--<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">-->
+        <!-- ICONS -->
+        <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+        
+        <!--<script src="assets/vendor/jquery/jquery.min.js"></script>-->
+        <!--<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>-->
+        <!--<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>-->
+        <!--<script src="assets/vendor/chartist/js/chartist.min.js"></script>-->
+        <!--<script src="assets/scripts/klorofil-common.js"></script>-->
+        <script type="text/javascript" src="../static/js/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/cookie_util.js"></script>
+        <script type="text/javascript" src="js/account.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="views/homePage/visitorHomePage.js"></script>
+    </head>
+    <body>
+        <!-- WRAPPER -->
+        <div id="wrapper">
+            <!-- NAVBAR -->
+            <nav class="navbar navbar-default navbar-fixed-top" style="height: 95px">
+                <div class="brand" style="height: 75px">
+                    <a class="syyy"><img style="width: 215px;height: 55px;margin-top: -13px;margin-left: -30px" src="images/logo.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+                </div>
+                <div class="header-m fl">
+                    <ul id="headPage" style="width: 1200px;margin-left: -120px;margin-top: -7px">
+                        <li class="syyy"><a class="" style="text-decoration:none" href="javascript:void(0)">首页</a></li>
+                        <li class="axlyyy"><a class="" style="text-decoration:none" href="javascript:void(0)">爱心领养</a></li>
+                        <li class="fwznn"><a class="col" style="text-decoration:none" href="javascript:void(0)">服务指南</a></li>
+                        <li class="zcfgg"><a class="col" style="text-decoration:none" href="javascript:void(0)">政策法规</a></li>
+                        <li class="dtzxx"><a class="col" style="text-decoration:none" href="javascript:void(0)">动态资讯</a></li>
+                        <li class="yqzss"><a class="col" style="text-decoration:none" href="javascript:void(0)">养犬知识</a></li>
+                    </ul>
+                </div>
+                <div class="container-fluid">
+                    <div id="navbar-menu">
+                        <!--<ul class="nav navbar-nav navbar-right">-->
+                            <!--<li id="users" class="dropdown">-->
+                                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span id="user_name">admin</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li><a href="#"><i class="lnr lnr-user"></i> <span>账号信息</span></a></li>-->
+                                    <!--<li><a><i class="lnr lnr-exit"></i> <span onclick="javascript:login();">退出登录</span></a></li>-->
+                                <!--</ul>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                        <ul class="nav navbar-nav navbar-right">
+                            <li id="users" class="dropdown hou">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span id="user_name">admin</span></a>
+                            </li>
+                            <li id="message" class="dropdown hou">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="messag">消息</span></a>
+                            </li>
+                            <li id="login_out" class="dropdown hou">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="logout" onclick="logOut();">退出</span></a>
+                            </li>
+                            <li id="denglu" class="dropdown" style="display: none">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><button type="button" style="background-color: #e4cb10;color: #ffffff;border:none;width: 60px;height:25px" onclick="jumpLanding();">登陆</button></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- END NAVBAR -->
+            <!-- LEFT SIDEBAR -->
+            <div id="caidanhou" style="display: none">
+                <div id="sidebar-nav" class="sidebar">
+                    <div class="sidebar-scroll">
+                        <nav>
+                            <ul id="interface" class="nav" style="font-size: 16px">
+                                <!--注释掉的为有子菜单的菜单-->
+                                <!--<li>-->
+                                <!--<a id="" href="" data-toggle="collapse" class="collapsed"><i class="lnr lnr-file-empty"></i> <span>犬只档案</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>-->
+                                <!--<div id="subPages" class="collapse ">-->
+                                <!--<ul class="nav">-->
+                                <!--<li><a class="active"><i class="lnr lnr-home"></i><span>新增账号</span></a></li>-->
+                                <!--<li><a href="page-login-old.html" class=""><i class="lnr lnr-home"></i>测试1</a></li>-->
+                                <!--<li><a href="page-login-old.html" class="">测试2</a></li>-->
+                                <!--</ul>-->
+                                <!--</div>-->
+                                <!--</li>-->
+                                <li class="menuu" id="qzbsy"><a data-toggle="collapse" class="active"><span>犬只管理平台</span></a></li><!--犬只办首页-->
+                                <li class="menuu" id="srssy"><a class="collapsed"><span>犬只管理平台</span></a></li><!--收容所首页-->
+                                <li class="menuu" id="cwyysy"><a class="collapsed"><span>犬只管理平台</span></a></li><!--宠物医院首页-->
+                                <li class="menuu" id="qzsy"><a class="collapsed"><span>犬只管理平台</span></a></li><!--犬主首页-->
+                                <li class="menuu" id="yyfsy"><a class="collapsed"><span>犬只管理平台</span></a></li><!--运营方首页-->
+
+                                <li class="menuu" id="qzda"><a class="collapsed"><span>犬只档案</span></a></li>
+                                <li class="menuu" id="qzdn"><a class="collapsed"><span>犬主档案</span></a></li>
+                                <!--<li class="menuu" id="wzqz"><a class="collapsed"><span>无证犬只</span></a></li>-->
+                                <li class="menuu" id="qzgl"><a class="collapsed"><span>犬证管理</span></a></li>
+                                <li class="menuu" id="hmd"><a class="collapsed"><span>黑名单</span></a></li>
+                                <!--<li class="menuu" id="zfcf"><a class="collapsed"><span>执法处罚</span></a></li>-->
+                                <!--<li class="menuu" id="fwwd"><a class="collapsed"><span>服务网点</span></a></li>-->
+                                <li class="menuu" id="xxfb"><a class="collapsed"><span>信息发布</span></a></li>
+                                <!--<li class="menuu" id="qzbsbgl"><a class="collapsed"><span>犬只办设备管理</span></a></li>-->
+                                <li class="menuu" id="dzwl"><a class="collapsed"><span>电子围栏</span></a></li>
+                                <!--<li class="menuu" id="qzbsrsqzzx"><a class="collapsed"><span>犬只办/收容所犬只注销</span></a></li>-->
+                                <li class="menuu" id="jyqz"><a class="collapsed"><span>禁养犬种</span></a></li>
+                                <!--<li class="menuu" id="qzbtjxx"><a class="collapsed"><span>犬只办统计信息</span></a></li>-->
+                                <li class="menuu" id="zfgl"><a class="collapsed"><span>执法管理</span></a></li>
+                                <li class="menuu" id="qzsr"><a class="collapsed"><span>犬只收容</span></a></li>
+                                <li class="menuu" id="hyzbl"><a class="collapsed"><span>会员证办理</span></a></li>
+                                <!--<li class="menuu" id="wtcl"><a class="collapsed"><span>问题处理</span></a></li>-->
+                                <!--<li class="menuu" id="srssbgl"><a class="collapsed"><span>收容所宠物医院设备管理</span></a></li>-->
+                                <!--<li class="menuu" id="srstjxx"><a class="collapsed"><span>收容所统计信息</span></a></li>-->
+                                <li class="menuu" id="zjbl"><a class="collapsed"><span>证件办理</span></a></li>
+                                <li class="menuu" id="mydj"><a class="collapsed"><span>免疫登记</span></a></li>
+                                <!--<li class="menuu" id="njgl"><a class="collapsed"><span>年检管理</span></a></li>-->
+                                <li class="menuu" id="bljl"><a class="collapsed"><span>病历记录</span></a></li>
+                                <!--<li class="menuu" id="yygl"><a class="collapsed"><span>预约管理</span></a></li>-->
+                                <!--<li class="menuu" id="yytjxx"><a class="collapsed"><span>医院统计信息</span></a></li>-->
+                                <!--<li class="menuu" id="wdxx"><a class="collapsed"><span>我的信息</span></a></li>-->
+                                <!--<li class="menuu" id="wdqz"><a class="collapsed"><span>我的犬证</span></a></li>-->
+                                <!--<li class="menuu" id="wdcw"><a class="collapsed"><span>我的宠物</span></a></li>-->
+                                <!--<li class="menuu" id="hdgj"><a class="collapsed"><span>活动轨迹</span></a></li>-->
+                                <!--<li class="menuu" id="qzywyy"><a class="collapsed"><span>犬主业务预约</span></a></li>-->
+                                <!--<li class="menuu" id="qzqzzx"><a class="collapsed"><span>犬主犬只注销</span></a></li>-->
+                                <li class="menuu" id="yyfsbgl"><a class="collapsed"><span>运营方设备管理</span></a></li>
+                                <!--<li class="menuu" id="xxsh"><a class="collapsed"><span>信息审核</span></a></li>-->
+                                <li class="menuu" id="fwwdsh"><a class="collapsed"><span>服务网点审核</span></a></li>
+                                <!--<li class="menuu" id="lbtgl"><a class="collapsed"><span>轮播图管理</span></a></li>-->
+                                <!--<li class="menuu" id="yyftjxx"><a class="collapsed"><span>运营方统计信息</span></a></li>-->
+                                <li class="menuu" id="qxgl"><a class="collapsed"><span>用户权限管理</span></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- END LEFT SIDEBAR -->
+                <!-- MAIN -->
+                <div class="main">
+                    <!-- MAIN CONTENT -->
+                    <!--<div id="home"style="width: 100%"></div>-->
+                    <!--<div id="home" class="main-content" style="margin-left: 20px;width: 1300px;"></div>-->
+                    <div id="home" class="main-content" style=""></div>
+                    <!--<div id="home" class="container-fluid">-->
+                    <!--</div>-->
+                    <!-- END MAIN CONTENT -->
+                </div>
+            </div>
+            <div id="mainer" style="margin-top: 144px">
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-md-12 column">
+                            <div id="homee" scrolling="auto" frameborder="0" style="width:100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN -->
+            <!--<div class="clearfix"></div>-->
+            <!--<footer>-->
+            <!--<div style="width: 100%"> &lt;!&ndash;class="container-fluid"&ndash;&gt;-->
+            <!--&lt;!&ndash;<p class="copyright">Copyright &copy; 2017.Company name All rights reserved.<a target="_blank" href="#">XXX云后台管理系统</a></p>&ndash;&gt;-->
+            <!--</div>-->
+            <!--</footer>-->
+        </div>
+        <!-- END WRAPPER -->
+    </body>
+
+    <style>
+        #home{
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 2%;
+        }
+         #wrapper .main{
+            height: 100%;
+        }
+    </style>
+</html>

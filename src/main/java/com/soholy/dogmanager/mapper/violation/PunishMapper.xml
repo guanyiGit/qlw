@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.violation.PunishMapper" >
+
+   <resultMap id="ViolationDetailMap" type="com.soholy.dogmanager.pojo.violation.ViolationPunish3VO" >
+   			<id column="violation_id" property="violationId" jdbcType="BIGINT" />
+		   	<result column="violation_date" property="violationDate" jdbcType="TIMESTAMP" />
+		    <result column="violation_place" property="violationPlace" jdbcType="VARCHAR" />
+		    <result column="violation_type" property="violationType" jdbcType="VARCHAR" />
+		 	<result column="points" property="points" jdbcType="INTEGER" />
+		    <result column="is_collection" property="isCollection" jdbcType="INTEGER" />
+		    <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+   	    	<result column="dog_id" property="dogId" jdbcType="BIGINT" />
+		    <result column="dog_breed_type" property="dogBreed" jdbcType="VARCHAR" />
+		    <result column="dog_color_type" property="dogColor" jdbcType="VARCHAR" />
+		    <result column="dog_name" property="dogName" jdbcType="VARCHAR" />
+		    <result column="birth_time" property="birthTime" jdbcType="TIMESTAMP" />
+		    <result column="dog_card_num" property="dogCardNum" jdbcType="VARCHAR" />
+		    <result column="device_number" property="deviceNumber" jdbcType="VARCHAR" />
+		    <result column="dog_owner_name" property="dogOwnerName" jdbcType="VARCHAR" />
+		    <result column="dog_owner_phone" property="dogOwnerPhone" jdbcType="VARCHAR" />
+			<result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+			 <result column="punish_time" property="punishTime" jdbcType="TIMESTAMP" />
+			  <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+			  <result column="dog_gender" property="dogGender" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap type="com.soholy.dogmanager.pojo.violation.DeviceDogVo" id="dogBaseMap">
+  	<id column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="deduction_sum" property="deductionSum" jdbcType="DOUBLE" />
+  </resultMap>
+  
+  
+  <resultMap type="com.soholy.dogmanager.pojo.violation.ViolationPunishVO" id="dogViolationPunishMap">
+    <result column="violation_date" property="violationDate" jdbcType="TIMESTAMP" />
+    <result column="violation_place" property="violationPlace" jdbcType="VARCHAR" />
+    <result column="dictionary_describe" property="dictionaryDescribe" jdbcType="VARCHAR" />
+ 	<result column="points" property="points" jdbcType="INTEGER" />
+    <result column="is_collection" property="isCollection" jdbcType="INTEGER" />
+  </resultMap>
+  
+  	<sql id="baseSQL">
+  				v.violation_id,
+ 			 	v.violation_date,
+ 			 	v.violation_place,
+ 			 	p.points,
+ 			 	p.is_collection,
+ 			 	p.punish_time,
+ 			 	p.remarks,
+ 			 	im.thumbnail_url,
+ 			 	dic1.dictionary_describe violation_type,
+ 			 	dic2.dictionary_describe dog_breed_type,
+ 			 	dic3.dictionary_describe dog_color_type,
+ 			 	di.dog_id,
+ 			 	di.dog_name,
+ 			 	di.birth_time,
+ 			 	di.dog_gender,
+ 			 	dc.dog_card_num,
+ 			 	de.device_number,
+ 			 	dw.dog_owner_name,
+ 			 	dw.dog_owner_phone,
+ 			 	doc.card_num
+  	</sql>
+ 	<!-- 查违法列表 -->
+ 	<select id="findViolationLists" parameterType="java.util.HashMap" resultMap="ViolationDetailMap">
+ 			SELECT
+ 			 <include refid="baseSQL"/>
+				FROM t_violation v				
+				LEFT JOIN t_dog_info di
+				ON v.`dog_id`=di.`dog_id`
+				LEFT JOIN t_dog_card dc
+				ON di.`dog_id`=dc.`dog_id`
+				LEFT JOIN t_immune_card ic
+				ON di.`dog_id`=ic.`dog_id`
+				LEFT JOIN t_device_ref_dog dr
+				ON di.`dog_id`=dr.`dog_id`
+				LEFT JOIN t_device de
+				ON de.`device_id`=dr.`device_id`
+				LEFT JOIN t_dog_owner dw
+				ON v.`dog_owner_id`=dw.`dog_owner_id`
+				LEFT JOIN t_dog_owner_card doc
+				ON dw.`dog_owner_id`=doc.`dog_owner_id`
+				LEFT JOIN t_punish p
+				ON v.`violation_id`=p.`violation_id`
+				LEFT JOIN t_dictionary dic1
+				ON v.`violation_type`=dic1.`dictionary_value` AND dic1.`dictionary_field`='violation_type' 
+				LEFT JOIN t_dictionary dic2
+				ON di.dog_breed_type=dic2.dictionary_value AND dic2.dictionary_field='dog_breed_type'
+				LEFT JOIN t_dictionary dic3
+				ON di.dog_color_type=dic3.dictionary_value AND dic3.dictionary_field='dog_color_type'
+				LEFT JOIN t_images_ref ir 
+				ON v.`dog_id`=ir.`ref_id` AND ir.`target_type`=1
+				LEFT JOIN t_images im
+				ON im.`image_id`=ir.`image_id`
+				<where>
+					<if test="string != null and string !='' ">
+						dw.`dog_owner_name` LIKE CONCAT('%',#{string},'%')
+						OR 
+						(doc.`card_type`=0 AND doc.`card_num` LIKE CONCAT('%',#{string},'%'))
+						OR
+						dc.`dog_card_num` LIKE CONCAT('%',#{string},'%')
+						OR
+						ic.`immune_card_num` LIKE CONCAT('%',#{string},'%')
+						OR
+						(de.`device_type`=1 AND de.`device_number` LIKE CONCAT('%',#{string},'%'))
+					</if>
+				</where>
+				 GROUP BY v.`violation_id` ORDER BY v.creation_time DESC LIMIT #{index},#{pageSize}
+ 	</select>
+ 	<select id="findViolationListsCount" parameterType="java.util.HashMap" resultType="int">
+ 			SELECT COUNT(*)
+				FROM t_violation v				
+				LEFT JOIN t_dog_info di
+				ON v.`dog_id`=di.`dog_id`
+				LEFT JOIN t_dog_card dc
+				ON di.`dog_id`=dc.`dog_id`
+				LEFT JOIN t_immune_card ic
+				ON di.`dog_id`=ic.`dog_id`
+				LEFT JOIN t_device_ref_dog dr
+				ON di.`dog_id`=dr.`dog_id`
+				LEFT JOIN t_device de
+				ON de.`device_id`=dr.`device_id`
+				LEFT JOIN t_dog_owner dw
+				ON v.`dog_owner_id`=dw.`dog_owner_id`
+				LEFT JOIN t_dog_owner_card doc
+				ON dw.`dog_owner_id`=doc.`dog_owner_id`
+				<where>
+					<if test="string != null and string !='' ">
+						dw.`dog_owner_name` LIKE CONCAT('%',#{string},'%')
+						OR
+						(doc.`card_type`=0 AND doc.`card_num` LIKE CONCAT('%',#{string},'%'))
+						OR
+						dc.`dog_card_num` LIKE CONCAT('%',#{string},'%')
+						OR
+						ic.`immune_card_num` LIKE CONCAT('%',#{string},'%')
+						OR
+						(de.`device_type`=1 AND de.`device_number` LIKE CONCAT('%',#{string},'%'))
+					</if>
+				</where>
+ 	</select>
+ 	
+ 	<!-- 查详情 -->
+ 	<select id="findViolationById" parameterType="long" resultMap="ViolationDetailMap">
+ 			SELECT
+ 				<include refid="baseSQL"/>
+				FROM t_violation v				
+				LEFT JOIN t_dog_info di
+				ON v.`dog_id`=di.`dog_id`
+				LEFT JOIN t_dog_card dc
+				ON di.`dog_id`=dc.`dog_id`
+				LEFT JOIN t_immune_card ic
+				ON di.`dog_id`=ic.`dog_id`
+				LEFT JOIN t_device_ref_dog dr
+				ON di.`dog_id`=dr.`dog_id`
+				LEFT JOIN t_device de
+				ON de.`device_id`=dr.`device_id`
+				LEFT JOIN t_dog_owner dw
+				ON v.`dog_owner_id`=dw.`dog_owner_id`
+				LEFT JOIN t_dog_owner_card doc
+				ON dw.`dog_owner_id`=doc.`dog_owner_id`
+				LEFT JOIN t_punish p
+				ON v.`violation_id`=p.`violation_id`
+				LEFT JOIN t_dictionary dic1
+				ON v.`violation_type`=dic1.`dictionary_value` AND dic1.`dictionary_field`='violation_type' 
+				LEFT JOIN t_dictionary dic2
+				ON di.dog_breed_type=dic2.dictionary_value AND dic2.dictionary_field='dog_breed_type'
+				LEFT JOIN t_dictionary dic3
+				ON di.dog_color_type=dic3.dictionary_value AND dic3.dictionary_field='dog_color_type'
+				LEFT JOIN t_images_ref ir 
+				ON v.`dog_id`=ir.`ref_id` AND ir.`target_type`=1
+				LEFT JOIN t_images im
+				ON im.`image_id`=ir.`image_id`
+			WHERE v.`violation_id`=#{id}
+ 	</select>
+ 	
+ 	<!-- 根据标识号查犬信息 -->
+ 	<select id="findDeviceDogVoByDeviceCode" parameterType="string" resultMap="dogBaseMap">
+ 		SELECT 
+ 			de.device_number,
+ 			di.dog_id,
+ 			di.dog_owner_id,
+ 			di.deduction_sum
+			FROM t_device de
+			LEFT JOIN t_device_ref_dog dr 
+			ON de.`device_id`=dr.`device_id`
+			LEFT JOIN t_dog_info di
+			ON dr.`dog_id`=di.`dog_id`
+			WHERE de.`device_number`=#{code} and de.`device_type`=1
+ 	</select>
+ 	
+ 	<!-- 根据犬id查违法记录 -->
+ 	<select id="findViolationPunishListByDogId" parameterType="long" resultMap="dogViolationPunishMap">
+ 		SELECT 
+ 			v.violation_date,
+ 			v.violation_place,
+ 			d.dictionary_describe,
+ 			p.points,
+ 			p.is_collection
+			FROM t_violation v
+			LEFT JOIN t_dictionary d
+			ON v.`violation_type`=d.`dictionary_value` AND d.`dictionary_field`='violation_type' 
+			LEFT JOIN t_punish p
+			ON v.`violation_id`=p.`violation_id`
+			WHERE v.`dog_id`=#{id}
+ 	</select>
+ 	
+ 	<!-- 扣分列表 -->
+ 	<select id="findViolationPunish4VOListBydogOwnerId" parameterType="long" resultType="com.soholy.dogmanager.pojo.violation.ViolationPunish4VO">
+ 		SELECT 
+			p.`points` points,
+			p.`punish_time` punishTime,
+			di.`dog_name` dogName,
+			d.`dictionary_describe` violationType
+		FROM t_dog_info di
+		LEFT JOIN t_violation v
+		ON di.`dog_id`=v.`dog_id`
+		LEFT JOIN t_punish p
+		ON v.`violation_id`=p.`violation_id`
+		LEFT JOIN t_dictionary d
+		ON v.`violation_type`=d.`dictionary_value` AND d.`dictionary_field`='violation_type'
+		WHERE di.`dog_owner_id`=#{dogOwnerId}
+ 	</select>
+ 	
+ 	
+ 	<!-- 累计扣分 -->
+ 	<select id="findtotalCountBydogOwnerId" resultType="com.soholy.dogmanager.pojo.violation.DogInfo2VO" parameterType="long">
+ 		SELECT 
+			im.`thumbnail_url` url,
+			di.`dog_name` dogName,
+			di.`deduction_sum` totalCount
+			FROM t_dog_info di
+		LEFT JOIN t_images_ref ir 
+		ON di.`dog_id`=ir.`ref_id` AND ir.`target_type`=1
+		LEFT JOIN t_images im
+		ON im.`image_id`=ir.`image_id`	
+		WHERE di.`dog_owner_id`=#{dogOwnerId}
+ 	</select>
+</mapper>

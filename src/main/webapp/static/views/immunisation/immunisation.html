@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--免疫证办理-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--引入webuploader相关组件-->
+    <link href="../../../static/webuploader/webuploader.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/search-input.css">
+
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/immunisation/immunisation.js"></script>
+    <script type="text/javascript" src="../../../static/js/search-icon-active.js"></script>
+
+    <style>
+        /*table tr:nth-child(even){*/
+        /*background: #ccc;*/
+        /*}*/
+        .table thead {
+            background: rgb(65, 199, 214);
+        }
+        .search-icon{
+            left: -52px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="width: 1200px">
+    <div class="row">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active" style="width: 50%;text-align: center;">
+                <a href="#immunisation" data-toggle="tab" >
+                    免疫证
+                </a>
+            </li>
+            <li style="width: 50%;text-align: center"><a href="#dogCard" data-toggle="tab">犬证</a></li>
+        </ul>
+    </div>
+    <div id="myTabContent" class="tab-content" style="margin-left: -30px">
+        <div class="tab-pane fade in active" id="immunisation" style="width: 1225px">
+            <div class="row" style="margin-top: 20px">
+                <div class="col-sm-6">
+                    <!--<img src="../../../static/views/device_manager/image/add-icon.png" style="width: 30px;height: 30px">-->
+                    <span id="add-im" class="click-add glyphicon glyphicon-plus" style="color: rgb(67, 200, 214)">免疫证办理</span>
+                </div>
+                <!--<div class="col-sm-6">-->
+                <!--<div class="input-group">-->
+                <!--<input id="key" type="text"  placeholder="免疫证号" class="form-control">-->
+                <!--<span class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span id="search">搜索   </span></i></a></span>-->
+                <!--</div>-->
+                <!--</div>-->
+                <div class="col-sm-6 search-container test">
+                    <span class="search-icon searchClick"></span>
+                    <input class="form-input" type="text" placeholder="免疫证号">
+                </div>
+            </div>
+            <div>
+                <table id="addImmunisationTable"></table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="dogCard">
+            <div class="row" style="margin-top: 20px">
+                <div class="col-sm-6">
+                    <span class="glyphicon glyphicon-plus" style="color: rgb(67, 200, 214)" onclick="dogCardHandle();">犬证办理</span>
+                </div>
+                <div class="col-sm-6 search-container">
+                    <span class="search-icon searchClick"></span>
+                    <input class="form-input" id="inpu" type="text" placeholder="犬证号/免疫证号">
+                </div>
+
+                <!--<div class="col-sm-6">-->
+                <!--<div class="input-group">-->
+                <!--<input id="inpu" type="text"  placeholder="犬证号/免疫证号" class="form-control">-->
+                <!--<span id="search11" class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div>
+                <table id="dogCardTable" style="width: 1196px"></table>
+            </div>
+        </div>
+
+        <!--<div class="tab-pane fade" id="jmeter">-->
+        <!--<p>jMeter 是一款开源的测试软件。它是 100% 纯 Java 应用程序，用于负载和性能测试。</p>-->
+        <!--</div>-->
+        <!--<div class="tab-pane fade" id="ejb">-->
+        <!--<p>Enterprise Java Beans（EJB）是一个创建高度可扩展性和强大企业级应用程序的开发架构，部署在兼容应用程序服务器（比如 JBOSS、Web Logic 等）的 J2EE 上。-->
+        <!--</p>-->
+        <!--</div>-->
+    </div>
+</div>
+</body>
+<style>
+    #myTab li a{
+        font-size: 22px;
+        color: #aaa;
+    }
+    #myTab .active a {
+        background-color: #51CAD4;
+        color: #fff;
+    }
+
+    .search-container {
+        margin: 20px 0;
+    }
+
+    .glyphicon-plus {
+        font-size: 20px;
+        margin-top: 19px;
+    }
+
+    #addImmunisationTable input,#dogCardTable input {
+        height: 25px;
+        width: 25px;
+    }
+
+    #addImmunisationTable input:hover, #dogCardTable input:hover {
+        cursor: pointer;
+    }
+
+    #addImmunisationTable,#dogCardTable {
+        border: solid 1px #ccc;
+        width: 100%;
+        font-family: 微软雅黑;
+    }
+
+    #addImmunisationTable thead tr , #dogCardTable thead tr {
+        height: 50px;
+        background: rgb(65, 199, 214);
+        font-size: 16px;
+        line-height: 50px;
+    }
+
+    #addImmunisationTable td,#deviceManagerActive td {
+        text-align: center;
+    }
+
+
+    .th-inner{
+        height: 25px;
+    }
+    .search-icon{
+    	left:-50px;
+    }
+</style>
+</html>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDictionaryMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDictionary">
+		<id column="dictionary_id" property="dictionaryId" jdbcType="INTEGER" />
+		<result column="dictionary_field" property="dictionaryField"
+			jdbcType="VARCHAR" />
+		<result column="dictionary_value" property="dictionaryValue"
+			jdbcType="INTEGER" />
+		<result column="dictionary_describe" property="dictionaryDescribe"
+			jdbcType="VARCHAR" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<!--  /**
+     * 插入返回主键
+     * @param tDictionary
+     * @return
+     */
+    Integer save(TDictionary tDictionary);-->
+	<!--插入返回主键-->
+	<insert id="save" parameterType="com.soholy.dogmanager.entity.TDictionary" >
+		INSERT INTO t_dictionary
+		(dictionary_field,dictionary_value,dictionary_describe,creation_time)
+		VALUES(
+			#{_parameter.dictionaryField},
+			#{_parameter.dictionaryValue},
+			#{_parameter.dictionaryDescribe},
+			#{_parameter.creationTime}
+			)
+		<selectKey keyProperty="_parameter.dictionaryId" resultType="java.lang.Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		dictionary_id, dictionary_field, dictionary_value,
+		dictionary_describe,
+		creation_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TDictionaryExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_dictionary
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary
+		where dictionary_id =
+		#{dictionaryId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		t_dictionary
+		where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDictionaryExample">
+		delete from t_dictionary
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.soholy.dogmanager.entity.TDictionary">
+		insert into t_dictionary
+		(dictionary_id, dictionary_field,
+		dictionary_value,
+		dictionary_describe, creation_time)
+		values
+		(#{dictionaryId,jdbcType=INTEGER},
+		#{dictionaryField,jdbcType=VARCHAR},
+		#{dictionaryValue,jdbcType=INTEGER},
+		#{dictionaryDescribe,jdbcType=VARCHAR},
+		#{creationTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDictionary">
+		insert into t_dictionary
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dictionaryId != null">
+				dictionary_id,
+			</if>
+			<if test="dictionaryField != null">
+				dictionary_field,
+			</if>
+			<if test="dictionaryValue != null">
+				dictionary_value,
+			</if>
+			<if test="dictionaryDescribe != null">
+				dictionary_describe,
+			</if>
+			<if test="creationTime != null">
+				creation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dictionaryId != null">
+				#{dictionaryId,jdbcType=INTEGER},
+			</if>
+			<if test="dictionaryField != null">
+				#{dictionaryField,jdbcType=VARCHAR},
+			</if>
+			<if test="dictionaryValue != null">
+				#{dictionaryValue,jdbcType=INTEGER},
+			</if>
+			<if test="dictionaryDescribe != null">
+				#{dictionaryDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime != null">
+				#{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDictionaryExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_dictionary
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_dictionary
+		<set>
+			<if test="record.dictionaryId != null">
+				dictionary_id = #{record.dictionaryId,jdbcType=INTEGER},
+			</if>
+			<if test="record.dictionaryField != null">
+				dictionary_field =
+				#{record.dictionaryField,jdbcType=VARCHAR},
+			</if>
+			<if test="record.dictionaryValue != null">
+				dictionary_value =
+				#{record.dictionaryValue,jdbcType=INTEGER},
+			</if>
+			<if test="record.dictionaryDescribe != null">
+				dictionary_describe =
+				#{record.dictionaryDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="record.creationTime != null">
+				creation_time =
+				#{record.creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_dictionary
+		set dictionary_id =
+		#{record.dictionaryId,jdbcType=INTEGER},
+		dictionary_field =
+		#{record.dictionaryField,jdbcType=VARCHAR},
+		dictionary_value =
+		#{record.dictionaryValue,jdbcType=INTEGER},
+		dictionary_describe =
+		#{record.dictionaryDescribe,jdbcType=VARCHAR},
+		creation_time =
+		#{record.creationTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDictionary">
+		update t_dictionary
+		<set>
+			<if test="dictionaryField != null">
+				dictionary_field = #{dictionaryField,jdbcType=VARCHAR},
+			</if>
+			<if test="dictionaryValue != null">
+				dictionary_value = #{dictionaryValue,jdbcType=INTEGER},
+			</if>
+			<if test="dictionaryDescribe != null">
+				dictionary_describe =
+				#{dictionaryDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime != null">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDictionary">
+		update
+		t_dictionary
+		set dictionary_field =
+		#{dictionaryField,jdbcType=VARCHAR},
+		dictionary_value =
+		#{dictionaryValue,jdbcType=INTEGER},
+		dictionary_describe =
+		#{dictionaryDescribe,jdbcType=VARCHAR},
+		creation_time =
+		#{creationTime,jdbcType=TIMESTAMP}
+		where dictionary_id =
+		#{dictionaryId,jdbcType=INTEGER}
+	</update>
+
+	<select id="findBizTypes" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_dictionary
+		WHERE dictionary_field = #{dictionaryField} and dictionary_value!=1
+	</select>
+
+	<select id="selectPetHospital" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary where dictionary_field = "pet_h_card_type"
+		<if test="typeNumber != null">
+			and dictionary_value = #{typeNumber}
+		</if>
+	</select>
+
+	<select id="selectInformationType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary where dictionary_field = "information_type"
+		<if test="typeNumber != null">
+			and dictionary_value = #{typeNumber}
+		</if>
+	</select>
+
+	<select id="selectOrgType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary where dictionary_field = "org_type"
+		<if test="typeNumber != null">
+			and dictionary_value = #{typeNumber}
+		</if>
+	</select>
+
+	<select id="selectOwnCardType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary where dictionary_field = "card_type"
+		<if test="typeNumber != null">
+			and dictionary_value = #{typeNumber}
+		</if>
+	</select>
+
+	<select id="selectAppointment_channel" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary where dictionary_field = "appointment_channel"
+		<if test="typeNumber != null">
+			and dictionary_value = #{typeNumber}
+		</if>
+	</select>
+
+	<select id="selectPictureType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dictionary where dictionary_field = "picture_type"
+		<if test="typeNumber != null">
+			and dictionary_value = #{typeNumber}
+		</if>
+	</select>
+
+</mapper>

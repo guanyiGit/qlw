@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=10" charset="utf-8" />
+        <title>云管理后台登陆</title>
+        <link href="css/reset.css" rel="stylesheet" type="text/css" />
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="js/Validform.min.js"></script>
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/cookie_util.js"></script>
+        <script type="text/javascript" src="js/account.js"></script>
+        <script type="text/javascript" src="js/alertBox.js"></script>	
+    </head>
+    <body>
+        <div class="login-box"></div>
+        <div class="login-form">
+            <!--<div class="lg-hd"><img src="../images/top.png" alt=""></div>-->
+            <div class="login-main">
+                <div class="lg-txt">用户登录</div>
+                <div class="lg-row">
+                    <div class="lg-group">
+                        <input id="count" type="text" value="" placeholder="请输入您的工号" class="lg-control" id="usernum" name="usernum" datatype="s5-16" errormsg="请输入正确的工号" sucmsg="　" nullmsg="请输入您的工号!"/><i class="ico ico-user"></i>
+                    </div>
+                </div>
+                <div class="lg-row">
+                    <div class="lg-group">
+                        <input id="password" type="password" name="userpassword" id="userpassword" datatype="*6-15" errormsg="密码范围在6~15位之间！" placeholder="请输入密码" sucmsg="　" nullmsg="请输入密码!" class="lg-control"><i class="ico ico-lock"></i>
+                    </div>
+                </div>
+                <div class="lg-ts">
+                    <span id="count_span" class="lg-bs"></span>
+                    <a href="javascript:forgetPwd();">忘记密码</a>
+                </div>
+                <div class="btn-group">
+                    <button id="login" type="" class="lgBtn">登 录</button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var demo = $(".login-form").Validform({
+                tiptype: 3,
+                label: ".label",
+                showAllError: true,
+                datatype: {
+                    "zh1-6": /^[\u4E00-\u9FA5\uf900-\ufa2d]{1,6}$/
+                },
+                ajaxPost: true
+            });
+            //通过$.Tipmsg扩展默认提示信息;
+            //$.Tipmsg.w["zh1-6"]="请输入1到6个中文字符！";
+            //demo.tipmsg.w["zh1-6"]="请输入1到6个中文字符！";
+            demo.addRule([{
+                    ele: "#usernum",
+                    datatype: "n5-16"
+                }, {
+                    ele: "#userpassword",
+                    datatype: "*6-20"
+                }]);
+        </script>
+
+        <div class="footer">
+            <p>云管理后台登陆</p>
+            <p class="ft-nav">
+                <a href="">版权声明</a><span>|</span>
+                <a href="">系统介绍</a><span>|</span>
+                <a href="">访问统计</a><span>|</span>
+                <a href="">店长信箱</a><span>|</span>
+                <a href="">联系我们</a><span>|</span>
+                <a href="">站点地图</a><span>|</span>
+                <a href="">花源首页</a> 
+            </p>
+        </div>
+    </body>
+</html>

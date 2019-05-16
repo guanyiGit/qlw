@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>爱心领养</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+  <!--   <script type="text/javascript" src="../../../static/js/alertBox.js"></script> -->
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+   <!--  <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script> -->
+    <!--引入ImgPageGrid js css-->
+    <link href="http://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+    <link href="../../../static/ImgPageGrid/css/imggrid.css" rel="stylesheet" />
+    <script src="../../../static/ImgPageGrid/js/imggrid.js"></script>
+
+    <!--引入easyui 组件-->
+    <link href="../../../static/easyui/demo/demo.css" rel="stylesheet" />
+    <link href="../../../static/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../static/easyui/themes/icon.css" rel="stylesheet" />
+    <!--<script src="../../../static/bootstrap-select/dist/js/bootstrap-select.js"></script>-->
+    <script src="../../../static/easyui/jquery.easyui.min.js"></script>
+
+    <!--引入webuploader相关组件-->
+    <!--<link href="../../../static/webuploader/webuploader.css" rel="stylesheet">-->
+    <!--<script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>-->
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/adoptionApplication.js"></script>
+    <style>
+       .tb1 tr td{
+           width: 180px;
+           text-align: center;
+           height: 45px;
+       }
+       .tb2  tr td{
+           width: 249px;
+           text-align: center;
+           height: 60px;
+       }
+        .singleinput{
+            width: 230px;
+            height: 40px;
+        }
+        .biginput{
+            width: 730px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+       <div class="container-fluid" style="width: 1200px;" id="detail">
+        <!--<div class="row" style="width: 1000px;position: relative;margin-right: auto;margin-left: auto;">-->
+        <div class="row" >
+            <div class="col-sm-12">
+                <div class="row" style="margin-top: 20px">
+                    <span style="">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);"><a href="#" style="color:rgb(255, 102, 85);">爱心领养&gt;&gt;领养申请</a></label>
+                    </span>
+                </div>
+                <hr style="border: 1px dashed #ccc;width:103%;height:0px;position: relative;left: -14px;">
+                <div class="row" style="margin-top: 20px;border: 1px solid gray;height: 650px">
+                    <!--<div class="titile-tab" style="background:rgb(65, 199, 219);">-->
+                    <!--<div class="titile-tab" style="background:rgb(65, 199, 219);height: 32px;">-->
+                    <div class="titile-tab" style="background:rgb(65, 199, 219);">
+                        <span style="    line-height: 30px;font-size: 16px;margin-left: 20px; color: white;">犬只信息</span>
+                    </div>
+                    <div id="app" class="row">
+                        <!--<div style="width: 721px;display: inline-block">-->
+                        <div style="display: inline-block" class="col-sm-10 ftom-table">
+                            <form>
+                                <table class="tb1" border="1px solid gray" cellpadding="1px" cellspacing="0px">
+                                    <tr>
+                                        <td style="background:#e4e4e4">犬名</td>
+                                        <td id="qm"></td>
+                                        <td style="background:#e4e4e4">品种</td>
+                                        <td id="pz"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background:#e4e4e4">性别</td>
+                                        <td id="qxb"></td>
+                                        <td style="background:#e4e4e4">毛色</td>
+                                        <td id="ms"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background:#e4e4e4">犬龄</td>
+                                        <td id="ql"></td>
+                                        <td style="background:#e4e4e4">特点</td>
+                                        <td id="td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background:#e4e4e4">备注</td>
+                                        <td colspan="3" id="bz"></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <!--<div style="display: inline-block; width: 185px;background: mediumvioletred;border: 1px solid gray;height: 185px; margin-left: 40px;position: absolute;text-align: center">-->
+                        <div class="col-sm-2" style="display: inline-block; background: mediumvioletred;border: 1px solid gray; right: 1px;height: 185px; position: absolute;text-align: center">
+                            <img id="pic" src="../../../static/images/add-icon.png" style="width: 150px;height: 150px;position: relative;top: 10%;">
+                        </div>
+                    </div>
+                    <!--<div class="titile-tab" style="background:rgb(65, 199, 219);height: 32px;margin-top: 10px">-->
+                    <div class="titile-tab" style="background:rgb(65, 199, 219);margin-top: 10px">
+                        <span style="line-height: 30px;font-size: 16px;margin-left: 20px; color: white;"> 领养申请人信息</span>
+                    </div>
+                    <div>
+                        <form>
+                            <table class="tb2" border="1px solid gray" cellpadding="1px" cellspacing="0px">
+                                <tr>
+                                    <td style="background:#e4e4e4">姓名</td>
+                                    <td><input class="singleinput" id="xm"></td>
+                                    <td style="background:#e4e4e4">性别</td>
+                                    <td>
+                                        <div id="xb">
+                                            <label class="checkbox-inline">
+                                                <input type="radio" name="optionsRadiosinline" id="optionsRadios3"
+                                                       value="0" checked> 男
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="radio" name="optionsRadiosinline" id="optionsRadios4"
+                                                       value="1"> 女
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#e4e4e4">证件类型</td>
+                                    <td id="zjlx">
+                                          <!--<select class="selectpicker" style="width:230px;height:40px">-->
+                                          <select class="selectpicker" style="height:40px">
+	                                            <option value="0" selected>身份证</option>
+	                                            <option value="1">房产证</option>
+	                                            <option value="2">营业执照</option>
+	                                            <option value="3">其他</option>
+                                      	 </select>
+                                    </td>
+                                    <td style="background:#e4e4e4">证件号码</td>
+                                    <td><input class="singleinput" id="zjhm"></td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#e4e4e4">养犬地址</td>
+                                    <td colspan="3"><input class="biginput" id="yqdz"></td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#e4e4e4">联系电话</td>
+                                    <td colspan="3" class="img-code">
+                                        <input class="singleinput" style="position: relative;left: -75px;" id="lxdh">
+                                        <label style="position: relative;left: -38px;">验证码</label>
+                                        <input class="singleinput" id="yzm">
+                                        <button style="position: relative;left: 45px;color: white;background:rgb(65, 199, 219)" class="btn btn-sm" id="btn">点击获取</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div style="margin-top: 10px;margin-left: 10px">
+                        <!-- <span style="color: red;">
+                           		 温馨提示：领养申请人需咨询领养工作具体情况，请在上班时间内电话联系：13800138000。感谢您对养犬管理工作的关心、支持和参与！
+                        </span> -->
+                    </div>
+                    <div style="margin-top: 40px">
+                        <span style="position: absolute;left: 32%">
+                            <button class="btn btn-sm btn-from" style="background:rgb(65, 199, 219)" type="button" id="send">提交</button>
+                        </span>
+                        <span style="position: absolute;left:60%">
+                            <button class="btn btn-sm btn-from" type="button" id="cansle">返回</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    table{
+        width: 100%;
+    }
+    .titile-tab{
+        height: 40px;
+        line-height: 40px;
+    }
+    input,select{
+        width: 95%;
+    }
+    .singleinput{
+        width: 95%;
+    }
+    .biginput{
+        width: 98%;
+    }
+    .img-code input{
+        width: 33.6%;
+    }
+    .btn-from{
+        width: 168px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 18px;
+        padding: 0;
+    }
+
+</style>
+
+</html>
