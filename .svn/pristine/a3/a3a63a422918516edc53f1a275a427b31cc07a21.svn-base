@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--审核详情  审核-->
+    <meta charset="UTF-8">
+    <title>审核详情</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/Validform.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="./js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="./views/message_moderation/moderation.css">-->
+
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <!--bootstrap table -->
+
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="./utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="./js/dateformat.js"></script>
+    <script type="text/javascript" src="./js/sendHttp.js"></script>
+    <!--<script type="text/javascript" src="./views/message_moderation/moderation.js"></script>-->
+
+</head>
+<body>
+<div class="container-fluid" id="app">
+    <div class="row ">
+        <div class="col-sm-12 titile">审核信息详情
+            <div class="back">返回</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">资讯类型:</div>
+        <div class="col-sm-6 info-type">系列</div>
+    </div>
+    <div class="row ">
+        <div class="col-sm-3">标题:</div>
+        <div class="col-sm-6 info-tiile">政策罚款</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">浏览次数:</div>
+        <div class="col-sm-6 info-view-count">系列</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">热度:</div>
+        <div class="col-sm-6 info-hot">000系列</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">审核状态:</div>
+        <div class="col-sm-6 info-state">000系列</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">修改时间:</div>
+        <div class="col-sm-6 info-uptime">000系列</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">创建时间:</div>
+        <div class="col-sm-6 info-time">000系列</div>
+    </div>
+    <div class="row" class="content">
+
+
+    </div>
+</div>
+</div>
+
+</body>
+<style type="text/css">
+    .container-fluid {
+        font-size: 20px;
+    }
+
+    .titile {
+        background-color: #ccc;
+        position: relative;
+        margin: 50px 0;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .titile > div {
+        background-color: #4BC9D5;
+        height: 100%;
+        width: 91px;
+        position: absolute;
+        right: 200px;
+        top: 0;
+        color: #fff;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .titile > div:hover {
+        cursor: pointer;
+    }
+
+    .container-fluid > div:first-child ~ div {
+        border-left: solid 1px #bbb;
+        border-right: solid 1px #bbb;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .container-fluid > div:last-child {
+        border-bottom: solid 1px #bbb;
+    }
+
+    .container-fluid > div:nth-of-type(even) {
+        background-color: #eee;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $(".back").animate({right:"10px"},500);
+        $(".back").click(function () {//返回
+            $("#home").load("views/message_moderation/message_moderation.html");
+        });
+
+        let info = window.sessionStorage.getItem("data-chakan-info")
+        info = JSON.parse(info);
+        console.log(info)
+        $(".info-type").text(info.informationTypeName);//资讯类型
+        $(".info-tiile").text(info.infoTitile);//标题
+        $(".info-view-count").text(info.viewCount);//浏览次数
+        $(".info-hot").text(info.hot);//热度
+        $(".info-state").text(info.infoState == 0 ? '审核中' : info.infoState == 1 ? '审核通过' : '未通过');//审核状态
+        $(".info-uptime").text(Date.format(info.updateTime, 'yyyy年MM月dd日'));//修改时间
+        $(".info-time").text(Date.format(info.creationTime, 'yyyy年MM月dd日'));//创建时间
+
+        $(".content").text(info.viewCount);//主题内容
+    })
+
+</script>
+</html>

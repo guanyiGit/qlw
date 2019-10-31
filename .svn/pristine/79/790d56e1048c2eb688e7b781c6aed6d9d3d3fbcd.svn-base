@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--添加免疫登记-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="../../js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--bootstrap table -->
+    <link href="../../../static/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <!--<script type="text/javascript" src="immuneToRegisterList.js"></script>-->
+</head>
+<body>
+<div class="container-fluid" style="">
+    <div style="z-index: 14;">
+        <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label"
+             style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);">
+            <div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+                <div style="width: auto; height: auto; text-align: left;">
+                    <div style="width: auto; height: auto;">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                            免疫登记&gt;&gt;免疫登记
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div style="display: none;"></div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="margin-top: 20px">
+        <div class="titile" style="">&nbsp&nbsp&nbsp&nbsp免疫信息</div>
+        <div class="row">
+                <span class="col-sm-6 col-lg-offset-1">
+                    <labe>免疫证号:</labe>
+                    <input>
+                </span>
+            <span class="col-sm-5 ">
+                   <label>犬主姓名:</label>
+                    <input>
+                 </span>
+        </div>
+
+        <div class="row">
+                <span class="col-sm-6 col-lg-offset-1">
+                     <labe>联系电话:</labe>
+                            <input>
+                </span>
+            <span class="col-sm-5 ">
+                   <label>地址:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                            <input>
+                 </span>
+        </div>
+
+        <div class="row">
+                <span class="col-sm-6 col-lg-offset-1">
+                      <labe>犬只品种:</labe>
+                            <input>
+                </span>
+            <span class="col-sm-5 ">
+                  <label>犬龄:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                            <input>
+                 </span>
+        </div>
+        <div class="row">
+                <span class="col-sm-6 col-lg-offset-1">
+                       <labe>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</labe>
+                            <input>
+                </span>
+            <span class="col-sm-5 ">
+                  <label>毛色:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                            <input>
+                 </span>
+        </div>
+        <div class="row">
+                <span class="col-sm-6 col-lg-offset-1">
+                       <labe>免疫时间:</labe>
+                            <input>
+                </span>
+            <span class="col-sm-5 ">
+                  <label>免疫项目:</label>
+                            <input>
+                 </span>
+        </div>
+        <div class="row">
+                <span class="col-sm-6 col-lg-offset-1">
+                       <label style="">疫苗厂家及批号:</label>
+                            <input>
+                </span>
+            <span class="col-sm-5 ">
+                  <label>接种兽医:</label>
+                            <input>
+                 </span>
+        </div>
+        <div class="row">
+                <span class="col-sm-11 col-lg-offset-1">
+                    <label style="">下次免疫时间:</label>
+                    <input>
+                </span>
+        </div>
+
+        <div class="row teat-container">
+            <span class="col-sm-11 col-lg-offset-1">
+                 <label>消息内容:</label>
+                <textarea class="form-control" id="deblock_udid" name="deblock_udid" rows="5"
+                              style=""></textarea>
+            </span>
+        </div>
+
+        <div class="row btns">
+                <span  class="col-sm-3 col-lg-offset-4 ">
+                    <button type="button" class="btn btn-sm" style="background: #43c7d6">保存</button>
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            style="background:white;border: 1px solid">取消</button>
+                </span>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    .titile {
+        background-color: rgb(65, 199, 219);
+        height: 45px;
+        line-height: 45px;
+        color: #fff;
+        border-radius: 3px;
+        margin-bottom: 25px;
+    }
+
+    .selestd input {
+        width: 100px;
+    }
+
+    input, select {
+        width: 200px;
+    }
+
+    .row {
+        line-height: 45px;
+        height: 45px;
+        margin: 10px 0;
+    }
+
+    input, select {
+        height: 30px;
+        line-height: 30px;
+    }
+
+    label,labe {
+        width: 110px;
+        vertical-align: top;
+        font-weight: normal;
+        display: inline-block;
+    }
+    .teat-container{
+        height: auto;
+    }
+    .btns span{
+        display: flex;
+        justify-content: space-around;
+    }
+    .btns{
+        width: auto;
+        margin: 36px 0;
+    }
+</style>
+</html>

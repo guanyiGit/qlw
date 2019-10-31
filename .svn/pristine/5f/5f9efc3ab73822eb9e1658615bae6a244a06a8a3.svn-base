@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TTherapyMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TTherapy" >
+    <id column="therapy_id" property="therapyId" jdbcType="BIGINT" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="physician_name" property="physicianName" jdbcType="VARCHAR" />
+    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+    <result column="operation_id" property="operationId" jdbcType="BIGINT" />
+    <result column="diagnose" property="diagnose" jdbcType="VARCHAR" />
+    <result column="treatment_info" property="treatmentInfo" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TTherapy" extends="BaseResultMap" >
+    <result column="symptom" property="symptom" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    therapy_id, org_id, physician_name, dog_id, dog_owner_id, operation_id, diagnose, 
+    treatment_info, remarks, creation_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    symptom
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TTherapyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_therapy
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TTherapyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_therapy
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_therapy
+    where therapy_id = #{therapyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_therapy
+    where therapy_id = #{therapyId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TTherapyExample" >
+    delete from t_therapy
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TTherapy" >
+    insert into t_therapy (therapy_id, org_id, physician_name, 
+      dog_id, dog_owner_id, operation_id, 
+      diagnose, treatment_info, remarks, 
+      creation_time, symptom)
+    values (#{therapyId,jdbcType=BIGINT}, #{orgId,jdbcType=INTEGER}, #{physicianName,jdbcType=VARCHAR}, 
+      #{dogId,jdbcType=BIGINT}, #{dogOwnerId,jdbcType=BIGINT}, #{operationId,jdbcType=BIGINT}, 
+      #{diagnose,jdbcType=VARCHAR}, #{treatmentInfo,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{creationTime,jdbcType=TIMESTAMP}, #{symptom,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TTherapy" >
+    insert into t_therapy
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="therapyId != null" >
+        therapy_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="physicianName != null" >
+        physician_name,
+      </if>
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id,
+      </if>
+      <if test="operationId != null" >
+        operation_id,
+      </if>
+      <if test="diagnose != null" >
+        diagnose,
+      </if>
+      <if test="treatmentInfo != null" >
+        treatment_info,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="symptom != null" >
+        symptom,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="therapyId != null" >
+        #{therapyId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="physicianName != null" >
+        #{physicianName,jdbcType=VARCHAR},
+      </if>
+      <if test="dogId != null" >
+        #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="operationId != null" >
+        #{operationId,jdbcType=BIGINT},
+      </if>
+      <if test="diagnose != null" >
+        #{diagnose,jdbcType=VARCHAR},
+      </if>
+      <if test="treatmentInfo != null" >
+        #{treatmentInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="symptom != null" >
+        #{symptom,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TTherapyExample" resultType="java.lang.Integer" >
+    select count(*) from t_therapy
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_therapy
+    <set >
+      <if test="record.therapyId != null" >
+        therapy_id = #{record.therapyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.orgId != null" >
+        org_id = #{record.orgId,jdbcType=INTEGER},
+      </if>
+      <if test="record.physicianName != null" >
+        physician_name = #{record.physicianName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dogId != null" >
+        dog_id = #{record.dogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogOwnerId != null" >
+        dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.operationId != null" >
+        operation_id = #{record.operationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.diagnose != null" >
+        diagnose = #{record.diagnose,jdbcType=VARCHAR},
+      </if>
+      <if test="record.treatmentInfo != null" >
+        treatment_info = #{record.treatmentInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.symptom != null" >
+        symptom = #{record.symptom,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_therapy
+    set therapy_id = #{record.therapyId,jdbcType=BIGINT},
+      org_id = #{record.orgId,jdbcType=INTEGER},
+      physician_name = #{record.physicianName,jdbcType=VARCHAR},
+      dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      operation_id = #{record.operationId,jdbcType=BIGINT},
+      diagnose = #{record.diagnose,jdbcType=VARCHAR},
+      treatment_info = #{record.treatmentInfo,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      symptom = #{record.symptom,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_therapy
+    set therapy_id = #{record.therapyId,jdbcType=BIGINT},
+      org_id = #{record.orgId,jdbcType=INTEGER},
+      physician_name = #{record.physicianName,jdbcType=VARCHAR},
+      dog_id = #{record.dogId,jdbcType=BIGINT},
+      dog_owner_id = #{record.dogOwnerId,jdbcType=BIGINT},
+      operation_id = #{record.operationId,jdbcType=BIGINT},
+      diagnose = #{record.diagnose,jdbcType=VARCHAR},
+      treatment_info = #{record.treatmentInfo,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TTherapy" >
+    update t_therapy
+    <set >
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="physicianName != null" >
+        physician_name = #{physicianName,jdbcType=VARCHAR},
+      </if>
+      <if test="dogId != null" >
+        dog_id = #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="dogOwnerId != null" >
+        dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      </if>
+      <if test="operationId != null" >
+        operation_id = #{operationId,jdbcType=BIGINT},
+      </if>
+      <if test="diagnose != null" >
+        diagnose = #{diagnose,jdbcType=VARCHAR},
+      </if>
+      <if test="treatmentInfo != null" >
+        treatment_info = #{treatmentInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="symptom != null" >
+        symptom = #{symptom,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where therapy_id = #{therapyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TTherapy" >
+    update t_therapy
+    set org_id = #{orgId,jdbcType=INTEGER},
+      physician_name = #{physicianName,jdbcType=VARCHAR},
+      dog_id = #{dogId,jdbcType=BIGINT},
+      dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      operation_id = #{operationId,jdbcType=BIGINT},
+      diagnose = #{diagnose,jdbcType=VARCHAR},
+      treatment_info = #{treatmentInfo,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      symptom = #{symptom,jdbcType=LONGVARCHAR}
+    where therapy_id = #{therapyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TTherapy" >
+    update t_therapy
+    set org_id = #{orgId,jdbcType=INTEGER},
+      physician_name = #{physicianName,jdbcType=VARCHAR},
+      dog_id = #{dogId,jdbcType=BIGINT},
+      dog_owner_id = #{dogOwnerId,jdbcType=BIGINT},
+      operation_id = #{operationId,jdbcType=BIGINT},
+      diagnose = #{diagnose,jdbcType=VARCHAR},
+      treatment_info = #{treatmentInfo,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where therapy_id = #{therapyId,jdbcType=BIGINT}
+  </update>
+</mapper>

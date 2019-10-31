@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TNotificationMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TNotification" >
+    <id column="notif_id" property="notifId" jdbcType="BIGINT" />
+    <result column="notif_type" property="notifType" jdbcType="INTEGER" />
+    <result column="notif_sender_id" property="notifSenderId" jdbcType="BIGINT" />
+    <result column="notif_receiver_id" property="notifReceiverId" jdbcType="BIGINT" />
+    <result column="notif_title" property="notifTitle" jdbcType="VARCHAR" />
+    <result column="noti_content" property="notiContent" jdbcType="VARCHAR" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="read_time" property="readTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="TNotificationDetailResultMap" type="com.soholy.dogmanager.entity.notice.TNotificationDetail" extends="BaseResultMap">
+    <association property="senderUser" javaType="com.soholy.dogmanager.entity.TUsers" columnPrefix="su_" resultMap="com.soholy.dogmanager.mapper.TUsersMapper.BaseResultMap"></association>
+    <association property="receiverUser" javaType="com.soholy.dogmanager.entity.TUsers" resultMap="com.soholy.dogmanager.mapper.TUsersMapper.BaseResultMap"></association>
+  </resultMap>
+
+  <!--根据通知id查通知详情-->
+  <select id="findNoticeDetailById" parameterType="java.lang.Long" resultMap="TNotificationDetailResultMap">
+    SELECT
+        n.* ,
+
+        su.creation_time su_creation_time,su.district_id su_district_id,su.dog_own_id su_dog_own_id,su.email su_email,
+        su.login_num su_login_num,su.`name` su_name,su.open_id su_open_id,su.organization_id su_organization_id,
+        su.org_type su_org_type,su.`password` su_password,su.phone su_phone,su.recentLogin_time su_recentLogin_time,
+        su.sex su_sex,su.username su_username,su.user_id su_user_id,su.u_status su_u_status,
+
+        ru.*
+    FROM  t_notification n
+    LEFT JOIN t_users su ON su.user_id = n.notif_sender_id
+    LEFT JOIN t_users ru ON ru.user_id = n.notif_receiver_id
+    WHERE n.notif_id = #{_parameter}
+  </select>
+
+  <!--查询给用户最后一次通知-->
+  <select id="findMaxNotifDateByUserId" resultMap="BaseResultMap" >
+  SELECT
+    <include refid="Base_Column_List"></include>
+  FROM t_notification nf
+  WHERE nf.creation_time = (
+      SELECT MAX(n.creation_time) FROM t_notification n
+      WHERE n.notif_receiver_id = #{userId} AND n.notif_type = #{notifType}
+    )
+  </select>
+
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TNotification" extends="BaseResultMap" >
+    <result column="noti_content" property="notiContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    notif_id, notif_type, notif_sender_id, notif_receiver_id, notif_title, task_id, status, 
+    creation_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    noti_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TNotificationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TNotificationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_notification
+    where notif_id = #{notifId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_notification
+    where notif_id = #{notifId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TNotificationExample" >
+    delete from t_notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TNotification" >
+    insert into t_notification (notif_id, notif_type, notif_sender_id, 
+      notif_receiver_id, notif_title, task_id, 
+      status, creation_time, noti_content
+      )
+    values (#{notifId,jdbcType=BIGINT}, #{notifType,jdbcType=INTEGER}, #{notifSenderId,jdbcType=BIGINT}, 
+      #{notifReceiverId,jdbcType=BIGINT}, #{notifTitle,jdbcType=VARCHAR}, #{taskId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP}, #{notiContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TNotification" >
+    <selectKey resultType ="java.lang.Long" keyProperty= "notifId" order= "AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey >
+    insert into t_notification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="notifId != null" >
+        notif_id,
+      </if>
+      <if test="notifType != null" >
+        notif_type,
+      </if>
+      <if test="notifSenderId != null" >
+        notif_sender_id,
+      </if>
+      <if test="notifReceiverId != null" >
+        notif_receiver_id,
+      </if>
+      <if test="notifTitle != null" >
+        notif_title,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="readTime != null" >
+        read_time ,
+      </if>
+      <if test="notiContent != null" >
+        noti_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="notifId != null" >
+        #{notifId,jdbcType=BIGINT},
+      </if>
+      <if test="notifType != null" >
+        #{notifType,jdbcType=INTEGER},
+      </if>
+      <if test="notifSenderId != null" >
+        #{notifSenderId,jdbcType=BIGINT},
+      </if>
+      <if test="notifReceiverId != null" >
+        #{notifReceiverId,jdbcType=BIGINT},
+      </if>
+      <if test="notifTitle != null" >
+        #{notifTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="readTime != null" >
+        #{readTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notiContent != null" >
+        #{notiContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TNotificationExample" resultType="java.lang.Integer" >
+    select count(*) from t_notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_notification
+    <set >
+      <if test="record.notifId != null" >
+        notif_id = #{record.notifId,jdbcType=BIGINT},
+      </if>
+      <if test="record.notifType != null" >
+        notif_type = #{record.notifType,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifSenderId != null" >
+        notif_sender_id = #{record.notifSenderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.notifReceiverId != null" >
+        notif_receiver_id = #{record.notifReceiverId,jdbcType=BIGINT},
+      </if>
+      <if test="record.notifTitle != null" >
+        notif_title = #{record.notifTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskId != null" >
+        task_id = #{record.taskId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.notiContent != null" >
+        noti_content = #{record.notiContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_notification
+    set notif_id = #{record.notifId,jdbcType=BIGINT},
+      notif_type = #{record.notifType,jdbcType=INTEGER},
+      notif_sender_id = #{record.notifSenderId,jdbcType=BIGINT},
+      notif_receiver_id = #{record.notifReceiverId,jdbcType=BIGINT},
+      notif_title = #{record.notifTitle,jdbcType=VARCHAR},
+      task_id = #{record.taskId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      noti_content = #{record.notiContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_notification
+    set notif_id = #{record.notifId,jdbcType=BIGINT},
+      notif_type = #{record.notifType,jdbcType=INTEGER},
+      notif_sender_id = #{record.notifSenderId,jdbcType=BIGINT},
+      notif_receiver_id = #{record.notifReceiverId,jdbcType=BIGINT},
+      notif_title = #{record.notifTitle,jdbcType=VARCHAR},
+      task_id = #{record.taskId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TNotification" >
+    update t_notification
+    <set >
+      <if test="notifType != null" >
+        notif_type = #{notifType,jdbcType=INTEGER},
+      </if>
+      <if test="notifSenderId != null" >
+        notif_sender_id = #{notifSenderId,jdbcType=BIGINT},
+      </if>
+      <if test="notifReceiverId != null" >
+        notif_receiver_id = #{notifReceiverId,jdbcType=BIGINT},
+      </if>
+      <if test="notifTitle != null" >
+        notif_title = #{notifTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notiContent != null" >
+        noti_content = #{notiContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="readTime != null" >
+        read_time = #{readTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where notif_id = #{notifId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TNotification" >
+    update t_notification
+    set notif_type = #{notifType,jdbcType=INTEGER},
+      notif_sender_id = #{notifSenderId,jdbcType=BIGINT},
+      notif_receiver_id = #{notifReceiverId,jdbcType=BIGINT},
+      notif_title = #{notifTitle,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      read_time = #{readTime,jdbcType=TIMESTAMP},
+      noti_content = #{notiContent,jdbcType=LONGVARCHAR}
+    where notif_id = #{notifId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TNotification" >
+    update t_notification
+    set notif_type = #{notifType,jdbcType=INTEGER},
+      notif_sender_id = #{notifSenderId,jdbcType=BIGINT},
+      notif_receiver_id = #{notifReceiverId,jdbcType=BIGINT},
+      notif_title = #{notifTitle,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where notif_id = #{notifId,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteNotification" parameterType="java.lang.Long">
+    delete from
+    t_notification where notif_id = #{notifId}
+  </delete>
+
+  <update id="updateNotification">
+    update t_notification
+    <set>
+      <if test="receiverd != null and receiverd != ''">
+        notif_receiver_id  = #{receiverd},
+      </if>
+      status = 1
+    </set>
+    where notif_id = #{notifId}
+  </update>
+
+  <select id="selectNoticeByType" parameterType="java.lang.Integer"
+          resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_notification
+    where notif_type = #{notifType}
+  </select>
+
+  <select id="selectNoticeByReceiverd" parameterType="java.lang.Long"
+          resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_notification
+    where notif_receiver_id = #{receiverd}
+    <if test="status != null">
+      <if test="status == 0">
+        AND read_time IS NULL
+      </if>
+      <if test="status == 1">
+        AND read_time IS NOT NULL
+      </if>
+    </if>
+  </select>
+
+  <select id="selectNoticeByTypeAndReceiverd" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_notification
+    <where>
+      <if test="notifType != null">
+        and notif_type = #{notifType}
+      </if>
+      <if test="notif_sender_id != null">
+        and notif_sender_id = #{notif_sender_id}
+      </if>
+      and
+      notif_receiver_id  in
+      <trim prefix="(" suffix=")" prefixOverrides=",">
+        0,
+        <if test="receiverd != null and receiverd != '' ">
+          #{receiverd}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+
+  <select id="noticeList" resultType="com.soholy.dogmanager.pojo.notice.NoticeVo">
+          select n.notif_id notifId, n.notif_title notifTitle, n.noti_content notiContent,n.creation_time creationTime,d.dictionary_describe dicNotiType
+    from
+          t_notification n LEFT JOIN t_dictionary d ON n.notif_type=d.dictionary_value
+    WHERE d.dictionary_field='notif_type'  AND n.`status`=#{status}  AND n.notif_receiver_id=#{userId}
+      order  by  n.creation_time desc
+  </select>
+
+  <update id="update">
+      UPDATE t_notification SET `status`=1, read_time=#{date} WHERE notif_id=#{noticeId}
+  </update>
+</mapper>

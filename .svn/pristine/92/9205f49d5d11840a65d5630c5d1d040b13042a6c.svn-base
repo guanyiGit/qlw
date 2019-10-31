@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TAdoptionRecordsMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TAdoptionRecords" >
+    <id column="adoption_records_id" property="adoptionRecordsId" jdbcType="BIGINT" />
+    <result column="dog_publicity_id" property="dogPublicityId" jdbcType="BIGINT" />
+    <result column="collection_id" property="collectionId" jdbcType="BIGINT" />
+    <result column="applyer_name" property="applyerName" jdbcType="VARCHAR" />
+    <result column="applyer_sex" property="applyerSex" jdbcType="INTEGER" />
+    <result column="applyer_phone" property="applyerPhone" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="INTEGER" />
+    <result column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+    <result column="adoption_status" property="adoptionStatus" jdbcType="INTEGER" />
+    <result column="adoption_time" property="adoptionTime" jdbcType="TIMESTAMP" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="adoption_address" property="adoptionAddress" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    adoption_records_id, dog_publicity_id, collection_id, applyer_name, applyer_sex, 
+    applyer_phone, card_type, card_number, adoption_status, adoption_time, operator_id, 
+    creation_time, adoption_address, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TAdoptionRecordsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_adoption_records
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_adoption_records
+    where adoption_records_id = #{adoptionRecordsId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_adoption_records
+    where adoption_records_id = #{adoptionRecordsId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TAdoptionRecordsExample" >
+    delete from t_adoption_records
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TAdoptionRecords" >
+    insert into t_adoption_records (adoption_records_id, dog_publicity_id, 
+      collection_id, applyer_name, applyer_sex, 
+      applyer_phone, card_type, card_number, 
+      adoption_status, adoption_time, operator_id, 
+      creation_time, adoption_address, remark
+      )
+    values (#{adoptionRecordsId,jdbcType=BIGINT}, #{dogPublicityId,jdbcType=BIGINT}, 
+      #{collectionId,jdbcType=BIGINT}, #{applyerName,jdbcType=VARCHAR}, #{applyerSex,jdbcType=INTEGER}, 
+      #{applyerPhone,jdbcType=VARCHAR}, #{cardType,jdbcType=INTEGER}, #{cardNumber,jdbcType=VARCHAR}, 
+      #{adoptionStatus,jdbcType=INTEGER}, #{adoptionTime,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, 
+      #{creationTime,jdbcType=TIMESTAMP}, #{adoptionAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TAdoptionRecords" >
+    insert into t_adoption_records
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adoptionRecordsId != null" >
+        adoption_records_id,
+      </if>
+      <if test="dogPublicityId != null" >
+        dog_publicity_id,
+      </if>
+      <if test="collectionId != null" >
+        collection_id,
+      </if>
+      <if test="applyerName != null" >
+        applyer_name,
+      </if>
+      <if test="applyerSex != null" >
+        applyer_sex,
+      </if>
+      <if test="applyerPhone != null" >
+        applyer_phone,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardNumber != null" >
+        card_number,
+      </if>
+      <if test="adoptionStatus != null" >
+        adoption_status,
+      </if>
+      <if test="adoptionTime != null" >
+        adoption_time,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="adoptionAddress != null" >
+        adoption_address,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adoptionRecordsId != null" >
+        #{adoptionRecordsId,jdbcType=BIGINT},
+      </if>
+      <if test="dogPublicityId != null" >
+        #{dogPublicityId,jdbcType=BIGINT},
+      </if>
+      <if test="collectionId != null" >
+        #{collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="applyerName != null" >
+        #{applyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyerSex != null" >
+        #{applyerSex,jdbcType=INTEGER},
+      </if>
+      <if test="applyerPhone != null" >
+        #{applyerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="adoptionStatus != null" >
+        #{adoptionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="adoptionTime != null" >
+        #{adoptionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adoptionAddress != null" >
+        #{adoptionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TAdoptionRecordsExample" resultType="java.lang.Integer" >
+    select count(*) from t_adoption_records
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_adoption_records
+    <set >
+      <if test="record.adoptionRecordsId != null" >
+        adoption_records_id = #{record.adoptionRecordsId,jdbcType=BIGINT},
+      </if>
+      <if test="record.dogPublicityId != null" >
+        dog_publicity_id = #{record.dogPublicityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.collectionId != null" >
+        collection_id = #{record.collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.applyerName != null" >
+        applyer_name = #{record.applyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyerSex != null" >
+        applyer_sex = #{record.applyerSex,jdbcType=INTEGER},
+      </if>
+      <if test="record.applyerPhone != null" >
+        applyer_phone = #{record.applyerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardType != null" >
+        card_type = #{record.cardType,jdbcType=INTEGER},
+      </if>
+      <if test="record.cardNumber != null" >
+        card_number = #{record.cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adoptionStatus != null" >
+        adoption_status = #{record.adoptionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.adoptionTime != null" >
+        adoption_time = #{record.adoptionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operatorId != null" >
+        operator_id = #{record.operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.adoptionAddress != null" >
+        adoption_address = #{record.adoptionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_adoption_records
+    set adoption_records_id = #{record.adoptionRecordsId,jdbcType=BIGINT},
+      dog_publicity_id = #{record.dogPublicityId,jdbcType=BIGINT},
+      collection_id = #{record.collectionId,jdbcType=BIGINT},
+      applyer_name = #{record.applyerName,jdbcType=VARCHAR},
+      applyer_sex = #{record.applyerSex,jdbcType=INTEGER},
+      applyer_phone = #{record.applyerPhone,jdbcType=VARCHAR},
+      card_type = #{record.cardType,jdbcType=INTEGER},
+      card_number = #{record.cardNumber,jdbcType=VARCHAR},
+      adoption_status = #{record.adoptionStatus,jdbcType=INTEGER},
+      adoption_time = #{record.adoptionTime,jdbcType=TIMESTAMP},
+      operator_id = #{record.operatorId,jdbcType=BIGINT},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      adoption_address = #{record.adoptionAddress,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TAdoptionRecords" >
+    update t_adoption_records
+    <set >
+      <if test="dogPublicityId != null" >
+        dog_publicity_id = #{dogPublicityId,jdbcType=BIGINT},
+      </if>
+      <if test="collectionId != null" >
+        collection_id = #{collectionId,jdbcType=BIGINT},
+      </if>
+      <if test="applyerName != null" >
+        applyer_name = #{applyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyerSex != null" >
+        applyer_sex = #{applyerSex,jdbcType=INTEGER},
+      </if>
+      <if test="applyerPhone != null" >
+        applyer_phone = #{applyerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=INTEGER},
+      </if>
+      <if test="cardNumber != null" >
+        card_number = #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="adoptionStatus != null" >
+        adoption_status = #{adoptionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="adoptionTime != null" >
+        adoption_time = #{adoptionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adoptionAddress != null" >
+        adoption_address = #{adoptionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where adoption_records_id = #{adoptionRecordsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TAdoptionRecords" >
+    update t_adoption_records
+    set dog_publicity_id = #{dogPublicityId,jdbcType=BIGINT},
+      collection_id = #{collectionId,jdbcType=BIGINT},
+      applyer_name = #{applyerName,jdbcType=VARCHAR},
+      applyer_sex = #{applyerSex,jdbcType=INTEGER},
+      applyer_phone = #{applyerPhone,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=INTEGER},
+      card_number = #{cardNumber,jdbcType=VARCHAR},
+      adoption_status = #{adoptionStatus,jdbcType=INTEGER},
+      adoption_time = #{adoptionTime,jdbcType=TIMESTAMP},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      adoption_address = #{adoptionAddress,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where adoption_records_id = #{adoptionRecordsId,jdbcType=BIGINT}
+  </update>
+
+  <!--查询操作人所在机构名称-->
+  <select id="selectOrgName" resultType="java.lang.String">
+    SELECT
+    B.organization_name
+    FROM t_users A
+    LEFT JOIN t_organization B
+    ON B.organization_id=A.organization_id
+    WHERE A.user_id=#{userId}
+  </select>
+
+  <!--查询领养人电话-->
+  <select id="selectPhone" resultType="java.lang.String">
+    SELECT
+    applyer_phone phone
+    FROM t_adoption_records
+    WHERE adoption_records_id=#{adoptionRecordsId}
+  </select>
+</mapper>

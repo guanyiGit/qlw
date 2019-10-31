@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TImagesMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TImages" >
+    <id column="image_id" property="imageId" jdbcType="BIGINT" />
+    <result column="image_name" property="imageName" jdbcType="VARCHAR" />
+    <result column="image_titile" property="imageTitile" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="image_size" property="imageSize" jdbcType="DOUBLE" />
+    <result column="image_ext" property="imageExt" jdbcType="VARCHAR" />
+    <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+    <result column="thumbnail_size" property="thumbnailSize" jdbcType="DOUBLE" />
+    <result column="cration_time" property="crationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    image_id, image_name, image_titile, image_url, image_size, image_ext, thumbnail_url, 
+    thumbnail_size, cration_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TImagesExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_images
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_images
+    where image_id = #{imageId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_images
+    where image_id = #{imageId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TImagesExample" >
+    delete from t_images
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TImages" >
+    insert into t_images (image_id, image_name, image_titile, 
+      image_url, image_size, image_ext, 
+      thumbnail_url, thumbnail_size, cration_time
+      )
+    values (#{imageId,jdbcType=BIGINT}, #{imageName,jdbcType=VARCHAR}, #{imageTitile,jdbcType=VARCHAR}, 
+      #{imageUrl,jdbcType=VARCHAR}, #{imageSize,jdbcType=DOUBLE}, #{imageExt,jdbcType=VARCHAR}, 
+      #{thumbnailUrl,jdbcType=VARCHAR}, #{thumbnailSize,jdbcType=DOUBLE}, #{crationTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TImages" >
+ 		 <selectKey resultType ="java.lang.Long" keyProperty= "imageId"
+                   order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     	</selectKey >
+    insert into t_images
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="imageId != null" >
+        image_id,
+      </if>
+      <if test="imageName != null" >
+        image_name,
+      </if>
+      <if test="imageTitile != null" >
+        image_titile,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
+      <if test="imageSize != null" >
+        image_size,
+      </if>
+      <if test="imageExt != null" >
+        image_ext,
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url,
+      </if>
+      <if test="thumbnailSize != null" >
+        thumbnail_size,
+      </if>
+      <if test="crationTime != null" >
+        cration_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="imageId != null" >
+        #{imageId,jdbcType=BIGINT},
+      </if>
+      <if test="imageName != null" >
+        #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="imageTitile != null" >
+        #{imageTitile,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageSize != null" >
+        #{imageSize,jdbcType=DOUBLE},
+      </if>
+      <if test="imageExt != null" >
+        #{imageExt,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailUrl != null" >
+        #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailSize != null" >
+        #{thumbnailSize,jdbcType=DOUBLE},
+      </if>
+      <if test="crationTime != null" >
+        #{crationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TImagesExample" resultType="java.lang.Integer" >
+    select count(*) from t_images
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_images
+    <set >
+      <if test="record.imageId != null" >
+        image_id = #{record.imageId,jdbcType=BIGINT},
+      </if>
+      <if test="record.imageName != null" >
+        image_name = #{record.imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageTitile != null" >
+        image_titile = #{record.imageTitile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageUrl != null" >
+        image_url = #{record.imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageSize != null" >
+        image_size = #{record.imageSize,jdbcType=DOUBLE},
+      </if>
+      <if test="record.imageExt != null" >
+        image_ext = #{record.imageExt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thumbnailUrl != null" >
+        thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thumbnailSize != null" >
+        thumbnail_size = #{record.thumbnailSize,jdbcType=DOUBLE},
+      </if>
+      <if test="record.crationTime != null" >
+        cration_time = #{record.crationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_images
+    set image_id = #{record.imageId,jdbcType=BIGINT},
+      image_name = #{record.imageName,jdbcType=VARCHAR},
+      image_titile = #{record.imageTitile,jdbcType=VARCHAR},
+      image_url = #{record.imageUrl,jdbcType=VARCHAR},
+      image_size = #{record.imageSize,jdbcType=DOUBLE},
+      image_ext = #{record.imageExt,jdbcType=VARCHAR},
+      thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
+      thumbnail_size = #{record.thumbnailSize,jdbcType=DOUBLE},
+      cration_time = #{record.crationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TImages" >
+    update t_images
+    <set >
+      <if test="imageName != null" >
+        image_name = #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="imageTitile != null" >
+        image_titile = #{imageTitile,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageSize != null" >
+        image_size = #{imageSize,jdbcType=DOUBLE},
+      </if>
+      <if test="imageExt != null" >
+        image_ext = #{imageExt,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailSize != null" >
+        thumbnail_size = #{thumbnailSize,jdbcType=DOUBLE},
+      </if>
+      <if test="crationTime != null" >
+        cration_time = #{crationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where image_id = #{imageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TImages" >
+    update t_images
+    set image_name = #{imageName,jdbcType=VARCHAR},
+      image_titile = #{imageTitile,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      image_size = #{imageSize,jdbcType=DOUBLE},
+      image_ext = #{imageExt,jdbcType=VARCHAR},
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      thumbnail_size = #{thumbnailSize,jdbcType=DOUBLE},
+      cration_time = #{crationTime,jdbcType=TIMESTAMP}
+    where image_id = #{imageId,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteBatch" parameterType="java.util.List">
+      delete from t_images 
+      where image_id in 
+      <foreach collection="list" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </delete>
+</mapper>

@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.statistic.DogCountMapper">
+
+	<!-- 全市区域犬只数量统计 -->
+	<select id="findDogCountsByDistrict" resultType="java.util.HashMap">
+		SELECT 
+		 tdi.district_name name,
+		 	 COUNT(*) value
+		 FROM 
+		 	t_district tdi INNER  JOIN  t_dog_owner o
+					ON tdi.district_id=o.district_id 
+			 INNER  JOIN  t_dog_info tdc ON o.dog_owner_id=tdc.dog_owner_id
+		WHERE tdc.dog_status!=3 AND tdi.district_type=2
+			GROUP BY tdi.district_name
+	</select>
+ 	
+ 	<!-- 全市犬只性别数量统计 -->
+ 	<select id="findDogGenderCounts" resultType="java.util.HashMap">
+		SELECT 
+	 			tdf.dog_gender name,COUNT(*)value 
+		FROM t_dog_info tdf INNER JOIN t_dog_card tdc ON  tdf.dog_id=tdc.dog_id AND tdc.`status`=1 
+
+		GROUP BY tdf.dog_gender		
+	</select>
+	
+	<!-- 全市犬龄分布统计 -->
+ 	<select id="findDogAgeCounts" resultType="java.util.HashMap">
+		SELECT   CONCAT(tdf.dogAge,'岁')  name,COUNT(*)value
+			FROM t_dog_info tdf where tdf.dog_status !=3
+		GROUP BY YEAR(tdf.dogAge)
+	</select>
+	
+	<!-- 全市品种分布统计 -->
+ 	<select id="findDogBreedsCounts" resultType="java.util.HashMap">
+		SELECT  COUNT(*)value,dic.dictionary_describe name
+			FROM t_dog_info tdf
+  		INNER JOIN t_dictionary dic ON tdf.dog_breed_type=dic.dictionary_value AND dic.dictionary_field='dog_breed_type'
+  		where tdf.dog_status !=3
+			GROUP BY tdf.dog_breed_type
+	</select>
+	
+	<!-- 全市犬只数量统计根据时间和区域 -->
+ 	<select id="findDogCountsByDateAndDistrict"  resultType="java.util.HashMap">
+		SELECT 
+ 			td.district_name districtName,COUNT(*)dogCounts, DATE_FORMAT(tdc.creation_time,'%Y-%m') creationTime 
+				FROM t_dog_owner o INNER JOIN t_district td 
+				ON o.district_id = td.district_id AND district_type=2 
+			INNER JOIN t_dog_card tdc ON o.dog_owner_id =tdc.dog_owner_id  AND tdc.`status`=1
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tdc.creation_time >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tdc.creation_time &lt; #{endDate}
+				</if>
+			</where>
+				GROUP BY td.district_id,DATE_FORMAT(tdc.creation_time,'%Y-%m')
+					LIMIT #{index},#{pageSize}
+	</select>
+	
+	<!-- 犬只数量统计列表记录数 便于分页-->
+	<select id="calTotalRecord" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT COUNT(m.dog_id) FROM(SELECT dog_id  FROM t_dog_card 
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					creation_time >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND creation_time &lt; #{endDate}
+				</if>
+				AND status=1
+			</where>
+		GROUP BY DATE_FORMAT(creation_time,'%Y-%m'))m
+	</select>
+	
+	<!-- 全市犬只数量统计趋势分析 统计每个区域每个月的犬只新增数量-->
+	<select id="findDogCountsTendency" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+ 			td.district_name districtName,COUNT(*)dogCounts, DATE_FORMAT(tdc.creation_time,'%Y-%m') creationTime 
+				FROM t_dog_owner o INNER JOIN t_district td 
+				ON o.district_id = td.district_id AND district_type=2 
+			INNER JOIN t_dog_card tdc ON o.dog_owner_id =tdc.dog_owner_id  AND tdc.`status`=1
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tdc.creation_time >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tdc.creation_time &lt; #{endDate}
+				</if>
+			</where>
+				GROUP BY td.district_id,DATE_FORMAT(tdc.creation_time,'%Y-%m')
+	</select>
+	
+	<!-- 全市犬只数量统计趋势分析 统计全市每个月的犬只新增数量-->
+	<select id="findTotalDogCountsTendency" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+ 			COUNT(*)dogCounts, DATE_FORMAT(tdc.creation_time,'%Y-%m') creationTime 
+				FROM t_dog_owner o INNER JOIN t_district td 
+				ON o.district_id = td.district_id AND district_type=2 
+			INNER JOIN t_dog_card tdc ON o.dog_owner_id =tdc.dog_owner_id  AND tdc.`status`=1
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tdc.creation_time >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tdc.creation_time &lt; #{endDate}
+				</if>
+			</where>
+				GROUP BY DATE_FORMAT(tdc.creation_time,'%Y-%m')
+				ORDER BY DATE_FORMAT(tdc.creation_time,'%Y-%m')
+	</select>
+	<!-- 犬只违规次数记录数  便于分页 已完成-->
+	<select id="calIllegalRecord" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT  COUNT(*) FROM(
+			SELECT violation_id FROM t_violation tv  INNER JOIN t_district td  ON tv.district_id=td.district_id
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tv.violation_date >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tv.violation_date &lt; #{endDate}
+				</if>
+					AND td.district_type=2 
+			</where>
+			
+		GROUP BY DATE_FORMAT(tv.violation_date,'%Y-%m'))m
+	</select>
+	
+	<!-- 犬只违规次数统计 按年月份和区域统计-->
+ 	<select id="findDogIllegalCounts" resultType="java.util.HashMap">
+		SELECT td.district_name districtName,DATE_FORMAT(tv.violation_date,'%Y-%m')illegalDate, COUNT(*)illegalCounts
+		 	FROM t_violation tv INNER JOIN t_district td 
+		ON tv.district_id=td.district_id 
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tv.violation_date >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tv.violation_date &lt; #{endDate}
+				</if>
+					AND district_type=2 
+			</where>
+			
+		GROUP BY tv.district_id,DATE_FORMAT(tv.violation_date,'%Y-%m')
+			LIMIT #{index},#{pageSize}
+	</select>
+	
+	<!-- 违法统计趋势分析 (根据时间和区域)-->
+	<select id="findDogIllegalCountsTendency" resultType="java.util.HashMap">
+		SELECT td.district_name districtName,DATE_FORMAT(tv.violation_date,'%Y-%m')illegalDate, COUNT(*)illegalCounts
+		 	FROM t_violation tv INNER JOIN t_district td 
+		ON tv.district_id=td.district_id 
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tv.violation_date >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tv.violation_date &lt; #{endDate}
+				</if>
+					AND district_type=2 
+			</where>
+			
+		GROUP BY tv.district_id,DATE_FORMAT(tv.violation_date,'%Y-%m')
+		ORDER BY DATE_FORMAT(tv.violation_date,'%Y-%m')
+	</select>
+	
+	<!-- 违法统计趋势分析(根据时间) -->
+	<select id="findTotalDogIllegalCountsTendency" resultType="java.util.HashMap">
+		SELECT DATE_FORMAT(tv.violation_date,'%Y-%m')illegalDate, COUNT(*)illegalCounts
+		 	FROM t_violation tv INNER JOIN t_district td 
+		ON tv.district_id=td.district_id 
+			<where>
+				<if test="startDate!=null and startDate!=''">
+					tv.violation_date >#{startDate}
+				</if>
+				<if test="endDate!=null and endDate!=''">
+					AND tv.violation_date &lt; #{endDate}
+				</if>
+					AND district_type=2 
+			</where>
+			
+		GROUP BY DATE_FORMAT(tv.violation_date,'%Y-%m')
+		ORDER BY DATE_FORMAT(tv.violation_date,'%Y-%m')
+		
+	</select>
+	
+	<!-- 服务网点统计 -->
+	<select id="findServeSiteDistribute" resultType="java.util.HashMap">
+		SELECT  d.district_name districtName,COUNT(*)serveCounts 
+			FROM t_district d INNER JOIN t_organization o ON d.district_id=o.district_id 
+		AND d.district_type=2 AND o.org_type=2 AND o.`status`=2 
+			GROUP BY d.district_id
+	</select>
+	
+	<!-- 收容犬只类型分布 -->
+	<select id="findCollDogType" resultType="java.util.HashMap">
+		SELECT 
+		 	d.dictionary_describe name,COUNT(*)value
+		FROM t_collection c INNER JOIN t_dictionary d 
+			ON c.coll_dog_type=d.dictionary_value AND d.dictionary_field='coll_dog_type' 
+		GROUP BY coll_dog_type 
+	</select>
+	
+	<!-- 收容犬只类型分布 -->
+	<select id="findCollDogSex" resultType="java.util.HashMap">
+		SELECT 
+		 	dog_gender name,COUNT(*)value
+		FROM t_collection  GROUP BY dog_gender
+	</select>
+	
+	<!-- 收容犬只品种分布 -->
+	<select id="findCollDogBreed" resultType="java.util.HashMap">
+		SELECT 
+		 d.dictionary_describe name,COUNT(*)value
+			FROM t_collection c INNER JOIN t_dictionary d
+		ON c.dog_breed_type=d.dictionary_value and  d.dictionary_field='dog_breed_type'
+ 			GROUP BY c.dog_breed_type
+	</select>
+	
+	
+	<!-- 收容犬只页面总记录数 便于分页  -->
+	<select id="findCollDogRecord" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM(
+				SELECT DISTINCT DATE_FORMAT(handling_time,'%Y-%m')handlingTime 
+			FROM t_collection 
+			<where>
+ 				<if test="startDate !=null">
+ 					handling_time >#{startDate}
+				</if>
+ 				<if test="endDate !=null">
+ 					and handling_time &lt; #{endDate}
+				</if>
+					and handling_time is not null
+ 			</where>
+			GROUP BY result_type,DATE_FORMAT(handling_time,'%Y-%m'))m
+	</select>
+	
+	<!-- 收容犬只中 认领,领养,处理 -->
+	<select id="findCollDogCounts" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT DATE_FORMAT(handling_time,'%Y-%m')handlingTime,result_type,COUNT(*)handlingCounts  
+			FROM t_collection 
+			<where>
+				<if test="startDate !=null">
+					handling_time >#{startDate}
+				</if>
+				<if test="endDate !=null">
+					and handling_time &lt; #{endDate}
+				</if>
+					and handling_time is not null
+			</where>
+			GROUP BY result_type,DATE_FORMAT(handling_time,'%Y-%m')
+		LIMIT #{index},#{pageSize}
+	</select>
+	
+	<!-- 所有收容犬只统计 -->
+	<select id="findTotalCollDogCounts" resultType="java.util.HashMap">
+		SELECT DATE_FORMAT(collection_time,'%Y-%m')collectionTime,COUNT(*)collCounts
+			 FROM t_collection 
+			 <where>
+				<if test="startDate !=null">
+					collection_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and collection_time &lt; #{endDate}
+				</if>
+			</where>
+			 GROUP BY DATE_FORMAT(collection_time,'%Y-%m')
+		LIMIT #{index},#{pageSize}
+	</select>
+	
+	<!-- 所有收容犬只页面总记录数 便于分页-->
+	<select id="findTotalCollDogRecords" resultType="java.lang.Integer">
+	SELECT COUNT(*) FROM(
+		SELECT DATE_FORMAT(collection_time,'%Y-%m')collectionTime,COUNT(*)collCounts
+			 FROM t_collection 
+			 <where>
+				<if test="startDate !=null">
+					collection_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and collection_time &lt; #{endDate}
+				</if>
+			</where>
+			 GROUP BY DATE_FORMAT(collection_time,'%Y-%m'))m
+	</select>
+	
+	
+	<!--认领,领养,处理犬只趋势分析 -->
+	<select id="findCollDogCountsTendency" resultType="java.util.HashMap">
+		SELECT DATE_FORMAT(handling_time,'%Y-%m')handlingTime,result_type,COUNT(*)handlingCounts  
+			FROM t_collection 
+			<where>
+				<if test="startDate !=null">
+					handling_time >#{startDate}
+				</if>
+				<if test="endDate !=null">
+					and handling_time &lt; #{endDate}
+				</if>
+					and handling_time is not null
+			</where>
+			GROUP BY result_type,DATE_FORMAT(handling_time,'%Y-%m')
+	</select>
+	
+	<!--所有收容犬只趋势分析 -->
+	<select id="findTotalCollDogCountsTendency" resultType="java.util.HashMap">
+		SELECT DATE_FORMAT(collection_time,'%Y-%m')collectionTime,COUNT(*)collCounts
+			 FROM t_collection 
+			 <where>
+				<if test="startDate !=null">
+					collection_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and collection_time &lt; #{endDate}
+				</if>
+			</where>
+			 GROUP BY DATE_FORMAT(collection_time,'%Y-%m') ORDER  BY collection_time ASC
+	</select>
+	 
+	<!-- 疫苗使用情况 -->
+	<select id="findVaccineCounts" resultType="java.util.HashMap">
+		SELECT SUM(vaccine_count)value,vaccine_name name
+			 FROM t_vaccine_register
+	    WHERE org_id=#{orgaId} AND DATE_FORMAT(creation_time,'%Y-%m')=#{date} 
+	    	GROUP BY vaccine_name
+	</select>
+	
+	
+	<!-- 客户数量统计 -->
+	<select id="findCustomerCounts" resultType="java.util.HashMap">
+		SELECT COUNT(*)customerCount,creation_time FROM(
+		SELECT COUNT(*), dog_owner_id,DATE_FORMAT(creation_time,'%Y-%m')creation_time FROM(
+			SELECT dog_owner_id,creation_time from t_dog_card WHERE lssue_org_id=#{orgaId}
+			UNION 
+			SELECT dog_owner_id,creation_time FROM t_immune_card WHERE lssue_org_id=#{orgaId}
+			UNION 
+			SELECT dog_owner_id,creation_time FROM t_inspections_info WHERE org_id=#{orgaId}
+			UNION 
+			SELECT c.dog_owner_id,r.creation_time FROM t_vaccine_register r INNER JOIN t_immune_card c 
+				ON r.ref_id=c.seq_id AND r.injection_type=0 AND r.org_id=#{orgaId}
+			UNION
+			SELECT dog_owner_id,creation_time FROM t_therapy WHERE dog_owner_id IS NOT NULL AND org_id=#{orgaId}
+		)m
+		<where>
+			<if test="startDate !=null">
+				creation_time>#{startDate}
+			</if>
+			<if test="endDate !=null">
+				and creation_time &lt; #{endDate}
+			</if>
+		</where>
+		GROUP BY dog_owner_id,DATE_FORMAT(creation_time,'%Y-%m')
+		)mm
+		GROUP BY creation_time
+		ORDER BY creation_time
+	</select>
+	
+	
+	
+	<!-- 看病次数统计-->
+	<select id="findTherapyCounts" resultType="java.util.HashMap">
+		SELECT COUNT(*)therapyCounts, DATE_FORMAT(creation_time,'%Y-%m') therapyTime 
+			FROM t_therapy   
+			<where>
+				<if test="startDate !=null">
+					creation_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and creation_time &lt; #{endDate}
+				</if>
+				and org_id=#{orgaId}
+		</where>  
+		GROUP BY 	DATE_FORMAT(creation_time,'%Y-%m')
+	</select>
+	
+	<!--犬证次数统计 -->
+	<select id="findDogCardCounts" resultType="java.util.HashMap">
+		SELECT COUNT(*)dogCardCounts,DATE_FORMAT(creation_time,'%Y-%m')dogCardDate 
+			FROM  t_dog_card   
+		<where>
+				<if test="startDate !=null">
+					creation_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and creation_time &lt; #{endDate}
+				</if>
+				and lssue_org_id=#{orgaId} 
+		</where>  
+			GROUP BY DATE_FORMAT(creation_time,'%Y-%m')
+	</select>
+	
+	<!--免疫证次数统计 -->
+	<select id="findImmuneCardCounts" resultType="java.util.HashMap">
+		SELECT COUNT(*)immuneCardCounts,DATE_FORMAT(creation_time,'%Y-%m')immuneCardDate 
+			FROM  t_immune_card   
+		<where>
+				<if test="startDate !=null">
+					creation_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and creation_time &lt; #{endDate}
+				</if>
+				and lssue_org_id=#{orgaId} 
+		</where>    
+			GROUP BY DATE_FORMAT(creation_time,'%Y-%m')
+	</select>
+	
+	<!-- 设备统计激活情况 -->
+	<select id="findDeviceList" resultType="java.util.HashMap">
+		SELECT device_status,COUNT(*)deviceCount FROM t_device GROUP BY device_status
+	</select>
+	
+	<!-- 注册用户趋势 -->
+	<select id="findRegesiterUserTendency" resultType="java.util.HashMap">
+		SELECT COUNT(*)userCount,DATE_FORMAT(creation_time,'%Y-%m')creationTime 
+			FROM t_users
+			<where>
+				<if test="startDate !=null">
+					creation_time >#{startDate}
+				</if>
+				<if test="startDate !=null">
+					and creation_time &lt; #{endDate}
+				</if>
+			</where>
+		GROUP BY DATE_FORMAT(creation_time,'%Y-%m')
+	</select>
+	
+	<!-- 在线用户趋势  -->
+	<select id="findLogUserTendency" resultType="java.util.HashMap">
+		SELECT COUNT(*)logCounts,DATE_FORMAT(recent_loginDate,'%Y-%m-%d')date FROM(
+			SELECT DISTINCT user_id,recent_loginDate FROM t_user_logRecord
+			<where>
+				<if test="startDate !=null">
+					recent_loginDate >#{startDate}
+				</if>
+				<if test="endDate !=null">
+					and recent_loginDate &lt; #{endDate}
+				</if>
+			</where>
+			)m
+			GROUP BY DATE_FORMAT(recent_loginDate,'%Y-%m-%d')
+			ORDER BY DATE_FORMAT(recent_loginDate,'%Y-%m-%d')
+	</select>
+
+	<!--############################ 首页  ###############################  -->
+	<!-- 昨日新增犬只 -->
+	<select id="findYesterdayAddDog" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_dog_card WHERE `status`=1 AND DATE_FORMAT(creation_time,'%Y-%m-%d')=#{date}	
+	</select>
+	
+	<!-- 昨日注销犬只 -->
+	<select id="findYesterdayCancelDog" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_dog_card WHERE `status`=3 AND DATE_FORMAT(creation_time,'%Y-%m-%d')=#{date}	
+	</select>
+	
+	<!-- 昨日违法次数 -->
+	<select id="findYesterdayIllegalCounts" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_violation WHERE  DATE_FORMAT(violation_date,'%Y-%m-%d')=#{date}	
+	</select>
+	
+	
+	
+	<!-- 昨日收容犬只 -->
+	<select id="findYesterdayCollDog" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_collection  WHERE DATE_FORMAT(collection_time,'%Y-%m-%d')=#{date}	
+	</select>
+	
+	<!-- 昨日认养犬只 -->
+	<select id="findYesterdayLeaveDog" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_collection 
+			WHERE result_type IN(1,2) AND DATE_FORMAT(handling_time,'%Y-%m-%d')=#{date} 	
+	</select>
+	
+	
+	<!-- 收容中,已认养,已处理的犬 -->
+	<select id="findCollLeaveHandelDog" resultType="java.util.HashMap">
+		SELECT result_type,COUNT(*)typeCounts FROM t_collection  
+			WHERE DATE_FORMAT(handling_time,'%Y-%m-%d') &lt;=#{date}  GROUP BY result_type 	
+	</select>
+	
+	
+	<!-- 查看全市所有犬主 -->
+	<select id="findAllDogOwner" resultType="java.lang.Integer">
+		 	SELECT COUNT(*) FROM t_dog_owner
+	</select>
+	
+	<!-- 查看全市所有服务网点 -->
+	<select id="findAllServeSite" resultType="java.lang.Integer">
+		 	SELECT COUNT(*) FROM t_organization WHERE org_type=2 AND `status`=1 AND test_type=0
+	</select>
+	<!-- 查看全市所有犬只 -->
+	<select id="findAllDog" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_dog_info WHERE dog_status not in (3)
+	</select>
+	
+	<!-- 今日预约统计 -->
+	<select id="findAppointmentMsg" resultType="java.util.HashMap">
+		SELECT COUNT(*)appointmentCount,biz_type
+			FROM t_appointment
+			WHERE org_id=#{orgId} and DATE_FORMAT(schedule_time,'%Y-%m-%d')=#{date}
+			 GROUP BY biz_type
+	</select>
+	
+	<!-- 昨日看病次数 -->
+	<select id="findYesterdayTherapy" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_therapy WHERE org_id=#{orgId} and DATE_FORMAT(creation_time,'%Y-%m-%d')=#{date}
+	</select>
+	
+	<!-- 昨日办理免疫证次数 -->
+	<select id="findYesterdayImmune" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_immune_card WHERE lssue_org_id=#{orgId} and DATE_FORMAT(lssue_time,'%Y-%m-%d')=#{date}
+	</select>
+	
+	<!-- 昨日办理犬证次数 -->
+	<select id="findYesterdayDogCard" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_dog_card WHERE lssue_org_id=#{orgId} and DATE_FORMAT(lssue_time,'%Y-%m-%d')=#{date}
+	</select>
+	
+	<!-- 昨日免疫次数 -->
+	<select id="findYesterdayInjection" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_vaccine_injection i INNER JOIN t_vaccine_register r 
+			ON i.vaccine_register_id=r.vaccine_register_id 
+		AND DATE_FORMAT(i.fact_injection_date,'%Y-%m-%d')=#{date} WHERE r.org_id=#{orgId} 
+	</select>
+	<!-- 昨日年检次数 -->
+	<select id="findYesterdayInspection" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_inspections_info WHERE org_id=#{orgId} and DATE_FORMAT(inspections_date,'%Y-%m-%d')=#{date}
+	</select>
+	
+	<!-- 今日在线人数-->
+	<select id="findTodayOnlineCounts" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_users WHERE  DATE_FORMAT(recentLogin_time,'%Y-%m-%d')=#{date}
+	</select>
+	<!-- 今日信息发布条数 -->
+	<select id="findTodayInformationCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_information WHERE DATE_FORMAT(update_time,'%Y-%m-%d')=#{date}
+	</select> 
+
+	<!--查询所有犬只的创建时间和注销时间-->
+	<select id="allDog" resultType="com.soholy.dogmanager.entity.TDogInfo">
+		select creation_time creationTime, cancellation_time cancellationTime from  t_dog_info
+	</select>
+</mapper>

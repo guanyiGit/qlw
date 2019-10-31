@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.user.RoleRefResourcesMapper">
+	<resultMap type="com.soholy.dogmanager.pojo.user.RoleRefResources"
+		id="BaseResultMap" extends="com.soholy.dogmanager.mapper.TRolesMapper.BaseResultMap">
+		<collection property="resources"
+			ofType="com.soholy.dogmanager.entity.TResources" resultMap="com.soholy.dogmanager.mapper.TResourcesMapper.BaseResultMap">
+		</collection>
+	</resultMap>
+	
+	<select id="roleRefResources" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select 
+		r.role_id,
+		r.role_name,
+		res.resource_id,
+		res.resource_name,
+		res.keyword,
+		res.resource_status,
+		res.resource_type,
+		res.seq,
+		res.parent_id,
+		res.level,
+		res.creation_time,
+		res.description,
+		res.link
+		from t_roles r
+		left join t_role_ref_resources rr on r.role_id = rr.role_id
+		left join t_resources res on res.resource_id = rr.resources_id
+		<where>
+			res.resource_status  = 0
+			<if test="roleId != null and roleId != -1">
+				and r.role_id = #{roleId}	
+			</if>
+				AND resource_status = 0
+		</where> 
+	</select>
+	
+	
+</mapper>

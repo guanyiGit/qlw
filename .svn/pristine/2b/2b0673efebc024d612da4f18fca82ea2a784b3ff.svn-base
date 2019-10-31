@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDeviceWarnMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDeviceWarn" >
+    <id column="device_warn_id" property="deviceWarnId" jdbcType="BIGINT" />
+    <result column="device_id" property="deviceId" jdbcType="BIGINT" />
+    <result column="warn_time" property="warnTime" jdbcType="TIMESTAMP" />
+    <result column="electricity_volume" property="electricityVolume" jdbcType="DOUBLE" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="warn_type" property="warnType" jdbcType="INTEGER" />
+  </resultMap>
+  
+   <!-- 查询最后一次告警时间 -->
+  <select id="findDeviceWarnInfoMaxTimeByDevId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  		SELECT  MAX(dw.warn_time) AS warn_time from t_device_warn dw WHERE dw.device_id =#{deviceId}
+  </select>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    device_warn_id, device_id, warn_time, electricity_volume, upload_time, creation_time, 
+    warn_type
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TDeviceWarnExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_device_warn
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_device_warn
+    where device_warn_id = #{deviceWarnId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_device_warn
+    where device_warn_id = #{deviceWarnId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDeviceWarnExample" >
+    delete from t_device_warn
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TDeviceWarn" >
+    insert into t_device_warn (device_warn_id, device_id, warn_time, 
+      electricity_volume, upload_time, creation_time, 
+      warn_type)
+    values (#{deviceWarnId,jdbcType=BIGINT}, #{deviceId,jdbcType=BIGINT}, #{warnTime,jdbcType=TIMESTAMP}, 
+      #{electricityVolume,jdbcType=DOUBLE}, #{uploadTime,jdbcType=TIMESTAMP}, #{creationTime,jdbcType=TIMESTAMP}, 
+      #{warnType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDeviceWarn" >
+    insert into t_device_warn
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceWarnId != null" >
+        device_warn_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="warnTime != null" >
+        warn_time,
+      </if>
+      <if test="electricityVolume != null" >
+        electricity_volume,
+      </if>
+      <if test="uploadTime != null" >
+        upload_time,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="warnType != null" >
+        warn_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceWarnId != null" >
+        #{deviceWarnId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="warnTime != null" >
+        #{warnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electricityVolume != null" >
+        #{electricityVolume,jdbcType=DOUBLE},
+      </if>
+      <if test="uploadTime != null" >
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="warnType != null" >
+        #{warnType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDeviceWarnExample" resultType="java.lang.Integer" >
+    select count(*) from t_device_warn
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_device_warn
+    <set >
+      <if test="record.deviceWarnId != null" >
+        device_warn_id = #{record.deviceWarnId,jdbcType=BIGINT},
+      </if>
+      <if test="record.deviceId != null" >
+        device_id = #{record.deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.warnTime != null" >
+        warn_time = #{record.warnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.electricityVolume != null" >
+        electricity_volume = #{record.electricityVolume,jdbcType=DOUBLE},
+      </if>
+      <if test="record.uploadTime != null" >
+        upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.warnType != null" >
+        warn_type = #{record.warnType,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_device_warn
+    set device_warn_id = #{record.deviceWarnId,jdbcType=BIGINT},
+      device_id = #{record.deviceId,jdbcType=BIGINT},
+      warn_time = #{record.warnTime,jdbcType=TIMESTAMP},
+      electricity_volume = #{record.electricityVolume,jdbcType=DOUBLE},
+      upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      warn_type = #{record.warnType,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDeviceWarn" >
+    update t_device_warn
+    <set >
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="warnTime != null" >
+        warn_time = #{warnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electricityVolume != null" >
+        electricity_volume = #{electricityVolume,jdbcType=DOUBLE},
+      </if>
+      <if test="uploadTime != null" >
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="warnType != null" >
+        warn_type = #{warnType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where device_warn_id = #{deviceWarnId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDeviceWarn" >
+    update t_device_warn
+    set device_id = #{deviceId,jdbcType=BIGINT},
+      warn_time = #{warnTime,jdbcType=TIMESTAMP},
+      electricity_volume = #{electricityVolume,jdbcType=DOUBLE},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      warn_type = #{warnType,jdbcType=INTEGER}
+    where device_warn_id = #{deviceWarnId,jdbcType=BIGINT}
+  </update>
+</mapper>

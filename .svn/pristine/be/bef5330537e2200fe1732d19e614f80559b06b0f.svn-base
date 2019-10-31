@@ -1,0 +1,184 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017-6-7, 14:27:17
+    Author     : shawn
+*/
+@charset "utf-8";
+
+body {
+    background: #f0f2f5;
+}
+
+.login-box {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    background: url(../images/bg.png) no-repeat center;
+    background-size: 100% 100%;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/bg.png', sizingMethod='scale');
+}
+
+.footer {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 12;
+    text-align: center;
+}
+
+.footer p {
+    line-height: 25px;
+    color: #8390a1;
+}
+
+.footer a {
+    color: #8390a1;
+}
+
+.footer p.ft-nav span {
+    padding: 0 10px;
+}
+
+.login-form {
+    width: 500px;
+    height: 400px;
+    margin-left: -250px;
+    margin-top: -200px;
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    z-index: 13;
+}
+
+.lg-hd {
+    width: 500px;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.login-main {
+    width: 230px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid #FFFFFF;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    padding: 20px 40px;
+    -moz-box-shadow: 2px 2px 5px #CCCCCC;
+    -webkit-box-shadow: 2px 2px 5px #CCCCCC;
+    box-shadow: 2px 2px 5px #CCCCCC;
+}
+
+.lg-txt {
+    height: 50px;
+    text-align: center;
+    font-size: 16px;
+    color: #28374e;
+}
+
+.lg-group {
+    width: 240px;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.lg-group .lg-control {
+    display: block;
+    width: 160px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 35px;
+    border: 0;
+    background: #dce2f0;
+}
+
+.lg-ts {
+    margin-bottom: 10px;
+    color: #cccccc;
+}
+
+.lg-ts a {
+    float: right;
+}
+
+.lg-bs {
+    color: #e8615e;
+}
+
+.btn-group {
+    height: 42px;
+}
+
+.lgBtn {
+    width: 230px;
+    height: 40px;
+    border: 0;
+    color: #333;
+    font-size: 16px;
+    background-color:rgb(250, 209, 41);
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    cursor: pointer;
+}
+
+.lg-group .ico {
+    width: 35px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.lg-group .ico-user {
+    background: url(../images/user.png) center no-repeat;
+}
+
+.lg-group .ico-lock {
+    background: url(../images/lock.png) center no-repeat;
+}
+
+.lg-row {
+    width: 500px;
+}
+
+#Validform_msg {
+    display: none;
+}
+
+.Validform_checktip {
+    margin-left: 0;
+    position: absolute;
+    height: 25px;
+    line-height: 25px;
+    top: 2px;
+    padding: 0 10px;
+    color: #fff;
+    z-index: 111;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+}
+
+.Validform_wrong {
+    height: 25px;
+    background: rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    left: 101%;
+}
+
+.Validform_right {
+    display: none;
+}

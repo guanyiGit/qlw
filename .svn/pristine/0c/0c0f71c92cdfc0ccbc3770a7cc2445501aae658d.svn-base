@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--禁养犬种-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+	<script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--引入webuploader相关组件-->
+    <link href="../../../static/webuploader/webuploader.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <script type="text/javascript" src="../../../static/js/YLUtils.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/banDogList.js"></script>
+
+    <style>
+        /*table tr:nth-child(even){*/
+        /*background: #ccc;*/
+        /*}*/
+        .table thead {
+            background: rgb(65, 199, 214);
+        }
+        .img {width: 260px}
+      
+        #filePicker div:nth-child(2){width:100%!important;height:100%!important;}  
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="width: 90%;margin-left: 20px;margin-top: 20px" id="master">
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="dogCard" style="margin-top: -40px">
+            <div  class="row" style="margin-top: 20px;margin-bottom: 20px">
+                <div class="col-sm-6" >
+                    <span class="glyphicon glyphicon-plus" style="font-size:17px;color: rgb(67, 200, 214);cursor:pointer" id="add" >新增禁养犬种</span>
+                </div>
+            </div>
+            <div>
+                <table id="banDogTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--详情。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。-->
+<div class="container-fluid" style="display: none;width: 80%;margin-top: 10px;margin-left: 20px" id="detail">
+    <p style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+        禁养犬种&gt;&gt;新增禁养犬种
+    </p>
+    <div class="panel panel-default" style="width: 100%; height: 600px;margin-top: 20px">
+        <!--form 表单-->
+        <form id="add" method="post">
+            <div class="form-group">
+                <!--注销信息-->
+                <div class="" style="margin-left: 20px;margin-top: 20px;">
+                    <div class="row">
+                        <div>
+                            <div style="margin-top: 10px;margin-left:20px" class="row">
+                                      <span class="col-sm-10">
+                                          <label>禁养犬种:</label>
+                                          <input style="width: 500px" id="jy" type="text">
+                                      </span>
+                            </div>
+                            <div style="margin-top: 10px;margin-left:20px" class="row">
+                                <label style="margin-left: 13px;margin-top: 10px">上传图片:</label>
+                                <div style="margin-top: -21px;margin-left:81px;margin-bottom: 20px;width: 500px">
+                                    <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                                    <!--dom结构部分-->
+                                    <div id="dg" class="panel panel-default">
+                                        <div class="uploader-demo">
+                                            <!--用来存放item-->
+                                            <ul id="fileList" class="list-unstyled list-inline "></ul>
+                                            <div id="filePicker"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px">
+                                <div style="margin-left: 35px"><label>备注:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label></div>
+                                <div style="margin-left: 97px;margin-top: -20px"><textarea rows="4" style="width: 500px" id="bz"></textarea></div>
+                            </div>
+                            <div style="height: 20px"></div>
+                            <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px" class="row">
+                            </div>
+                            <div style="margin-top: 21px;margin-left: 188px">
+                                <button style="background-color: rgb(65, 199, 219);border:none;color: #ffffff;width: 80px;height: 30px" id="save" type="button">提交</button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <button style="border:none;width: 80px;height: 30px" id="cansle" type="button">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<style>
+    #banDogTable thead tr{
+        height: 50px;
+        line-height: 50px;
+        background: rgb(65, 199, 214);
+    }
+
+</style>
+</html>

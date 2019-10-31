@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="css/test1.css">
+    <link href="bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <script src="js/aos.js"></script>
+    <script src="js/js.js"></script>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <script src="js/dengxiashan.js"></script>
+    <style type="text/css">a{text-decoration:none}</style>
+</head>
+<body>
+<!--wrap-->
+<div class="wrap">
+    <!--头部-->
+    <div class="header">
+        <div class="header-z">
+            <div class="header-l fl"><a href="javascript:void(0)"><img src="images/logo.png" alt="" style="margin-left: 30px;margin-top: 25px"></a></div>
+            <div class="header-m fl">
+                <ul>
+                    <li><a href="javascript:void(0)" style="text-decoration:none">首页</a></li>
+                    <li><a href="javascript:void(0)" style="text-decoration:none">爱心领养</a></li>
+                    <li><a href="javascript:void(0)" style="text-decoration:none">服务指南</a></li>
+                    <li><a href="javascript:void(0)" style="text-decoration:none">政策法规</a></li>
+                    <li><a href="javascript:void(0)" style="text-decoration:none">动态资讯</a></li>
+                    <li><a href="javascript:void(0)" style="text-decoration:none">养犬知识</a></li>
+                </ul>
+            </div>
+            <div class="header-r fl" style="margin-right: -5px;">
+                <div class="header-r-1 fl"><a href="javascript:void(0)" style="text-decoration:none;color: #777">李某某</a></div>
+                <!--<div class="header-r-2 fl"><img src="images/h12.png" alt=""></div>-->
+                <div class="header-r-3 fl"><a href="javascript:void(0)" style="text-decoration:none;color: #777">退出</a></div>
+            </div>
+        </div>
+    </div>
+    <!--头部 end-->
+    <!--用户管理-->
+    <div class="mainer" style="margin-top: -20px">
+        <div class="container">
+            <div class="row clearfix">
+                <div id="aside2" class="col-md-2 column">
+                    <div class="asideItem5">
+                    <ul id="menu2">
+                        <li class="menuu" id="qzbsy"><a data-toggle="collapse" class="active" style="text-decoration:none"><span>犬只管理平台</span></a></li><!--犬只办首页-->
+                        <li class="menuu" id="srssy"><a class="collapsed" style="text-decoration:none"><span>犬只管理平台</span></a></li><!--收容所首页-->
+                        <li class="menuu" id="cwyysy"><a class="collapsed" style="text-decoration:none"><span>犬只管理平台</span></a></li><!--宠物医院首页-->
+                        <li class="menuu" id="qzsy"><a class="collapsed" style="text-decoration:none"><span>犬只管理平台</span></a></li><!--犬主首页-->
+                        <li class="menuu" id="yyfsy"><a class="collapsed" style="text-decoration:none"><span>犬只管理平台</span></a></li><!--运营方首页-->
+
+                        <li class="menuu" id="qzda"><a class="collapsed" style="text-decoration:none"><span>犬只档案</span></a></li>
+                        <li class="menuu" id="qzdn"><a class="collapsed" style="text-decoration:none"><span>犬主档案</span></a></li>
+                        <!--<li class="menuu" id="wzqz"><a class="collapsed" style="text-decoration:none"><span>无证犬只</span></a></li>-->
+                        <li class="menuu" id="qzgl"><a class="collapsed" style="text-decoration:none"><span>犬证管理</span></a></li>
+                        <li class="menuu" id="hmd"><a class="collapsed" style="text-decoration:none"><span>黑名单</span></a></li>
+                        <!--<li class="menuu" id="zfcf"><a class="collapsed" style="text-decoration:none"><span>执法处罚</span></a></li>-->
+                        <!--<li class="menuu" id="fwwd"><a class="collapsed" style="text-decoration:none"><span>服务网点</span></a></li>-->
+                        <li class="menuu" id="xxfb"><a class="collapsed" style="text-decoration:none"><span>信息发布</span></a></li>
+                        <!--<li class="menuu" id="qzbsbgl"><a class="collapsed" style="text-decoration:none"><span>犬只办设备管理</span></a></li>-->
+                        <li class="menuu" id="dzwl"><a class="collapsed" style="text-decoration:none"><span>电子围栏</span></a></li>
+                        <!--<li class="menuu" id="qzbsrsqzzx"><a class="collapsed" style="text-decoration:none"><span>犬只办/收容所犬只注销</span></a></li>-->
+                        <li class="menuu" id="jyqz"><a class="collapsed" style="text-decoration:none"><span>禁养犬种</span></a></li>
+                        <!--<li class="menuu" id="qzbtjxx"><a class="collapsed" style="text-decoration:none"><span>犬只办统计信息</span></a></li>-->
+                        <li class="menuu" id="zfgl"><a class="collapsed" style="text-decoration:none"><span>执法管理</span></a></li>
+                        <li class="menuu" id="qzsr"><a class="collapsed" style="text-decoration:none"><span>犬只收容</span></a></li>
+                        <li class="menuu" id="hyzbl"><a class="collapsed" style="text-decoration:none"><span>会员证办理</span></a></li>
+                        <!--<li class="menuu" id="wtcl"><a class="collapsed" style="text-decoration:none"><span>问题处理</span></a></li>-->
+                        <!--<li class="menuu" id="srssbgl"><a class="collapsed" style="text-decoration:none"><span>收容所宠物医院设备管理</span></a></li>-->
+                        <!--<li class="menuu" id="srstjxx"><a class="collapsed" style="text-decoration:none"><span>收容所统计信息</span></a></li>-->
+                        <li class="menuu" id="zjbl"><a class="collapsed" style="text-decoration:none"><span>证件办理</span></a></li>
+                        <li class="menuu" id="mydj"><a class="collapsed" style="text-decoration:none"><span>免疫登记</span></a></li>
+                        <!--<li class="menuu" id="njgl"><a class="collapsed" style="text-decoration:none"><span>年检管理</span></a></li>-->
+                        <li class="menuu" id="bljl"><a class="collapsed" style="text-decoration:none"><span>病历记录</span></a></li>
+                        <!--<li class="menuu" id="yygl"><a class="collapsed" style="text-decoration:none"><span>预约管理</span></a></li>-->
+                        <!--<li class="menuu" id="yytjxx"><a class="collapsed" style="text-decoration:none"><span>医院统计信息</span></a></li>-->
+                        <!--<li class="menuu" id="wdxx"><a class="collapsed" style="text-decoration:none"><span>我的信息</span></a></li>-->
+                        <!--<li class="menuu" id="wdqz"><a class="collapsed" style="text-decoration:none"><span>我的犬证</span></a></li>-->
+                        <!--<li class="menuu" id="wdcw"><a class="collapsed" style="text-decoration:none"><span>我的宠物</span></a></li>-->
+                        <!--<li class="menuu" id="hdgj"><a class="collapsed" style="text-decoration:none"><span>活动轨迹</span></a></li>-->
+                        <!--<li class="menuu" id="qzywyy"><a class="collapsed" style="text-decoration:none"><span>犬主业务预约</span></a></li>-->
+                        <!--<li class="menuu" id="qzqzzx"><a class="collapsed" style="text-decoration:none"><span>犬主犬只注销</span></a></li>-->
+                        <li class="menuu" id="yyfsbgl"><a class="collapsed" style="text-decoration:none"><span>运营方设备管理</span></a></li>
+                        <!--<li class="menuu" id="xxsh"><a class="collapsed" style="text-decoration:none"><span>信息审核</span></a></li>-->
+                        <li class="menuu" id="fwwdsh"><a class="collapsed" style="text-decoration:none"><span>服务网点审核</span></a></li>
+                        <!--<li class="menuu" id="lbtgl"><a class="collapsed" style="text-decoration:none"><span>轮播图管理</span></a></li>-->
+                        <!--<li class="menuu" id="yyftjxx"><a class="collapsed" style="text-decoration:none"><span>运营方统计信息</span></a></li>-->
+                        <li class="menuu" id="qxgl"><a class="collapsed" style="text-decoration:none"><span>用户权限管理</span></a></li>
+                    </ul>
+                    </div>
+                </div>
+                <!--<div class="col-md-1 column" style="width: 5px">-->
+                <!--</div>-->
+                <div class="col-md-9 column">
+                    <!--<div id="section">-->
+                        <!--<div class="section-z fay">-->
+                            <div id="home" scrolling="auto" frameborder="0" style="width:100%;">
+                            </div>
+                        <!--</div>-->
+
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+        <!--左侧栏-->
+        <!--<div id="aside2" style="box-shadow:0px 0px 10px #666666;">-->
+            <!--&lt;!&ndash;<img src="images/s5-8.png" alt="图片">&ndash;&gt;-->
+            <!--<div class="asideItem5">-->
+                <!--<ul id="menu2">-->
+                    <!--<li class="menu" id="khba" onclick="khba();"><a href="javascript:void(0)" style="text-decoration:none">客户备案</a></li>-->
+                    <!--<li class="menu" id="khlx" onclick="khlx();"><a href="javascript:void(0)" style="text-decoration:none">客户立项</a></li>-->
+                    <!--<li class="menu" id="khrw" onclick="khrw();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">客户入围</a></li>-->
+                    <!--<li class="menu" id="khxxbg" onclick="khxxbg();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">信息变更</a></li>-->
+                    <!--<li class="menu" id="khwdgl" onclick="khwdgl();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">文档管理</a></li>-->
+                    <!--<li class="menu" id="xmba" onclick="xmba();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目备案</a></li>-->
+                    <!--<li class="menu" id="xmlx" onclick="xmlx();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目立项</a></li>-->
+                    <!--<li class="menu" id="xmrw" onclick="xmrw();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目入围</a></li>-->
+                    <!--<li class="menu" id="xmtb" onclick="xmtb();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目投标</a></li>-->
+                    <!--<li class="menu" id="xmzb" onclick="xmzb();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目中标</a></li>-->
+                    <!--<li class="menu" id="xmxxbg" onclick="xmxxbg();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">信息变更</a></li>-->
+                    <!--<li class="menu" id="xmwdgl" onclick="xmwdgl();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">文档管理</a></li>-->
+                    <!--<li class="menu" id="cbys" onclick="cbys();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">成本预算</a></li>-->
+                    <!--<li class="menu" id="xsfy" onclick="xsfy();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">销售费用</a></li>-->
+                    <!--<li class="menu" id="gzyj" onclick="gzyj();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">工作移交</a></li>-->
+                    <!--<li class="menu" id="gzyjzp" onclick="gzyjzp();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">工作移交（指派）</a></li>-->
+                    <!--<li class="menu" id="khk" onclick="khk();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">客户库</a></li>-->
+                    <!--<li class="menu" id="xmk" onclick="xmk();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目库</a></li>-->
+                    <!--<li class="menu" id="wdk" onclick="wdk();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">文档库</a></li>-->
+                    <!--<li class="menu" id="khfbtj" onclick="khfbtj();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">客户分布统计</a></li>-->
+                    <!--<li class="menu" id="xmfbtj" onclick="xmfbtj();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目分布统计</a></li>-->
+                    <!--<li class="menu" id="xmxsqk" onclick="xmxsqk();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目销售情况</a></li>-->
+                    <!--<li class="menu" id="xmxshz" onclick="xmxshz();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">项目销售汇总</a></li>-->
+                    <!--<li class="menu" id="yhgl" onclick="yhgl();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">用户管理</a></li>-->
+                    <!--<li class="menu" id="zzgl" onclick="zzgl();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">组织管理</a></li>-->
+                    <!--<li class="menu" id="jsgl" onclick="jsgl();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">角色管理</a></li>-->
+                    <!--<li class="menu" id="qxkz" onclick="qxkz();" style="display: none"><a href="javascript:void(0)" style="text-decoration:none">权限管理</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--左侧栏 end-->
+
+        <!--右侧栏-->
+        <!--<div id="section">-->
+            <!--<div class="section-z fay">-->
+                <!--&lt;!&ndash;<div class="tit1 mb20">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ul style="font-size: 16px" class="breadcrumb">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<a href="#">首页</a>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<a href="#">正常设备</a>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li class="active">&ndash;&gt;-->
+                            <!--&lt;!&ndash;Data&ndash;&gt;-->
+                        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--<div id="u17_input" scrolling="auto" frameborder="0" style="width:100%;margin-top: -2%;">-->
+                <!--</div>-->
+                <!--<div id="div2" scrolling="auto" frameborder="0" style="width:100%;margin-top: -2%">-->
+                <!--</div>-->
+                <!--<div id="div3" scrolling="auto" frameborder="0" style="width:100%">-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</div>-->
+        <!--右侧栏 end-->
+    </div>
+    <!--用户管理 end-->
+    <!--时间控件-->
+    <!--<script>-->
+        <!--laydate.skin('yahui')-->
+        <!--laydate({-->
+            <!--elem: '#J-xl' //指定元素-->
+        <!--});-->
+        <!--laydate({-->
+            <!--elem: '#J-xl-2'-->
+        <!--});-->
+    <!--</script>-->
+    <script>
+        $("#menu1 li").click(function(){
+            $("#menu1 li").removeClass("active");
+            $(this).addClass("active");
+        })
+        $("#menu2 li").click(function(){
+            $("#menu2 li").removeClass("active2");
+            $(this).addClass("active2");
+        })
+    </script>
+</div><!--wrap End-->
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script type="text/javascript" src="../../../static/js/jquery-3.3.1.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!-- 引入bootstrap select插件 -->
+    <link href="../../bootstrap-3.3.7/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="../../bootstrap-3.3.7/dist/js/bootstrap-select.min.js"></script>
+
+    <!--引入stringbuffer.js-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!-- 弹框组件 -->
+    <script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery.form.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/serviceSite/ServiceSiteInfo.js"></script>
+
+
+</head>
+<body>
+<!--详情-->
+<div class="container-fluid info-container back">
+    <div style="z-index: 14;">
+        <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label"
+             style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);">
+            <div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+                <div style="width: auto; height: auto; text-align: left;">
+                    <div style="width: auto; height: auto;">
+                        <label class="mav-text" style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);margin-left: 49px">
+                            服务网点审核
+                        </label>
+                        <!--<button id="return" class="btn btn-sm btn-info"-->
+                        <!--style="margin-left: 1100px;margin-top: -50px;width: 80px" onclick="returnn();">返回-->
+                        <!--</button>-->
+                    </div>
+                </div>
+            </div>
+            <div style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" style="width: 1200px; height: auto;margin:0 auto;margin-top: 40px">
+        <div style="width: 800px;margin-top: 10px;margin-left: 210px">
+            <p>
+                <img  id="wancheng" src="../../../static/images/wancheng.png" style="width: 32px;height: 32px;"/>
+                <b style="color: #989898;">&nbsp&nbsp&nbsp&nbsp---------------------------------------------------------&nbsp&nbsp&nbsp&nbsp</b>
+                <img  id="jiazai" src="../../../static/images/wancheng.png" style="width: 30px;height: 30px;"/>
+                <b style="color: #989898;">&nbsp&nbsp&nbsp&nbsp---------------------------------------------------------&nbsp&nbsp&nbsp&nbsp</b>
+                <img  id="wei"  src="../../../static/images/wei.png" style="width: 32px;height: 32px;"/>
+            </p>
+            <p style="font-size: 16px">
+                <span style="margin-left: -50px">宠物医院提交申请</span>
+                <span style="margin-left: 235px">平台审核</span>
+                <span style="margin-left: 285px">结束</span>
+            </p>
+        </div>
+        <!--form 表单-->
+        <form id="add" method="post">
+            <div class="form-group">
+                <!--基本信息-->
+                <div class="panel panel-info" style="margin: 0 auto;width: 1000px">
+                    <p style="background-color: rgb(65, 199, 219);height: 30px;line-height: 30px;color: #FFFFFF;font-size: 14px;vertical-align:auto">&nbsp&nbsp&nbsp&nbsp<b>基本信息</b></p>
+                    <div  style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>医院名称:</label>
+                                <input id="organizationName" name="organizationName">
+                            </span>
+                        <span style="margin-left: 200px">
+                        <label>注册资本:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="organizationCapital" name="organizationCapital">
+                        </span>
+                    </div>
+                    <div  style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label style="margin-left: 13px">注册号:</label>
+                                <input id="registerNumber" name="registerNumber">
+                            </span>
+                        <span style="margin-left: 147px">
+                                <label>统一社会信用代码:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input id="creditCode" name="creditCode">
+                        </span>
+                    </div>
+                    <div  style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>成立日期:</label>
+                                <input id="establishDate" name="establishDate">
+                            </span>
+                        <span style="margin-left: 200px">
+                        <label>所属省份:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="province" name="province">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>所属城市:</label>
+                                <input id="ownedCity" name="ownedCity">
+                            </span>
+                        <span style="margin-left: 200px">
+                                <label>所属区/县:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input id="district" name="district">
+                            </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>详细地址:</label>
+                                <input style="width: 687px" id="address" name="address">
+                            </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label style="margin-left: 13px">联系人:</label>
+                                <input id="personLiable" name="personLiable">
+                            </span>
+                        <span style="margin-left: 200px">
+                                <label>联系电话:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input id="phone" name="phone">
+                            </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                        <label>经营范围:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <div style="margin-left: 63px;margin-top: -21px"><textarea rows="4" style="width: 687px" id="scopeOfOperation" name="scopeOfOperation"></textarea></div>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px">
+                        <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                        <!--dom结构部分-->
+                        <label>店铺照片:</label>
+                        <div id="dg" class="panel panel-default">
+                            <div class="uploader-demo">
+                                <!--用来存放item-->
+                                <ul id="fileList" class="list-unstyled list-inline "></ul>
+                                <div id="filePicker"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--证件信息-->
+            <div class="form-group">
+                <!--证件信息-->
+                <div class="panel panel-info" style="margin: 0 auto;width: 1000px">
+                    <p style="background-color: rgb(65, 199, 219);height: 30px;line-height: 30px;color: #FFFFFF;font-size: 14px;vertical-align:auto">&nbsp&nbsp&nbsp&nbsp<b>证件信息</b></p>
+                    &nbsp;&nbsp;<b style="font-size: 14px">1、动物诊疗许可证</b>
+                    <div  id="card1"  style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>证件号码:</label>
+                                <input class="card_number" name="card_number">
+                            </span>
+                        <span style="margin-left: 200px">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input  name="upTime" class="upTime">
+                         <input  name="expireTime" class="expireTime">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px">
+                        <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                        <!--dom结构部分-->
+                        <label>照片:</label>
+                        <div id="dg1" class="panel panel-default">
+                            <div class="uploader-demo">
+                                <div id="filePicker1">
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    &nbsp;&nbsp;<b style="font-size: 14px">2、动物防疫合格证</b>
+                    <div  id="card2" style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>证件号码:</label>
+                                <input  class="card_number" name="card_number">
+                            </span>
+                        <span style="margin-left: 200px">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input  name="upTime" class="upTime">
+                         <input  name="expireTime" class="expireTime">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px">
+                        <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                        <!--dom结构部分-->
+                        <label>照片:</label>
+                        <div id="dg2" class="panel panel-default">
+                            <div class="uploader-demo">
+                                <div id="filePicker2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    &nbsp;&nbsp;<b style="font-size: 14px">3、工商营业执照</b>
+                    <div id="card3" style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>证件号码:</label>
+                                <input class="card_number" name="card_number">
+                            </span>
+                        <span style="margin-left: 200px">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input  name="upTime" class="upTime">
+                         <input  name="expireTime" class="expireTime">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px">
+                        <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                        <!--dom结构部分-->
+                        <label>照片:</label>
+                        <div id="dg3" class="panel panel-default">
+                            <div class="uploader-demo">
+                                <div id="filePicker3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    &nbsp;&nbsp;<b style="font-size: 14px">4、兽医资格证</b>
+                    <div id="card4" style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>证件号码:</label>
+                                <input class="card_number" name="card_number">
+                            </span>
+                        <span style="margin-left: 200px">
+                        <label>有效期限:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                         <input  name="upTime" class="upTime">
+                         <input  name="expireTime" class="expireTime">
+                        </span>
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px">
+                        <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                        <!--dom结构部分-->
+                        <label>照片:</label>
+                        <div id="dg4" class="panel panel-default">
+                            <div class="uploader-demo">
+                                <div id="filePicker4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--工具按钮-->
+        <!-- 失败原因展示 -->
+        <div  id="fail_reason" class="form-group">
+            <div style="margin-top: 10px;margin-left:100px">
+                <label>失败原因:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div style="margin-left: 63px;margin-top: -21px"><textarea rows="4" style="width: 687px" id="fail_reason_text" name="fail_reason"></textarea></div>
+            </div>
+        </div>
+
+        <!--<div class="row">-->
+            <!--<div class="col-sm-4">-->
+            <!--</div>-->
+            <!--<div class="col-sm-4">-->
+                <!--<button   data-toggle="modal" data-target="#success" class="btn btn-sm btn-info an" style="margin-right: 50px;width: 80px" onclick="">-->
+                    <!--审核通过-->
+                <!--</button>-->
+                <!--<button  data-toggle="modal" data-target="#fail"  class="btn btn-sm btn-info an" style="margin-right: 50px;width: 80px" onclick="">-->
+                    <!--审核不通过-->
+                <!--</button>-->
+                <!--<button id="cancel" class="btn btn-sm btn-default an" style="width: 80px" onclick="">取消</button>-->
+            <!--</div>-->
+            <!--<div class="col-sm-4">-->
+            <!--</div>-->
+            <!--<div style="height: 50px"></div>-->
+        <!--</div>-->
+
+
+
+    </div>
+    <div style="height: 25px"></div>
+</div>
+</body>
+<style>
+    .active a{
+        font-size: 55px;
+        background-color: red;
+    }
+</style>
+</html>

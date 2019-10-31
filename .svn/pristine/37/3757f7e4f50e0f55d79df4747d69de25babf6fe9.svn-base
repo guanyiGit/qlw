@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TFenceCoordinateMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TFenceCoordinate">
+		<id column="e_fence_coordinate_id" property="eFenceCoordinateId"
+			jdbcType="BIGINT" />
+		<result column="fence_id" property="fenceId" jdbcType="BIGINT" />
+		<result column="longitude" property="longitude" jdbcType="DECIMAL" />
+		<result column="latitude" property="latitude" jdbcType="DECIMAL" />
+		<result column="seq" property="seq" jdbcType="INTEGER" />
+		<result column="district_id" property="districtId" jdbcType="INTEGER" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="FenceRefCoordinateResultMap" type="com.soholy.dogmanager.pojo.fence.FenceRefCoordinate" extends="com.soholy.dogmanager.mapper.TFenceMapper.BaseResultMap">
+		<association property="tUsers" javaType="com.soholy.dogmanager.entity.TUsers" resultMap="com.soholy.dogmanager.mapper.TUsersMapper.BaseResultMap"></association>
+		<collection property="coordinates" ofType="com.soholy.dogmanager.entity.TFenceCoordinate" resultMap="com.soholy.dogmanager.mapper.TFenceCoordinateMapper.BaseResultMap"></collection>
+	</resultMap>
+
+	<!--查围栏详情-->
+	<select id="findDetailByids" resultMap="FenceRefCoordinateResultMap">
+		SELECT
+			f.fence_id, f.fence_type, f.fence_name, f.operator_id, f.status, f.start_time, f.creation_time,
+			u.user_id, u.organization_id, u.dog_own_id, u.org_type, u.district_id, u.open_id, u.username, u.password,
+			u.name, u.sex, u.phone, u.email, u.u_status, u.login_num, u.recentLogin_time, u.creation_time,
+			fc.e_fence_coordinate_id, fc.fence_id, fc.longitude, fc.latitude, fc.seq, fc.district_id, fc.creation_time
+		FROM (t_fence f,t_fence_coordinate fc)
+		LEFT JOIN t_users u ON u.user_id = f.operator_id
+		WHERE f.fence_id = fc.fence_id
+		AND f.`status` = 1
+		<if test="fenceIds != null and fenceIds.length > 0">
+			<foreach collection="fenceIds" item="fenceId" open="AND f.fence_id IN (" separator="," close=")">
+				#{fenceId}
+			</foreach>
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		e_fence_coordinate_id, fence_id, longitude, latitude, seq,
+		district_id, creation_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TFenceCoordinateExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_fence_coordinate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from t_fence_coordinate
+		where e_fence_coordinate_id =
+		#{eFenceCoordinateId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		t_fence_coordinate
+		where e_fence_coordinate_id =
+		#{eFenceCoordinateId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TFenceCoordinateExample">
+		delete from t_fence_coordinate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.soholy.dogmanager.entity.TFenceCoordinate">
+		insert into t_fence_coordinate
+		(e_fence_coordinate_id, fence_id,
+		longitude,
+		latitude, seq, district_id,
+		creation_time)
+		values (#{eFenceCoordinateId,jdbcType=BIGINT},
+		#{fenceId,jdbcType=BIGINT},
+		#{longitude,jdbcType=DECIMAL},
+		#{latitude,jdbcType=DECIMAL}, #{seq,jdbcType=INTEGER},
+		#{districtId,jdbcType=INTEGER},
+		#{creationTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TFenceCoordinate">
+		insert into t_fence_coordinate
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="eFenceCoordinateId != null">
+				e_fence_coordinate_id,
+			</if>
+			<if test="fenceId != null">
+				fence_id,
+			</if>
+			<if test="longitude != null">
+				longitude,
+			</if>
+			<if test="latitude != null">
+				latitude,
+			</if>
+			<if test="seq != null">
+				seq,
+			</if>
+			<if test="districtId != null">
+				district_id,
+			</if>
+			<if test="creationTime != null">
+				creation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="eFenceCoordinateId != null">
+				#{eFenceCoordinateId,jdbcType=BIGINT},
+			</if>
+			<if test="fenceId != null">
+				#{fenceId,jdbcType=BIGINT},
+			</if>
+			<if test="longitude != null">
+				#{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude != null">
+				#{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="seq != null">
+				#{seq,jdbcType=INTEGER},
+			</if>
+			<if test="districtId != null">
+				#{districtId,jdbcType=INTEGER},
+			</if>
+			<if test="creationTime != null">
+				#{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TFenceCoordinateExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_fence_coordinate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_fence_coordinate
+		<set>
+			<if test="record.eFenceCoordinateId != null">
+				e_fence_coordinate_id =
+				#{record.eFenceCoordinateId,jdbcType=BIGINT},
+			</if>
+			<if test="record.fenceId != null">
+				fence_id = #{record.fenceId,jdbcType=BIGINT},
+			</if>
+			<if test="record.longitude != null">
+				longitude = #{record.longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="record.latitude != null">
+				latitude = #{record.latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="record.seq != null">
+				seq = #{record.seq,jdbcType=INTEGER},
+			</if>
+			<if test="record.districtId != null">
+				district_id = #{record.districtId,jdbcType=INTEGER},
+			</if>
+			<if test="record.creationTime != null">
+				creation_time =
+				#{record.creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_fence_coordinate
+		set e_fence_coordinate_id =
+		#{record.eFenceCoordinateId,jdbcType=BIGINT},
+		fence_id =
+		#{record.fenceId,jdbcType=BIGINT},
+		longitude =
+		#{record.longitude,jdbcType=DECIMAL},
+		latitude =
+		#{record.latitude,jdbcType=DECIMAL},
+		seq =
+		#{record.seq,jdbcType=INTEGER},
+		district_id =
+		#{record.districtId,jdbcType=INTEGER},
+		creation_time =
+		#{record.creationTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TFenceCoordinate">
+		update t_fence_coordinate
+		<set>
+			<if test="fenceId != null">
+				fence_id = #{fenceId,jdbcType=BIGINT},
+			</if>
+			<if test="longitude != null">
+				longitude = #{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude != null">
+				latitude = #{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="seq != null">
+				seq = #{seq,jdbcType=INTEGER},
+			</if>
+			<if test="districtId != null">
+				district_id = #{districtId,jdbcType=INTEGER},
+			</if>
+			<if test="creationTime != null">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where e_fence_coordinate_id = #{eFenceCoordinateId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TFenceCoordinate">
+		update
+		t_fence_coordinate
+		set fence_id = #{fenceId,jdbcType=BIGINT},
+		longitude
+		= #{longitude,jdbcType=DECIMAL},
+		latitude =
+		#{latitude,jdbcType=DECIMAL},
+		seq = #{seq,jdbcType=INTEGER},
+		district_id = #{districtId,jdbcType=INTEGER},
+		creation_time =
+		#{creationTime,jdbcType=TIMESTAMP}
+		where e_fence_coordinate_id =
+		#{eFenceCoordinateId,jdbcType=BIGINT}
+	</update>
+
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		<selectKey order="AFTER" resultType="java.lang.Long" keyProperty="eFenceCoordinateId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_fence_coordinate
+		(e_fence_coordinate_id, fence_id,
+		longitude,
+		latitude, seq, district_id,
+		creation_time)
+		value
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.eFenceCoordinateId},
+			#{item.fenceId},
+			#{item.longitude},
+			#{item.latitude},
+			#{item.seq},
+			#{item.districtId},
+			#{item.creationTime}
+			)
+		</foreach>
+	</insert>
+
+	<select id="selectCoordinatesByFenceId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_fence_coordinate
+		where fence_id =
+		#{fenceId} order by seq asc
+	</select>
+
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from t_fence_coordinate where e_fence_coordinate_id in
+		<foreach collection="list" item="item" open="(" separator=","
+			close=")">
+			item.eFenceCoordinateId
+		</foreach>
+	</delete>
+	
+	<delete id="deleteByFenceId" parameterType="java.lang.Long">
+		delete from t_fence_coordinate where fence_id = #{fenceId}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>服务网点</title>
+    <!--服务指南-->
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/search-input.css">
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--引入ImgPageGrid js css-->
+    <link href="http://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+    <link href="../../../static/ImgPageGrid/css/imggrid.css" rel="stylesheet" />
+    <script src="../../../static/ImgPageGrid/js/imggrid.js"></script>
+
+    <!--引入bootstrap-select 组件-->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-select.min.js"></script>
+
+    <!--引入easyui 组件-->
+    <link href="../../../static/easyui/demo/demo.css" rel="stylesheet" />
+    <link href="../../../static/easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../static/easyui/themes/icon.css" rel="stylesheet" />
+    <!--<script src="../../../static/bootstrap-select/dist/js/bootstrap-select.js"></script>-->
+    <script src="../../../static/easyui/jquery.easyui.min.js"></script>
+
+    <!--引入webuploader相关组件-->
+    <!--<link href="../../../static/webuploader/webuploader.css" rel="stylesheet">-->
+    <!--<script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>-->
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/serviceNetwork.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="container-fluid" style="width: 1200px;">
+        <div class="row" style="">
+            <div class="col-sm-12">
+                <div class="" style="margin-top: 20px">
+                    <div class="input-group" style="display: inline-block; width: 100%;">
+                        <!--<span style="">-->
+                        <span style="font-size: 18px;color: red;cursor: pointer;display: inline-block;margin: 42px 0 42px 20px;">养犬服务&gt;&gt;</span>
+                            <!--<label style="position:relative;right:133px;white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);"><a href="#" style="color:rgb(255, 102, 85);">养犬服务&gt;&gt;</a></label>-->
+                            <!--<input style="width: 131px;position: relative;left: 959px;height: 28px;" id="key" type="text"  placeholder="免疫证号" class="form-control">-->
+                            <!--<span style="width: 70px;position: relative;left: 856px;" class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span id="search">搜索</span></i></a></span>-->
+                        <!--</span>-->
+                        <div class="search-container">
+                            <span class="search-icon" ></span>
+                            <input class="form-input" id="key" type="text" placeholder="免疫证号">
+                        </div>
+                    </div>
+                </div>
+            <hr style="border: 1px dashed #ccc;width:100%;height:0px;position: relative;left:0px;">
+            </div>
+        </div>
+        <div class="row" style="">
+            <div class="col-sm-12">
+                <div style="">
+                    <table id="serviceNetworkTable" class="table "></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+
+</html>

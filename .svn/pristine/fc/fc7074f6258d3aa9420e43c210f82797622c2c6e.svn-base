@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.statistic.TVaccineMapper">
+	<!--得到免疫登记总数量  -->
+	<!--<select id="getTVaccineCount" resultType="int">
+		SELECT count(0)
+		FROM t_vaccine_register vr
+			LEFT JOIN t_dog_info di ON vr.dog_id=di.dog_id
+			INNER JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+			LEFT JOIN t_dictionary dy1 ON dy1.dictionary_field='dog_breed_type'
+			            AND dy1.dictionary_value=di.dog_breed_type
+			LEFT JOIN t_dictionary dy2 ON dy2.dictionary_field='dog_color_type' 
+			            AND dy2.dictionary_value=di.dog_color_type  
+			LEFT JOIN t_dog_owner tdo ON tdo.dog_owner_id=di.dog_owner_id
+			LEFT JOIN t_dog_owner_card oc ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+			<if test="input!=null and input!=''">
+				and ic.immune_card_num LIKE"%"#{input}"%" OR tdo.dog_owner_phone LIKE"%"#{input}"%"
+					OR tdo.dog_owner_name LIKE"%"#{input}"%" OR oc.card_num LIKE"%"#{input}"%"
+			</if>
+	</select>-->
+	<select id="getTVaccineCount" resultType="int">
+		SELECT count(0)
+		FROM t_dog_info di
+		LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+		<if test="input==null or input==''">
+			INNER JOIN (
+			SELECT MAX(vac_org),dog_id FROM t_vaccine_injection
+			WHERE 1=1
+			and vac_org = #{org_id}
+			GROUP BY dog_id
+			) AA ON AA.dog_id=di.dog_id
+		</if>
+		LEFT JOIN t_dictionary dy1 ON dy1.dictionary_field='dog_breed_type'
+		AND dy1.dictionary_value=di.dog_breed_type
+		LEFT JOIN t_dictionary dy2 ON dy2.dictionary_field='dog_color_type'
+		AND dy2.dictionary_value=di.dog_color_type
+		LEFT JOIN t_dog_owner tdo ON tdo.dog_owner_id=di.dog_owner_id
+		LEFT JOIN t_dog_owner_card oc ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+		where 1=1
+		<!--<if test="input==null or input==''">
+			and ic.lssue_org_id = #{org_id}
+		</if>-->
+		<if test="input!=null and input!=''">
+			and ic.immune_card_num = #{input} OR tdo.dog_owner_phone = #{input}
+			OR tdo.dog_owner_name = #{input} OR oc.card_num = #{input}
+		</if>
+	</select>
+	<!-- 得到免疫登记列表 -->
+	<!--<select id="tVaccineList" resultType="Map">
+		SELECT di.dog_id,vr.vaccine_register_id,vr.org_id,vr.creation_time,ic.seq_id,ic.immune_card_num,di.dog_name
+			,dy1.dictionary_describe breed,di.dog_gender,di.birth_time,di.dogAge
+			,dy2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone
+			FROM t_vaccine_register vr
+			LEFT JOIN t_dog_info di ON vr.dog_id=di.dog_id
+			INNER JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+			LEFT JOIN t_dictionary dy1              
+			            ON dy1.dictionary_field='dog_breed_type'
+			            AND dy1.dictionary_value=di.dog_breed_type
+			LEFT JOIN t_dictionary dy2             
+			            ON dy2.dictionary_field='dog_color_type' 
+			            AND dy2.dictionary_value=di.dog_color_type  
+			LEFT JOIN t_dog_owner tdo 
+			            ON tdo.dog_owner_id=di.dog_owner_id
+			LEFT JOIN t_dog_owner_card oc 
+						ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+			<if test="input!=null and input!=''">
+				and ic.immune_card_num LIKE"%"#{input}"%" OR tdo.dog_owner_phone LIKE"%"#{input}"%"
+					OR tdo.dog_owner_name LIKE"%"#{input}"%" OR oc.card_num LIKE"%"#{input}"%"
+			</if>
+			order by vr.creation_time desc
+			LIMIT #{start},#{size}
+	</select>-->
+	<select id="tVaccineList" resultType="Map">
+		SELECT di.dog_id,ic.seq_id,ic.immune_card_num,ic.creation_time createTime,di.dog_name
+		,dy1.dictionary_describe breed,di.dog_gender,di.birth_time,di.dogAge
+		,dy2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone,tdo.org_id
+		<if test="input==null or input==''">
+		,AA.vac_org
+		</if>
+		FROM t_dog_info di
+		LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+		<if test="input==null or input==''">
+		INNER JOIN (
+		SELECT MAX(vac_org) vac_org,dog_id FROM t_vaccine_injection
+		WHERE 1=1
+			and vac_org = #{org_id}
+		GROUP BY dog_id
+		) AA ON AA.dog_id=di.dog_id
+		</if>
+		LEFT JOIN t_dictionary dy1
+		ON dy1.dictionary_field='dog_breed_type'
+		AND dy1.dictionary_value=di.dog_breed_type
+		LEFT JOIN t_dictionary dy2
+		ON dy2.dictionary_field='dog_color_type'
+		AND dy2.dictionary_value=di.dog_color_type
+		LEFT JOIN t_dog_owner tdo
+		ON tdo.dog_owner_id=di.dog_owner_id
+		LEFT JOIN t_dog_owner_card oc
+		ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+		where 1=1
+		<!--<if test="input==null or input==''">
+			and ic.lssue_org_id = #{org_id}
+		</if>-->
+		<if test="input!=null and input!=''">
+			and ic.immune_card_num = #{input} OR tdo.dog_owner_phone = #{input}
+			OR tdo.dog_owner_name = #{input} OR oc.card_num = #{input}
+		</if>
+		order by ic.creation_time desc
+		LIMIT #{start},#{size}
+	</select>
+	<!--得到喂药列表总数量-->
+	<select id="getTVaccineCountWY" resultType="int">
+		select count(0)from t_drug_record dr
+					LEFT JOIN t_dog_info di ON dr.dog_id=di.dog_id
+					LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+					LEFT JOIN t_dictionary dy1
+					ON dy1.dictionary_field='dog_breed_type'
+					AND dy1.dictionary_value=di.dog_breed_type
+					LEFT JOIN t_dictionary dy2
+					ON dy2.dictionary_field='dog_color_type'
+					AND dy2.dictionary_value=di.dog_color_type
+					LEFT JOIN t_dog_owner tdo
+					ON tdo.dog_owner_id=di.dog_owner_id
+					LEFT JOIN t_dog_owner_card oc
+					ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+			<if test="org_id!=null and org_id!=''">
+				and dr.org_id=#{org_id}
+			</if>
+		</select>
+	<!-- 得到喂药列表-->
+	<select id="tVaccineListWY" resultType="Map">
+		select dr.drug_record_id,dr.dog_id,dr.next_drug_date,dr.create_date,ic.seq_id,ic.immune_card_num,di.dog_name
+		,dy1.dictionary_describe breed,di.dog_gender,di.birth_time,di.dogAge
+		,dy2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone
+			from t_drug_record dr
+					LEFT JOIN t_dog_info di ON dr.dog_id=di.dog_id
+					LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+					LEFT JOIN t_dictionary dy1
+					ON dy1.dictionary_field='dog_breed_type'
+					AND dy1.dictionary_value=di.dog_breed_type
+					LEFT JOIN t_dictionary dy2
+					ON dy2.dictionary_field='dog_color_type'
+					AND dy2.dictionary_value=di.dog_color_type
+					LEFT JOIN t_dog_owner tdo
+					ON tdo.dog_owner_id=di.dog_owner_id
+					LEFT JOIN t_dog_owner_card oc
+					ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+		<if test="org_id!=null and org_id!=''">
+			and dr.org_id=#{org_id}
+		</if>
+			GROUP BY dr.dog_id
+			ORDER BY dr.create_date desc
+				LIMIT #{start},#{size}
+	</select>
+	<!--得到病历总数量-->
+	<select id="getTherapyListCount" resultType="int">
+		select count(0)from t_therapy ty
+					LEFT JOIN t_dog_info di ON ty.dog_id=di.dog_id
+					LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+					LEFT JOIN t_dictionary dy1
+					ON dy1.dictionary_field='dog_breed_type'
+					AND dy1.dictionary_value=di.dog_breed_type
+					LEFT JOIN t_dictionary dy2
+					ON dy2.dictionary_field='dog_color_type'
+					AND dy2.dictionary_value=di.dog_color_type
+					LEFT JOIN t_dog_owner tdo
+					ON tdo.dog_owner_id=di.dog_owner_id
+					LEFT JOIN t_dog_owner_card oc
+					ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+			<if test="org_id!=null and org_id!=''">
+				and ty.org_id=#{org_id}
+			</if>
+	</select>
+	<!-- 得到病历列表-->
+	<select id="getTherapyList" resultType="Map">
+		select ty.therapy_id,ty.dog_id,ty.creation_time,ic.seq_id,ic.immune_card_num,di.dog_name
+		,dy1.dictionary_describe breed,di.dog_gender,di.dogAge
+		,dy2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone
+			from t_therapy ty
+					LEFT JOIN t_dog_info di ON ty.dog_id=di.dog_id
+					LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+					LEFT JOIN t_dictionary dy1
+					ON dy1.dictionary_field='dog_breed_type'
+					AND dy1.dictionary_value=di.dog_breed_type
+					LEFT JOIN t_dictionary dy2
+					ON dy2.dictionary_field='dog_color_type'
+					AND dy2.dictionary_value=di.dog_color_type
+					LEFT JOIN t_dog_owner tdo
+					ON tdo.dog_owner_id=di.dog_owner_id
+					LEFT JOIN t_dog_owner_card oc
+					ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+		<if test="org_id!=null and org_id!=''">
+			and ty.org_id=#{org_id}
+		</if>
+		GROUP BY ty.dog_id
+		ORDER BY ty.creation_time desc
+		LIMIT #{start},#{size}
+	</select>
+	<!--添加免疫登记  -->
+	<insert id="addTVaccine" parameterType="Map" >
+		INSERT INTO t_vaccine_register 
+	(dog_id,org_id,first_injection_date,`schedule`,creation_time)
+	VALUES(#{dog_id},#{org_id},#{first_injection_date},1,NOW())
+  	</insert>
+	<!--添加免疫记录  -->
+	<insert id="addVaccineInjection" parameterType="map">
+		INSERT INTO t_vaccine_injection(vaccine_register_id,fact_injection_date,next_injection_date
+			,injection_status,operator_id,create_date
+			,remarks,vaccine_name,vaccine_producer)
+		VALUES(#{vaccine_register_id},#{fact_injection_date},#{next_injection_date}
+		,0,#{operator_id},NOW()
+		,#{remarks},#{vaccine_name},#{vaccine_producer})
+	</insert>
+	
+	<!-- 得到喂药登记列表 -->
+	<select id="getDrugList" resultType="Map">
+		SELECT di.dog_id,vr.drug_id,ic.immune_card_num,di.dog_name
+			,dy1.dictionary_describe breed,di.dog_gender,di.birth_time
+			,dy2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone
+			FROM t_drug vr
+			LEFT JOIN t_dog_info di ON vr.dog_id=di.dog_id
+			LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id      
+			LEFT JOIN t_dictionary dy1 ON dy1.dictionary_field='dog_breed_type'
+			            AND dy1.dictionary_value=di.dog_breed_type
+			LEFT JOIN t_dictionary dy2 ON dy2.dictionary_field='dog_color_type' 
+			            AND dy2.dictionary_value=di.dog_color_type  
+			LEFT JOIN t_dog_owner tdo ON tdo.dog_owner_id=di.dog_owner_id
+			LEFT JOIN t_dog_owner_card oc ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1 and vr.org_id=#{org_id}
+			<if test="input!=null and input!=''">
+				and ic.immune_card_num LIKE"%"#{input}"%" OR tdo.dog_owner_phone LIKE"%"#{input}"%"
+					OR tdo.dog_owner_name LIKE"%"#{input}"%" OR oc.card_num LIKE"%"#{input}"%"
+			</if>
+			GROUP BY vr.dog_id order by vr.create_time desc
+			LIMIT #{start},#{size}
+	</select>
+	<!--根据狗id得到喂药记录总数量  -->
+	<select id="getDrugRccordListDogIdCount" resultType="int">
+		select count(0)from t_drug_record dr
+		INNER JOIN t_vaccine_register vr ON vr.vaccine_register_id=dr.vaccine_register_id
+    	LEFT JOIN t_users us ON us.user_id=dr.operator_id    
+   		 where vr.dog_id=#{id} and vr.org_id=#{org_id} ORDER BY dr.create_date desc
+	</select>
+	<!--根据狗id得到喂药记录  -->
+	<select id="getDrugRccordListDogId" resultType="Map">
+		select dr.drug_record_id,dr.drug_date,dr.drug_name,
+        dr.drug_name_num,dr.veterinary,us.`name`,dr.next_drug_date,dr.remarks    
+    		from t_drug_record dr
+		INNER JOIN t_vaccine_register vr ON vr.vaccine_register_id=dr.vaccine_register_id
+    	LEFT JOIN t_users us ON us.user_id=dr.operator_id    
+   		 where vr.dog_id=#{id} and vr.org_id=#{org_id} ORDER BY dr.create_date desc
+   		 Limit #{start},#{size}
+	</select>
+	<!-- 根据狗id得到喂药记录集合数量 -->
+	<select id="getDrugRecordListCount" resultType="int">
+		select count(0)
+			from t_drug_record dr
+			LEFT JOIN t_users us ON us.user_id=dr.operator_id
+			where dr.org_id=#{org_id} and dr.dog_id=#{dog_id}
+	</select>
+	<!-- 根据狗id得到喂药记录集合 -->
+	<select id="getDrugRecordList" resultType="Map">
+		select dr.drug_record_id,dr.drug_date,dr.drug_name
+			,dr.drug_name_num,dr.veterinary,us.`name`,dr.create_date
+			,dr.next_drug_date,dr.remarks,dr.org_id,dr.dog_id
+			from t_drug_record dr
+			LEFT JOIN t_users us ON us.user_id=dr.operator_id
+			where dr.org_id=#{org_id} and dr.dog_id=#{dog_id}
+	</select>
+	<!--添加喂药记录  -->
+	<insert id="addDrugRecord" parameterType="Map">
+		INSERT into t_drug_record(vaccine_register_id,drug_date,drug_name
+			,drug_name_num,veterinary,next_drug_date,operator_id,create_date,remarks,org_id,dog_id)
+			VALUES(#{vaccine_register_id},#{drug_date},#{drug_name}
+			,#{drug_name_num},#{veterinary},#{next_drug_date},#{operator_id},NOW(),#{remarks},#{org_id},#{dog_id})
+	</insert>
+
+	<select id="findDogPic" resultType="java.util.HashMap">
+		SELECT
+		  im.image_url,
+		  im.thumbnail_url
+		FROM
+		  t_images im
+		 LEFT JOIN t_images_ref imr
+		 ON im.image_id =imr.image_id
+		 WHERE imr.image_ref_id=#{dogId} AND imr.target_type=#{type}
+	</select>
+	<!--根据免疫登记id关联狗id得到狗信息（根据狗id得到狗信息）  -->
+	<select id="getTVaccineId" resultType="java.util.HashMap">
+		SELECT
+		  tdi.dog_id,
+		  vr.vaccine_register_id,
+		  ic.immune_card_num,
+		  tdo.dog_owner_name,
+		  tdo.dog_owner_phone,
+		  tdo.community,
+		  tdo.address,
+		  oc.card_type,
+		  oc.card_num,
+		  dis.district_name,
+		  tdi.dog_name,
+		  td1.dictionary_describe breed,
+		  tdi.birth_time,
+		  tdi.dog_gender,
+		  tdi.dogAge,
+		  td2.dictionary_describe color
+		FROM
+		  t_vaccine_register vr
+		  LEFT JOIN t_dog_info tdi
+			ON tdi.dog_id = vr.dog_id
+		  LEFT JOIN t_immune_card ic
+			ON ic.dog_id = tdi.dog_id
+		  LEFT JOIN t_dog_owner tdo
+			ON tdo.dog_owner_id = tdi.dog_owner_id
+		  LEFT JOIN t_dog_owner_card oc
+			ON oc.dog_owner_id = tdo.dog_owner_id
+		  LEFT JOIN t_district dis
+			ON tdo.district_id=dis.district_id
+		  LEFT JOIN t_dictionary td1
+			ON tdi.dog_breed_type = td1.dictionary_value
+			AND td1.dictionary_field = 'dog_breed_type'
+		  LEFT JOIN t_dictionary td2
+			ON tdi.dog_color_type = td2.dictionary_value
+			AND td2.dictionary_field = 'dog_color_type'
+		WHERE vr.vaccine_register_id = #{id}
+		LIMIT 0, 1
+	</select>
+	<select id="getDogInfoImm" resultType="Map">
+		select tdi.dog_id,tdo.dog_owner_id,ic.immune_card_num,tdo.dog_owner_name,tdo.dog_owner_phone
+			,oc.card_type,oc.card_num,tdi.dog_name
+			,td1.dictionary_describe breed,tdi.birth_time,tdi.dog_gender,tdi.dogAge
+			,td2.dictionary_describe color
+			from t_dog_info tdi
+			LEFT JOIN t_immune_card ic ON ic.dog_id=tdi.dog_id
+			LEFT JOIN t_dog_owner tdo ON tdo.dog_owner_id=tdi.dog_owner_id
+			LEFT JOIN t_dog_owner_card oc ON oc.dog_owner_id=tdo.dog_owner_id
+			LEFT JOIN t_dictionary td1 ON tdi.dog_breed_type=td1.dictionary_value
+			            AND td1.dictionary_field='dog_breed_type'
+			LEFT JOIN t_dictionary td2 ON tdi.dog_color_type=td2.dictionary_value
+			            AND td2.dictionary_field='dog_color_type'
+			where tdi.dog_id=#{id}
+			limit 0,1
+	</select>
+	<select id="getRefIdTVaccineCount" resultType="int">
+		SELECT COUNT(vr.vaccine_register_id)
+			FROM t_vaccine_register vr 
+			WHERE vr.ref_id=#{ref_id}
+	</select>
+	
+	<!-- <insert id="addTVaccineInjection" parameterType="Map" >
+		INSERT INTO t_vaccine_injection 
+	(vaccine_register_id,vaccine_injection_count,injection_date, 
+	fact_injection_date,next_injection_date,injection_status, 
+	operator_id,create_date,remarks)
+	VALUES(#{vaccine_register_id},1,'2012/1/1'
+	,#{fact_injection_date},#{next_injection_date},0
+	,#{operator_id},NOW(),#{remarks})
+  </insert> -->
+  <select id="getVaccineRegisterId" resultType="int">
+  	SELECT LAST_INSERT_ID()
+  </select>
+  <select id="getIdRefId" resultType="String">
+  	select vaccine_register_id from t_vaccine_register
+		where ref_id=#{ref_id} and vaccine_name=#{vaccine_name}
+  </select>
+  <select id="getDogOwnerID" resultType="Integer">
+  select dog_owner_id from t_dog_owner where dog_owner_phone=#{phone} limit 0,1 
+  </select>
+  <select id="getDogIds" resultType="Integer">
+  	select dog_id from t_dog_info where dog_owner_id=#{dogOwnerId} and dog_name=#{dogName} limit 0,1
+  </select>
+  <!--
+     <select id="getInjectionCount" resultType="int">
+  	select count(0) from t_vaccine_injection vi
+	    LEFT JOIN t_users us ON us.user_id=vi.operator_id
+		where vi.vaccine_register_id=#{id}
+  </select>
+   -->
+  <select id="getInjectionCount" resultType="int">
+  	select count(0) from t_vaccine_injection vi
+	    LEFT JOIN t_users us ON us.user_id=vi.operator_id
+		where vi.dog_id=#{id}
+  </select>
+  <!--根据免疫登记id得到免疫记录列表  -->
+	<!--
+	  <select id="getInjectionList" resultType="Map">
+      SELECT vi.fact_injection_date, vi.vaccine_name, vi.vaccine_producer,
+      us.`name`, vi.next_injection_date, vi.remarks,org.organization_name
+      FROM t_vaccine_injection vi
+      LEFT JOIN t_users us ON us.user_id=vi.operator_id
+      LEFT JOIN t_organization org ON org.organization_id=vi.vac_org
+		<where>
+			vi.vaccine_register_id=#{id} ORDER BY vi.create_date desc
+			<if test="start != null and size !=null ">
+				limit #{start},#{size}
+			</if>
+		</where>
+  </select>
+	-->
+	<select id="getInjectionList" resultType="Map">
+		SELECT vi.fact_injection_date, vi.vaccine_name, vi.vaccine_producer,
+		us.`name`, vi.next_injection_date, vi.remarks,org.organization_name
+		FROM t_vaccine_injection vi
+		LEFT JOIN t_users us ON us.user_id=vi.operator_id
+		LEFT JOIN t_organization org ON org.organization_id=vi.vac_org
+		<where>
+			vi.dog_id=#{id} ORDER BY vi.create_date desc
+			<if test="start != null and size !=null ">
+				limit #{start},#{size}
+			</if>
+		</where>
+	</select>
+  <!--根据狗id得到免疫记录列表总数量  -->
+  <select id="getInjectionListDogIDCount" resultType="int">
+  	select count(0)from t_vaccine_register vr
+		INNER JOIN t_vaccine_injection vi ON vi.vaccine_register_id=vr.vaccine_register_id
+		INNER JOIN t_dog_info di ON di.dog_id=vr.dog_id
+		LEFT JOIN t_users us ON us.user_id=vi.operator_id
+		where vr.dog_id=#{id} and vr.org_id=#{org_id}
+  </select>
+  <!--根据狗id得到免疫记录列表  -->
+  <select id="getInjectionListDogID" resultType="Map">
+  	select vi.fact_injection_date, vi.vaccine_name,vi.vaccine_producer,
+        us.`name`,vi.next_injection_date,vi.remarks
+		from t_vaccine_register vr
+		INNER JOIN t_vaccine_injection vi ON vi.vaccine_register_id=vr.vaccine_register_id
+		INNER JOIN t_dog_info di ON di.dog_id=vr.dog_id
+		LEFT JOIN t_users us ON us.user_id=vi.operator_id
+		where vr.dog_id=#{id} and vr.org_id=#{org_id}
+		limit #{start},#{pageSize}
+  </select>
+  <insert id="addDogOwner" parameterType="Map">
+  	insert into 
+		t_dog_owner(dog_owner_type,dog_owner_name,dog_owner_phone,sex,`status`,creation_time)
+		VALUES(0,#{dog_owner_name},#{dog_owner_phone},0,0,now())
+  </insert>
+  <insert id="addDogInfo" parameterType="Map">
+  		insert into t_dog_info(dog_owner_id,dog_breed_type,dog_color_type,dog_name,dog_gender
+			,dog_status,health_status,operation_id,creation_time,dogAge)
+			values(#{dog_owner_id},#{dog_breed_type},#{dog_color_type},#{dog_name},#{dog_gender}
+			,0,0,#{operation_id},NOW(),#{dogAge})
+  </insert>
+  <insert id="addTherapy" parameterType="Map">
+  	insert into t_therapy(org_id,physician_name,dog_id,dog_owner_id,operation_id
+			 ,symptom,diagnose,treatment_info,remarks,creation_time)
+			 value(#{org_id},#{physician_name},#{dog_id},#{dog_owner_id},#{operation_id}
+			 ,#{symptom},#{diagnose},#{treatment_info},#{remarks},NOW())
+  </insert>
+  <!--根据犬主电话或者姓名得到狗集合数量  -->
+  <select id="getDogInfoPhoneCount" resultType="int">
+  	select count(0) from t_dog_info di
+		LEFT JOIN t_dog_owner tdo ON di.dog_owner_id=tdo.dog_owner_id
+		LEFT JOIN t_dictionary td1 ON di.dog_breed_type=td1.dictionary_value 
+					            AND td1.dictionary_field='dog_breed_type'
+		LEFT JOIN t_dictionary td2 ON di.dog_color_type=td2.dictionary_value 
+					            AND td2.dictionary_field='dog_color_type'
+		where tdo.dog_owner_name=#{input} OR tdo.dog_owner_phone=#{input}
+  </select>
+  <!--根据犬主电话或者姓名得到狗集合  -->
+  <select id="getDogInfoPhone" resultType="Map">
+  	select di.dog_id,ic.immune_card_num,di.dog_name,td1.dictionary_describe breed,di.birth_time
+		,di.dog_gender,td2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone
+		from t_dog_info di
+		LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+		LEFT JOIN t_dog_owner tdo ON di.dog_owner_id=tdo.dog_owner_id
+		LEFT JOIN t_dictionary td1 ON di.dog_breed_type=td1.dictionary_value 
+					            AND td1.dictionary_field='dog_breed_type'
+		LEFT JOIN t_dictionary td2 ON di.dog_color_type=td2.dictionary_value 
+					            AND td2.dictionary_field='dog_color_type'
+		where tdo.dog_owner_name=#{input} OR tdo.dog_owner_phone=#{input}
+		
+		limit #{start},#{pageSize}
+  </select>
+  <!--查询今天到3天内的喂药通知  -->
+  <select id="getDrugTZ" resultType="Map">
+  	SELECT
+  		dr.drug_record_id,tdo.dog_owner_id,tdo.dog_owner_name,tdo.dog_owner_phone,
+        di.dog_name,dr.next_drug_date,ton.organization_name,dr.drug_name    
+    FROM
+        t_drug_record dr     
+    INNER JOIN
+        t_vaccine_register dg 
+            ON dg.vaccine_register_id=dr.vaccine_register_id     
+    INNER JOIN
+        t_dog_info di 
+            ON di.dog_id=dg.dog_id     
+    INNER JOIN
+        t_dog_owner tdo 
+            ON tdo.dog_owner_id=di.dog_owner_id     
+    INNER JOIN
+        t_organization ton ON ton.organization_id=dg.org_id     
+    where dr.next_drug_date&lt;=timestampadd(day, 3, now()) 
+				and dr.next_drug_date>=NOW() and dr.send=0
+  </select>
+  <!--查询今天到3天内的下次免疫通知  -->
+  <select id="getInjectionTZ" resultType="Map">
+  	SELECT dr.vaccine_injection_id,tdo.dog_owner_id,tdo.dog_owner_name,tdo.dog_owner_phone,
+        di.dog_name,dr.next_injection_date,ton.organization_name,dr.vaccine_name    
+    FROM
+        t_vaccine_injection dr     
+    INNER JOIN
+        t_vaccine_register dg 
+            ON dg.vaccine_register_id=dr.vaccine_register_id     
+    INNER JOIN
+        t_dog_info di 
+            ON di.dog_id=dg.dog_id     
+    INNER JOIN
+        t_dog_owner tdo 
+            ON tdo.dog_owner_id=di.dog_owner_id     
+    INNER JOIN
+        t_organization ton ON ton.organization_id=dg.org_id     
+    where dr.next_injection_date&lt;=timestampadd(day, 3, now()) 
+				and dr.next_injection_date>=NOW() and dr.send=0
+  </select>
+  <select id="getVaccineRegisterIds" resultType="Integer">
+  	select vr.vaccine_register_id
+		from t_vaccine_register vr
+		where vr.dog_id=#{id} and org_id=#{org_id} limit 0,1
+  </select>
+  <!--添加消息通知一次添加多条  -->
+  <insert id="addNotification">
+  	insert into t_notification(notif_type,notif_sender_id,notif_receiver_id
+  		,notif_title,noti_content,task_id
+  		,`status`,creation_time)VALUES
+	<foreach collection="list" item="item" index="index" separator=",">
+		(2,-1,#{item.notif_receiver_id}
+		,#{item.notif_title},#{item.noti_content},0,0,NOW())
+	</foreach>
+  </insert>
+  <!--修改喂药发送状态为1  -->
+  <update id="updDrugRecord">
+  	update t_drug_record set send=1 where drug_record_id in
+  	<foreach collection="list" index="index" item="item" 
+        separator="," open="(" close=")">
+        #{item}
+    </foreach>
+  </update>
+  <!--修改免疫发送状态为1  -->
+  <update id="updInjection">
+  	update t_vaccine_injection set send=1 where vaccine_injection_id in
+  	<foreach collection="list" index="index" item="item" 
+        separator="," open="(" close=")">
+        #{item}
+    </foreach>
+  </update>
+  <!--修改密码  -->
+  <update id="updPwd" parameterType="Map">
+  	UPDATE t_users set 
+  	`password`=#{newPwd} where user_id=#{id} and username=#{name}
+  </update>
+  <!--修改密码前判断原密码是否正确（根据原用户id，用户名，密码返回数量）  -->
+  <select id="boolPwd" parameterType="map" resultType="int">
+  	select count(0)from t_users
+		where user_id=#{id} and username=#{name} and `password`=#{rawPwd} limit 0,1
+  </select>
+  <!--根据狗id和机构id得到病历记录总数  -->
+  <select id="getTherapeListCount" resultType="int" parameterType="map">
+  	select count(0) from t_therapy ty where ty.dog_id=#{dogId} and ty.org_id=#{orgId}
+  </select>
+  <!--根据狗id和机构id得到病历记录  -->
+  <select id="getTherapeList" resultType="map" parameterType="map">
+  	select ty.therapy_id,ty.creation_time,ty.symptom,ty.diagnose,ty.treatment_info,ty.remarks
+		from t_therapy ty where ty.dog_id=#{dogId} and ty.org_id=#{orgId}
+		ORDER BY ty.creation_time desc limit #{start},#{size}
+  </select>
+  <select id="getDogOwner" resultType="Map">
+  	select tdo.dog_owner_id,tdo.dog_owner_name,tdo.dog_owner_phone,oc.card_num
+		from t_dog_owner tdo
+		LEFT JOIN t_dog_owner_card oc on oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+		where tdo.dog_owner_phone=#{phone} limit 0,1
+  </select>
+  <select id="getDog" resultType="Map">
+  	select tdo.dog_id,tdo.dog_name,dy1.dictionary_describe breed
+			,dy2.dictionary_describe color,tdo.dog_gender
+	from t_dog_info tdo
+		LEFT JOIN t_dictionary dy1              
+            ON dy1.dictionary_field='dog_breed_type'
+            AND dy1.dictionary_value=tdo.dog_breed_type
+		LEFT JOIN t_dictionary dy2             
+            ON dy2.dictionary_field='dog_color_type' 
+            AND dy2.dictionary_value=tdo.dog_color_type
+        where tdo.dog_owner_id=#{id} and tdo.dog_name=#{dogName}
+  </select>
+  <!--添加身份证  -->
+  <insert id="addDogOwnerCard" parameterType="Map">
+  	INSERT t_dog_owner_card(dog_owner_id,card_type,card_num,creation_time)
+  	VALUE(#{dog_owner_id},0,#{card_num},NOW())
+  </insert>
+  <!--根据病历记录id得到病历记录详情  -->
+  <select id="getTherapes" resultType="Map">
+  	select th.therapy_id,org_id,th.physician_name,th.dog_id,th.dog_owner_id
+		,th.operation_id,th.symptom,th.diagnose,th.treatment_info,th.remarks
+		,th.creation_time from t_therapy th where th.therapy_id=#{id}
+  </select>
+  <!--根据id和图片类型14得到图片集合  -->
+  <select id="getTherapeLists" resultType="Map">
+  	select ir.image_ref_id,ir.image_id,im.image_url
+  		,im.image_ext,im.thumbnail_url from t_images_ref ir
+			LEFT JOIN t_images im on im.image_id=ir.image_id
+			where ir.ref_id=#{id} AND ir.target_type=14
+  </select>
+  <select id="getHospitalList" resultType="Map">
+  	select o.organization_id organizationId,o.organization_name organizationName,
+        o.organization_capital organizationCapital,o.register_number registerNumber,
+        o.credit_code creditCode,o.establish_date establishDate,o.fixedPhone fixedPhone
+        ,td.district_name province,t.district_name ownedCity,d.district_name district,
+        o.phone,o.person_liable personLiable,o.org_type orgType,
+        o.scope_of_operation scopeOfOperation,o.longitude,o.latitude,o.address,
+        o.`status`,o.fail_reason failReason,o.creation_time creationTime,o.fixedPhone fixedPhone   
+    from t_organization o   
+    left join t_district td on o.province_id = td.district_id   
+    left join t_district d on o.district_id = d.district_id   
+    left join t_district t on o.owned_city_id = t.district_id
+	  where o.`status`=1
+	  and o.org_type=2
+    <!-- where o.organization_id != 17 -->
+  </select>
+	<select id="getHealthConditionList" resultType="map">
+		select*from t_health_condition where 1=1
+			<if test="dogId!=null and dogId!=''">
+				and dog_id=#{dogId}/*10101685*/
+			</if>
+	</select>
+	<!--//根据狗id得到狗，犬主，信息（喂药）-->
+	<select id="getDogDowOwner" resultType="map">
+		select tdi.dog_id,tdo.dog_owner_id,ic.immune_card_num
+	,tdo.dog_owner_name,tdo.dog_owner_phone,tdo.sex tdo_sex,tdo.birth_date tdo_birth_date,tdo.address tdo_address
+	,oc.card_type,oc.card_num,tdi.dog_name
+	,td1.dictionary_describe breed,tdi.birth_time,tdi.dog_gender,tdi.dogAge
+	,td2.dictionary_describe color
+	,tis2.image_url image_url2,tis10.image_url image_url10
+	from t_dog_info tdi
+	LEFT JOIN t_immune_card ic ON ic.dog_id=tdi.dog_id
+	LEFT JOIN t_dog_owner tdo ON tdo.dog_owner_id=tdi.dog_owner_id
+	LEFT JOIN t_dog_owner_card oc ON oc.dog_owner_id=tdo.dog_owner_id
+	LEFT JOIN t_dictionary td1 ON tdi.dog_breed_type=td1.dictionary_value
+	AND td1.dictionary_field='dog_breed_type'
+	LEFT JOIN t_dictionary td2 ON tdi.dog_color_type=td2.dictionary_value
+	AND td2.dictionary_field='dog_color_type'
+	LEFT JOIN t_images_ref ir on ir.ref_id=tdi.dog_id
+	LEFT JOIN t_images tis2 on tis2.image_id=ir.image_id  and ir.target_type=2
+	LEFT JOIN t_images tis10 on tis10.image_id=ir.image_id  and ir.target_type=2
+	where tdi.dog_id=#{id}
+	limit 0,1
+	</select>
+	<!--根据犬主姓名/免疫证号/电话号码精确得到犬，犬主信息总数量-->
+	<select id="getDogListCount" resultType="int">
+		select count(0)
+			from t_dog_info di
+			LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+				LEFT JOIN t_dictionary dy1
+				ON dy1.dictionary_field='dog_breed_type'
+				AND dy1.dictionary_value=di.dog_breed_type
+				LEFT JOIN t_dictionary dy2
+				ON dy2.dictionary_field='dog_color_type'
+				AND dy2.dictionary_value=di.dog_color_type
+				LEFT JOIN t_dog_owner tdo
+				ON tdo.dog_owner_id=di.dog_owner_id
+				LEFT JOIN t_dog_owner_card oc
+				ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+		<if test="input!=null and input!=''">
+			and ic.immune_card_num=#{input}
+			or tdo.dog_owner_name=#{input} or tdo.dog_owner_phone=#{input}
+		</if>
+	</select>
+	<!--根据犬主姓名/免疫证号/电话号码精确得到犬，犬主信息-->
+	<select id="getDogList" resultType="map">
+		select di.dog_id,ic.seq_id,ic.immune_card_num,di.dog_name
+		,dy1.dictionary_describe breed,di.dog_gender,di.birth_time,di.dogAge
+		,dy2.dictionary_describe color,tdo.dog_owner_name,tdo.dog_owner_phone
+			from t_dog_info di
+			LEFT JOIN t_immune_card ic ON ic.dog_id=di.dog_id
+				LEFT JOIN t_dictionary dy1
+				ON dy1.dictionary_field='dog_breed_type'
+				AND dy1.dictionary_value=di.dog_breed_type
+				LEFT JOIN t_dictionary dy2
+				ON dy2.dictionary_field='dog_color_type'
+				AND dy2.dictionary_value=di.dog_color_type
+				LEFT JOIN t_dog_owner tdo
+				ON tdo.dog_owner_id=di.dog_owner_id
+				LEFT JOIN t_dog_owner_card oc
+				ON oc.dog_owner_id=tdo.dog_owner_id and oc.card_type=0
+			where 1=1
+		<if test="input!=null and input!=''">
+			and ic.immune_card_num=#{input}
+			or tdo.dog_owner_name=#{input} or tdo.dog_owner_phone=#{input}
+		</if>
+		<if test="start != null and size !=null ">
+			limit #{start},#{size}
+		</if>
+	</select>
+</mapper>

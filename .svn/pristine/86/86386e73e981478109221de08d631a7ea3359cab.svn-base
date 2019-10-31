@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--活动轨迹-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <!--bootstrap table -->
+
+    <!--<link href="../../../static/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">-->
+    <script type="text/javascript" src="../../bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="dogTrackEvents.js"></script>
+    <style>
+        .table thead {
+            background: rgb(65, 199, 214);
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel panel-default" style="width: 1200px;">
+    <table id="dogTrackEventsTable"></table>
+</div>
+</body>
+</html>

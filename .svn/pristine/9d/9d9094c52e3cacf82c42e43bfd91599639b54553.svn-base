@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--犬证办理-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <!--<script type="text/javascript" src="../../../static/js/common.js"></script>-->
+    <!--&lt;!&ndash;<script type="text/javascript" src="../js/bootstrap.min.js"></script>&ndash;&gt;-->
+    <!--<script type="text/javascript" src="../../../static/js/cookie_util.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <link href="../../../static/views/device_manager/device_manager-active.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/views/dogCard/dogCardHandle.js"></script>
+
+    <style>
+        /*table tr:nth-child(even){*/
+        /*background: #ccc;*/
+        /*}*/
+        .table thead {
+            background: rgb(65, 199, 214);
+        }
+
+
+        #deviceManagerActive {
+            border: solid 1px #ccc;
+            width: 100%;
+        }
+
+        #deviceManagerActive thead tr {
+            height: 50px;
+            background: rgb(65, 199, 214);
+        }
+
+        #deviceManagerActive td {
+            text-align: center;
+        }
+
+
+
+        .search-container {
+        margin: 42px 16px 42px 0;
+        position: relative;
+        width: 313px;
+        float: right;
+        }
+
+        .search-icon {
+        display: inline-block;
+        height: 35px;
+        width: 35px;
+        background: url(../../../static/assets/img/seach-icon.png) no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        left: -29px;
+        top: 8px;
+        }
+
+        .search-container::after {
+        content: "";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+        }
+
+        .form-input {
+        border-radius: 50px;
+        width: 350px;
+        margin-right: 10px;
+        border: solid 1px #A3C3FA;
+        height: 46px;
+        text-indent: 4em;
+        float: right;
+        transition: text-indent 1s;
+        -moz-transition: text-indent 1s; /* Firefox 4 */
+        -webkit-transition: text-indent 1s; /* Safari 和 Chrome */
+        -o-transition: text-indent 1s;
+        }
+
+        input:focus {
+        outline: none !important;
+        border: 1px solid red;
+        box-shadow: 0 0 10px #719ECE;
+        }
+
+
+
+        #deviceManagerActive input {
+            height: 25px;
+            width: 25px;
+        }
+        #deviceManagerActive input:hover {
+            cursor: pointer;
+        }
+
+        .top-tabbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 16px;
+            margin: 10px 0 20px 0;
+        }
+
+        .top-tabbar > div {
+            width: 50%;
+            color: #9E9E9E;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 22px;
+        }
+        .top-tabbar > div:hover{
+            background-color: rgb(238,238,238);
+        }
+
+        .top-tabbar > div:hover, .disableds > span:hover {
+            cursor: pointer;
+        }
+        .disa-icon{
+            background: url("../../../static/views/device_manager/image/add-icon.png")no-repeat;
+            background-size: 90% 100%;
+        }
+        .con-icons>div>div>span:last-of-type,.msg-text,.disa-text{
+            color: #51CAD4;
+            width: 80px;
+            margin-left: 10px;
+            /*padding-left: 10px;*/
+            /*padding-right: 10px;*/
+        }
+        .con-icons>div{
+            width: 138px;
+            height: 45px;
+            font-size: 17px;
+            line-height: 45px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="width: 90%;margin-left: -10px">
+    <div id="myTabContent" class="tab-content">
+        <!--<div class="tab-pane fade in active" id="dogCard" style="margin-top: -40px">-->
+            <!--<div  class="row" style="margin-top: 20px">-->
+                <!--<div class="col-sm-6">-->
+                    <!--<span class="glyphicon glyphicon-plus" style="color: rgb(67, 200, 214)" onclick="dogCardHandle();">犬证办理</span>-->
+                <!--</div>-->
+                <!--<div class="col-sm-6">-->
+                    <!--<div class="input-group">-->
+                        <!--<input id="inpu" type="text"  placeholder="犬证号/免疫证号" class="form-control">-->
+                        <!--<span id="search11" class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="row" style="margin-top: -35px">
+                <input type="file" class="uploadfile" name="file" style="display: none;">
+                <!--<div class="col-sm-4 con-icons ">-->
+                <div class="container con-icons">
+                    <div class="col-sm-3 disableds " onclick="dogCardHandle();">
+                        <span class="col-sm-4 disa-icon"></span>
+                        <span class="col-sm-5 col-sm-offset-1 disa-text">犬证办理 </span>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <span id="search11" class="search-icon"></span>
+                    <input id="inpu" class="form-input" type="text" placeholder="犬证号/免疫证号...">
+                </div>
+            </div>
+
+
+
+            <div style="margin-top: -35px">
+                <table id="dogCardTable"></table>
+            </div>
+        <!--</div>-->
+        <!--<div class="tab-pane fade" id="jmeter">-->
+        <!--<p>jMeter 是一款开源的测试软件。它是 100% 纯 Java 应用程序，用于负载和性能测试。</p>-->
+        <!--</div>-->
+        <!--<div class="tab-pane fade" id="ejb">-->
+        <!--<p>Enterprise Java Beans（EJB）是一个创建高度可扩展性和强大企业级应用程序的开发架构，部署在兼容应用程序服务器（比如 JBOSS、Web Logic 等）的 J2EE 上。-->
+        <!--</p>-->
+        <!--</div>-->
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <!-- <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script src="../js/public.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../bootstrap/js/bootstrap-treeview.js"></script>
+    <script src="../js/treeDate.js"></script>
+    <script src="../js/manageRole.js"></script> -->
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <!-- 引入 bootstrap -->
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-treeview.js"></script>
+    <script src="../../../static/js/treeDate.js"></script>
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-treeview.css" rel="stylesheet">
+	<script type="text/javascript" src="../../../static/views/Role/manageRole.js"></script>    
+</head>
+<body>
+<div id="tablelist">
+    <div style="font-weight: bold">角色管理</div>
+    <div style="height: 20px"></div>
+    <div id="list1">
+        <div>
+            <button class="buttonn hsbutton" id="xzjs" onclick="openRole();" style="width: 75px">新增</button>
+            <button class="buttonn hsbutton" id="scjs" onclick="deleteRole();" style="width: 75px">删除</button>
+            <!--<button class="buttonn" style="width: 75px">菜单授权</button>-->
+            <!--<button class="buttonn" style="width: 75px">操作授权</button>-->
+            <!--<div style="margin: -31px 0px 0px 84%">-->
+                <!--<input id="thiskeyword" class="input-medium search-query" type="text" placeholder="请输入角色编号或名称" style="height:30px;border:1px solid #999999;border-radius:10px;"/>-->
+                <!--<button class="buttonn" type="submit" onclick="findInfoByKeyWord()">查找</button>-->
+            <!--</div>-->
+        </div>
+        <div style="height: 10px;"></div>
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th><input onclick="fan();" type="checkbox"></th>
+                    <th>角色名称</th>
+                    <th>角色描述</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="tlist1">
+                </tbody>
+            </table>
+        </div>
+        <!--<div style="text-align: center;">-->
+            <!--<ul class="pagination">-->
+                <!--<li>-->
+                    <!--<a href="javascript:indexPage();">首页</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="javascript:upPagenum();">上一页</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<span><em id="nowpagenum">1</em>/<em id="nowpagecount">23</em></span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="javascript:nextPagenum();">下一页</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="javascript:endPagenum();">末页</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<div style="color: #1a91d0;margin: -52px 0px 0px 30%"><em>总计：</em><em id="totalcount">0</em><em>&nbsp;条</em></div>-->
+        <!--</div>-->
+    </div>
+</div>
+<!--悬浮遮挡背景div-->
+<div id="suspension" style="background-color: #C7C7C7;width: 100%;height: 100%;position:fixed; top: 10px; left: 10px; opacity:0.5;display: none"></div>
+<div id="popupWindow" style="background-color: #FFFFFF;position:absolute; top: 10px; left: 10px; width: 30%;height: 300px;margin: 3% 0 0 35%;display: none">
+    <div>
+        <div style="height: 10px;width: 100%;background-color:#1a91d0"></div>
+        <div style="height: 30px;width: 100%;background-color:#1a91d0"><span style="margin: 10px 10px 10px 10px;font-size: 16px;color: #ffffff"><b id="insertt">添加角色</b></span></div>
+        <div style="height: 10px"></div>
+    </div>
+    <div>
+        <table class="tableee1" style="width: 100%;">
+            <tbody>
+            <tr>
+                <td class="td1">角色名称</td>
+                <td class="td2"><input id="namee" type="text"></td>
+            </tr>
+            <tr>
+                <td class="td1">角色描述</td>
+                <td class="td2"><input id="describe" type="text"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top: 30px;margin-left: 36%"><button class="buttonn1 insert" onclick="insertRole();">确定</button><button class="buttonn1 update" onclick="saveUpdate();" style="display: none">确定</button>&nbsp;&nbsp;<button id="return" class="buttonn1 check" style="display: none">返回</button>&nbsp;&nbsp;<button id="cancel" class="buttonn1 insert update">取消</button></div>
+</div>
+<div id="popupWindow1" style="background-color: #FFFFFF;position:absolute; top: 10px; left: 10px; width: 25%;height: auto;margin: 3% 0 0 33%;display: none">
+    <div class="tablee1" style="border-width:0px 0px 0px 0px;">
+        <div style="height: 10px;width: 100%;background-color:#1a91d0"></div>
+        <div style="height: 30px;width: 100%;background-color:#1a91d0"><span style="margin: 10px 10px 10px 10px;font-size: 16px;color: #ffffff"><b>菜单授权</b></span></div>
+        <div style="height: 10px"></div>
+        <!--<p style="margin-left: 20px"><span style="width: 30px" onclick="future();"><b>全选</b></span>&nbsp;<span style="width: 30px" onclick="fan();"><b>反选</b></span>&nbsp;<span style="width: 30px" onclick="dontChoose();"><b>不选</b></span></p>-->
+        <p style="margin-left: 10px"><b>角色：</b><span id="rol"></span></p>
+        <div id="tree" style="margin-left: 50px;line-height: 1px;width: 75%">
+        </div>
+    </div>
+    <div>
+        <div></div>
+    </div>
+    <div style="margin-top: 30px;margin-left: 30%"><button class="buttonn1" onclick="savePermissions();">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;<button id="cancel1" class="buttonn1">取消</button></div>
+    <div style="height: 10px"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>犬只收容</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+	<script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/search-input.css">
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    
+    <script type="text/javascript" src="../../../static/js/YLUtils.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dog/canineCollection.js"></script>
+     <!--日期插件-->
+    <link rel="stylesheet" href="../../../static/css/dcalendar.picker.css"/>
+    <script type="text/javascript" src="../../../static/js/dcalendar.picker.js"></script>
+    <script type="text/javascript">
+        $('#rlsj').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });
+        $('#lysj').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });
+        $('#clsj').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });
+    </script>
+    
+    <style>
+        .myactive .active{
+            background: red;
+        }
+        .myactive .active:hover{
+            background: rebeccapurple;
+        }
+        /*ul li {*/
+            /*margin-right: 100px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<!--//nav-pills nav-stacked-->
+    <div class="container-fluid" style="width: 1200px" id="master">
+        <div class="row" style="margin-top: 20px">
+            <div class="col-sm-12" >
+                <div style="">
+                    <ul id="myTab" class="nav navbar-nav ">
+                        <li class="active">
+                            <a href="#tab1" data-toggle="tab" onclick="initTable1();">收容中</a>
+                        </li>
+                        <li>
+                            <a href="#tab2" data-toggle="tab" onclick="initTable2();">发布中</a>
+                        </li>
+                        <li>
+                            <a href="#tab3" data-toggle="tab" onclick="initTable3();">待确认领养</a>
+                        </li>
+                        <li>
+                            <a href="#tab4" data-toggle="tab" onclick="initTable4();">已认领</a>
+                        </li>
+                        <li>
+                            <a href="#tab5" data-toggle="tab" onclick="initTable5();">已领养</a>
+                        </li>
+                        <li>
+                            <a href="#tab6" data-toggle="tab" onclick="initTable6();">已处理</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-bottom:0px;">
+            <div class="col-sm-12" style="position:relative;">
+                <div id="myTabContent" class="tab-content" style="margin-top: 10px;">
+                    <div class="tab-pane fade active in " id="tab1">
+                        <div class="" id="" style="margin-bottom: 20px;">
+                            <a href="#" class="text-click" style="cursor: pointer;line-height: 130px;">
+                                <span class="glyphicon glyphicon-plus-sign" style="color: #1fc6d8" id="srdj">流浪犬收容登记</span>
+                                <span class="glyphicon glyphicon-cloud" style="color: #1fc6d8;margin-left: 40px;" id="fblypt">发布到领养平台</span>
+                            </a>
+                            <!--<span class="input-group " style="width: 322px;position: absolute;top: 25px;right: 32px;" id="so1">-->
+                            <span class="input-group " id="so1">
+                                 <div class="search-container ">
+                                    <span class="search-icon" id="ss1" ></span>
+                                    <input class="form-input " type="text" placeholder="犬只编号/性别/品种/收容原因">
+                                </div>
+                                <!--<input type="text"  placeholder="犬只编号/性别/品种/收容原因" class="form-control">-->
+                                <!--<span class="input-group-addon" id="ss1"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                            </span>
+                        </div>
+                        <div>
+                            <table id="dogFileTable1" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab2">
+                        <div class=""  style="margin-bottom: 20px;">
+                            <a href="#" style="cursor: pointer;line-height: 130px;">
+                                <span class="glyphicon glyphicon-repeat" style="color: #1fc6d8" id="plch">撤回到收容库</span>
+                            </a>
+                            <span class="input-group "  id="so2">
+                                <div class="search-container ">
+                                    <span class="search-icon" id="ss2" ></span>
+                                    <input class="form-input " type="text" placeholder="犬只编号/性别/品种/收容原因"">
+                                </div>
+                                <!--<input type="text"  placeholder="犬只编号/性别/品种/收容原因" class="form-control">-->
+                                <!--<span class="input-group-addon" id="ss2"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                            </span>
+                        </div>
+                        <div>
+                            <table id="dogFileTable2" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab3">
+                        <div class=""  style="margin-bottom: 20px;">
+                            <a href="#" style="cursor: pointer;line-height: 130px;">
+                                <span class="glyphicon glyphicon-repeat" style="color: #1fc6d8" id="plch1">撤回到收容库</span>
+                                <span class="glyphicon glyphicon-refresh" style="color: #1fc6d8;margin-left: 40px;" id="cxfb">重新发布</span>
+                            </a>
+                            <span class="input-group "  id="so3">
+                                <!--<input type="text"  placeholder="犬只编号/性别/品种/收容原因" class="form-control">-->
+                                <!--<span class="input-group-addon" id="ss3"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                                 <div class="search-container ">
+                                    <span class="search-icon" id="ss3" ></span>
+                                    <input class="form-input " type="text" placeholder="犬只编号/性别/品种/收容原因"">
+                                </div>
+                            </span>
+                        </div>
+                        <div>
+                            <table id="dogFileTable3" class="table table-striped table-bordered"></table>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="tab4">
+                        <div class=""  style="margin-bottom: 20px;">
+                            <span class="input-group " id="so4">
+                                <!--<input type="text"  placeholder="犬只编号/性别/品种/收容原因" class="form-control">-->
+                                <!--<span class="input-group-addon" id="ss4"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                                <div class="search-container ">
+                                    <span class="search-icon" id="ss4" ></span>
+                                    <input class="form-input " type="text" placeholder="犬只编号/性别/品种/收容原因"">
+                                </div>
+                            </span>
+                        </div>
+                        <div>
+                            <table id="dogFileTable4" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab5">
+                        <div class=""  style="margin-bottom: 20px;">
+                            <span class="input-group "  id="so5">
+                                <!--<input type="text"  placeholder="犬只编号/性别/品种" class="form-control">-->
+                                <!--<span class="input-group-addon" id="ss5"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                                <div class="search-container ">
+                                    <span class="search-icon" id="ss5" ></span>
+                                    <input class="form-input " type="text" placeholder="犬只编号/性别/品种">
+                                </div>
+                            </span>
+                        </div>
+                        <div>
+                            <table id="dogFileTable5" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab6">
+                        <div class=""  style="margin-bottom: 20px;">
+                            <span class="input-group " id="so6">
+                                <!--<input type="text"  placeholder="犬只编号/性别/品种" class="form-control">-->
+                                <!--<span class="input-group-addon" id="ss6"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                                <div class="search-container ">
+                                    <span class="search-icon" id="ss6" ></span>
+                                    <input class="form-input " type="text" placeholder="犬只编号/性别/品种">
+                                </div>
+                            </span>
+                        </div>
+                        <div>
+                            <table id="dogFileTable6" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-sm-3" id="so" style="position: absolute;right: 280px">-->
+                <!--<div class="input-group " style="position: relative;right: -30px;">-->
+                    <!--<input type="text"  placeholder="犬只编号/性别/品种/收容原因" class="form-control">-->
+                    <!--<span class="input-group-addon" id="ss"><a href="#"><i class="glyphicon glyphicon-search"> <span >搜索   </span></i></a></span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div style="height:50px"></div>-->
+            <!--<table id="dogFileTable" class="table table-striped table-bordered"></table>-->
+        </div>
+</div>
+    
+	<!-- 认领登记 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 400px;height: 480px">
+                <div class="modal-header " style="background-color: rgb(65, 199, 219);height:36px;line-height:7px">
+                    &nbsp&nbsp认领登记
+                </div>
+                <div class="modal-body">
+                   <div class="row" style="margin-left: 20px;margin-top:20px">
+                      <label>认领时间:</label>
+                       <input style="width: 250px;" id="rlsj">
+                   </div>
+                    <div class="row" style="margin-left: 34px;margin-top: 15px">
+                        <label>认领人:</label>
+                       <input style="width: 250px;" id="rlr">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>证件类型:</label>
+                       <select style="width:250px" id="rlzjlx">
+                       		<option value="0">身份证</option>
+                       		<option value="1">房产证</option>
+                       </select>
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>证件号码:</label>
+                       <input style="width: 250px;" id="rlzjhm">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>联系电话:</label>
+                       <input style="width: 250px;" id="rllxdh">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>养犬地址:</label>
+                       <input style="width: 250px;" id="rlyqdz">
+                    </div>
+                    <div class="row" style="margin-left: 48px;margin-top: 15px">
+                        <label>备注:</label>
+                        <input style="width: 250px;" id=rlbz>
+                        <!-- <textarea id="bz" class="form-control" id="deblock_udid" name="deblock_udid" rows="16" style="min-width:60%;max-width: 97%;height: 150px;margin-left: 10px;"></textarea> -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <div style="margin: auto;position: relative;  top: 0; left: 0; bottom: 0; right: 0;line-height: 100px;text-align: center">
+                            <span style="margin-right: 20px;display: inline">
+                                <button type="button" class="btn btn-primary" id="save1" data-dismiss="modal">确定</button>
+                            </span>
+                            <span style="display: inline">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+       
+       
+       <!-- 领养登记 -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 400px;height: 480px">
+                <div class="modal-header " style="background-color: rgb(65, 199, 219);height:36px;line-height:7px">
+                    &nbsp&nbsp领养登记
+                </div>
+                <div class="modal-body">
+                   <div class="row" style="margin-left: 20px;margin-top:20px">
+                      <label>领养时间:</label>
+                       <input style="width: 250px;" id="lysj">
+                   </div>
+                    <div class="row" style="margin-left: 34px;margin-top: 15px">
+                        <label>领养人:</label>
+                       <input style="width: 250px;" id="lyr">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>证件类型:</label>
+                       <select style="width:250px" id="lyzjlx">
+                       		<option value="0">身份证</option>
+                       		<option value="1">房产证</option>
+                       </select>
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>证件号码:</label>
+                       <input style="width: 250px;" id="lyzjhm">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>联系电话:</label>
+                       <input style="width: 250px;" id="lylxdh">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>养犬地址:</label>
+                       <input style="width: 250px;" id="lyyqdz">
+                    </div>
+                    <div class="row" style="margin-left: 48px;margin-top: 15px">
+                        <label>备注:</label>
+                        <input style="width: 250px;" id="lybz">
+                        <!-- <textarea id="bz" class="form-control" id="deblock_udid" name="deblock_udid" rows="16" style="min-width:60%;max-width: 97%;height: 150px;margin-left: 10px;"></textarea> -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <div style="margin: auto;position: relative;  top: 0; left: 0; bottom: 0; right: 0;line-height: 100px;text-align: center">
+                            <span style="margin-right: 20px;display: inline">
+                                <button type="button" class="btn btn-primary" id="save2" data-dismiss="modal">确定</button>
+                            </span>
+                            <span style="display: inline">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+       <!-- 处理登记 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 400px;height: 350px">
+                <div class="modal-header " style="background-color: rgb(65, 199, 219);height:36px;line-height:7px">
+                    &nbsp&nbsp处理登记
+                </div>
+                <div class="modal-body">
+                   <div class="row" style="margin-left: 20px;margin-top:20px">
+                      <label>处理时间:</label>
+                       <input style="width: 250px;" id="clsj">
+                   </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>处理方式:</label>
+                       <input style="width: 250px;" id="clfs">
+                    </div>
+                    <div class="row" style="margin-left: 20px;margin-top: 15px">
+                        <label>处理原因:</label>
+                       <input style="width: 250px;" id="clyl">
+                    </div>
+                    <div class="row" style="margin-left: 48px;margin-top: 15px">
+                        <label>备注:</label>
+                        <input style="width: 250px;" id="clbz">
+                        <!-- <textarea id="bz" class="form-control" id="deblock_udid" name="deblock_udid" rows="16" style="min-width:60%;max-width: 97%;height: 150px;margin-left: 10px;"></textarea> -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <div style="margin: auto;position: relative;  top: 0; left: 0; bottom: 0; right: 0;line-height: 100px;text-align: center">
+                            <span style="margin-right: 20px;display: inline">
+                                <button type="button" class="btn btn-primary" id="save3" data-dismiss="modal">确定</button>
+                            </span>
+                            <span style="display: inline">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <!-- 确认领养 -->
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 800px;height: 350px">
+                <div class="modal-header " style="background-color: rgb(65, 199, 219);height:36px;line-height:7px">
+                    &nbsp&nbsp确认领养
+                </div>
+                <div class="modal-body">
+          			<div class="panel-body" style="padding-bottom:0px;">
+	       				<table id="sureAdoptionTable" class="table table-striped table-bordered"></table>
+					</div>
+                </div>
+                <div class="modal-footer">
+                        <div style="margin: auto;position: relative;  top: 0; left: 0; bottom: 0; right: 0;line-height: 100px;text-align: center">
+                            <span style="margin-right: 20px;display: inline">
+                                <button type="button" class="btn btn-primary" id="save7" >确定</button>
+                            </span>
+                            <span style="display: inline">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- 犬只收容详情 -->
+    <div class="container-fluid" style="width: 970px;display:none" id="detail">
+        <div style="z-index: 14;">
+            <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label" style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);"><div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+                <div style="width: auto; height: auto; text-align: left;">
+                    <div style="width: auto; height: auto;">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                            犬只收容&gt;&gt;查看详情
+                        </label>
+                    </div>
+                </div>
+            </div>
+                <div style="display: none;"></div>
+            </div>
+        </div>
+        <div class="panel panel-default" style="margin-top: 20px">
+            <div class="row" style="margin-right: 20px;margin-left: 20px;margin-top: 10px">
+                <div style="background-color: rgb(65, 199, 219);height: 27px;line-height: 24px">&nbsp&nbsp&nbsp&nbsp犬只信息</div>
+                <div class="col-sm-10" style="height: 100%">
+                        <div style="margin-top: 20px">
+                            <span style="margin-left: 10px">
+                                <laber>犬只编号:</laber>
+                                <input  type="text" id="qzbh">
+                            </span>
+                            <span  style="margin-left: 210px">
+                                <laber>犬舍编号:</laber>
+                                <input  type="text" id="qsbh">
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px">
+                            <span style="margin-left: 10px;">
+                                <laber>标示牌号:</laber>
+                                <input  type="text" id="bsph">
+                            </span>
+                            <span style="margin-left: 210px;">
+                                <laber>犬只名称:</laber>
+                                <input  type="text" id="qzmc">
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px">
+                            <span style="margin-left: 10px">
+                                <laber>品种:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="csrq" type="text">
+                                <!-- <select id="breedSelect" style="width:174px">
+                                </select> -->
+                            </span>
+                            <span  style="margin-left: 210px">
+                                <laber>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                               <!--  <input id="ms" type="text"> -->
+                               <input type="radio" name="xb" value="0" id="xb1">雄
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <input type="radio" name="xb" value="1" id="xb2">雌
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                            <span style="margin-left: 10px;">
+                                <laber>犬龄:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="ql" type="text">
+                            </span>
+                            <span  style="margin-left: 209px">
+                                <laber>毛色:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="ms" type="text">
+                                  <!--  <select id="colorSelect" style="width:174px">
+                                	</select> -->
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                            <span style="margin-left: 10px;">
+                                <laber>体重:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="tz" type="text">
+                            </span>
+                            <span  style="margin-left: 209px">
+                                <laber>特点:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</laber>
+                                <input id="td" type="text">
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                            <span style="margin-left: 10px;">
+                                <laber>健康状况:</laber>
+                                <!-- <input id="jkzk" type="text"> -->
+                                   <select id="jkzk"  style="width: 178px;height: 27px;">
+                                    <option value="0">良好</option>
+                                    <option value="1">差</option>
+                                </select>
+                            </span>
+                            <span  style="margin-left: 209px">
+                                <laber>收容原因:</laber>
+                                <input id="sryy" type="text">
+                                 <!--  <select id="collTypeSelect" style="width:174px">
+                                </select> -->
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                            <span style="margin-left: 10px;">
+                                <laber>收容时间:</laber>
+                                <input id="srsj" type="text">
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                            <span style="margin-left: 10px;">
+                                <laber>备注:</laber>
+                                <textarea class="form-control" id="bz" name="deblock_udid" rows="16" style="min-width:60%;max-width: 97%;height: 150px;margin-left: 10px;"></textarea>
+                            </span>
+                        </div>
+                        <div style="margin-bottom: 40px;">
+                            <button class="btn btn-sm" style="background: rgb(67, 200, 214);margin-left: 246px;"  data-toggle="modal" data-target="#myModal"><font style="color: white">认领登记</font></button>
+                            <button class="btn btn-sm" style="background: rgb(67, 200, 214);margin-left: 45px;"  data-toggle="modal" data-target="#myModal1"><font style="color: white">领养登记</font></button>
+                            <button class="btn btn-sm" style="background: rgb(67, 200, 214);margin-left: 45px;"  data-toggle="modal" data-target="#myModal2"><font style="color: white">处理登记</font></button>
+                        </div>
+                </div>
+                <div class="col-sm-2" style="height: 100%">
+                    <div style="width:100px;height:100px;line-height: 1px;margin-top: 20px">
+                        <div class="panel panel-info "   >
+                            <img src="../../../static/images/dog.jpg" alt="没有图片" id="pic">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</body>
+<style>
+    .text-click,a[data-toggle="tab"]{
+        font-size: 17px;
+    }
+    #so1,#so2,#so3,#so4,#so5,#so6{
+        float: right;
+    }
+    table input[type='checkbox']{
+        height: 20px;
+        width: 20px;
+        display: inline-block;
+    }
+    thead tr{
+        background-color: #49C8D5;
+    }
+</style>
+</html>

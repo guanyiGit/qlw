@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--病历列表-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../../static/views/medical_history/medical_history_List.css">
+
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <!--bootstrap table -->
+
+    <!--<link href="../../../static/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">-->
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/medical_history/medical_history_List.js"></script>
+    <style>
+        .table thead {
+            background: rgb(65, 199, 214);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid" >
+    <div class="row titile">
+        <div class="col-sm-6">
+            <div id="addTherapy" class="col-sm-3 titile-add">
+                <div class="col-sm-2 icon-add" ></div>
+                <div class="col-sm-10 add-text" >新增病历</div>
+            </div>
+            <!-- <div class="col-sm-3 titile-msg">
+                <div class="col-sm-2 icon-msg" ></div>
+                <div class="col-sm-10 msg-text" >发消息</div>
+            </div> -->
+        </div>
+        <div id="search" class="col-sm-5 col-sm-offset-1 seach-container">
+            <div class="search">
+                <input id="key" type="text" class="seach-in" placeholder="犬证号、免疫证号">
+            </div>
+        </div>
+    </div>
+    <div>
+    <table id="dogTrackEventsTable"></table>
+    </div>
+</div>
+
+
+
+
+</body>
+<script type="text/javascript">
+
+</script>
+</html>

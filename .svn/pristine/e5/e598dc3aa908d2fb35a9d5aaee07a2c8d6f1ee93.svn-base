@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.user.UserInfoMapper">
+	<!-- <resultMap id="BaseResultMap" type="com.soholy.dogmanager.pojo.user.UserInfo"
+		extends="com.soholy.dogmanager.mapper.TUsersMapper.BaseResultMap">
+		<collection property="dogRefDevices" ofType="com.soholy.dogmanager.pojo.device.DogRefDevice" resultMap="com.soholy.dogmanager.mapper.TDogInfoMapper.BaseResultMap">
+			<association property="device" javaType="com.soholy.dogmanager.entity.TDevice" resultMap="com.soholy.dogmanager.mapper.TDeviceMapper.BaseResultMap"/>				
+		</collection>
+		<collection property="tRoles" ofType="com.soholy.dogmanager.entity.TRoles" resultMap="com.soholy.dogmanager.mapper.TRolesMapper.BaseResultMap"/>
+	</resultMap> -->
+	
+	<resultMap type="com.soholy.dogmanager.pojo.user.UserInfo" id="BaseResultMap">
+		<id column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="organization_id" property="organizationId"
+			jdbcType="INTEGER" />
+		<result column="dog_own_id" property="dogOwnId" jdbcType="BIGINT" />
+		<result column="org_type" property="orgType" jdbcType="INTEGER" />
+		<result column="district_id" property="districtId" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="login_num" property="loginNum" jdbcType="INTEGER" />
+		<result column="recentLogin_time" property="recentloginTime"
+			jdbcType="TIMESTAMP" />
+		<association property="tOrganization" javaType="com.soholy.dogmanager.entity.TOrganization" >
+			<id column="organization_id" property="organizationId" jdbcType="INTEGER" />
+			<result column="organization_name" property="organizationName" jdbcType="VARCHAR" />
+			<result column="organization_capital" property="organizationCapital" jdbcType="VARCHAR" />
+			<result column="register_number" property="registerNumber" jdbcType="VARCHAR" />
+			<result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+			<result column="establish_date" property="establishDate" jdbcType="TIMESTAMP" />
+			<result column="province_id" property="provinceId" jdbcType="INTEGER" />
+			<result column="owned_city_id" property="ownedCityId" jdbcType="INTEGER" />
+			<result column="district_id2" property="districtId" jdbcType="INTEGER" />
+			<result column="phone" property="phone" jdbcType="VARCHAR" />
+			<result column="person_liable" property="personLiable" jdbcType="VARCHAR" />
+			<result column="org_type" property="orgType" jdbcType="INTEGER" />
+			<result column="scope_of_operation" property="scopeOfOperation" jdbcType="VARCHAR" />
+			<result column="address" property="address" jdbcType="VARCHAR" />
+			<result column="longitude" property="longitude" jdbcType="DECIMAL" />
+			<result column="latitude" property="latitude" jdbcType="DECIMAL" />
+			<result column="status" property="status" jdbcType="INTEGER" />
+			<result column="fail_reason" property="failReason" jdbcType="VARCHAR" />
+			<result column="power" property="power" jdbcType="INTEGER" />
+			<result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP" />
+			<result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+		</association>
+		<collection property="dogRefDevices" ofType="com.soholy.dogmanager.pojo.device.DogRefDevice">
+			 <id column="dog_id" property="dogId" jdbcType="BIGINT" />
+			 <result column="dog_name" property="dogName" jdbcType="VARCHAR"/>
+			 <association property="device" javaType="com.soholy.dogmanager.entity.TDevice">
+			 	 <id column="device_id" property="deviceId" jdbcType="BIGINT" />
+			 </association>
+		</collection>
+		<collection property="tRoles" ofType="com.soholy.dogmanager.entity.TRoles">
+			<id column="role_id" property="roleId" jdbcType="INTEGER" />
+			<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+
+	<select id="selectUserInfo" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		u.user_id,
+		u.organization_id,
+		u.org_type,
+		u.dog_own_id,
+		u.district_id,
+		u.username,
+		u.name,
+		u.sex,
+		u.phone,
+		u.email,
+		u.login_num,
+		u.recentLogin_time,
+		d.dog_id,
+		d.dog_name,
+		r.device_id,
+		role.role_id,
+		role.role_name,
+		o.*,o.district_id district_id2
+		from t_users u
+		left join t_dog_info d on u.dog_own_id = d.dog_owner_id
+		left join t_device_ref_dog r on r.dog_id = d.dog_id
+		left join t_user_ref_roles urr on urr.user_id = u.user_id
+		left join t_roles role on role.role_id = urr.role_id
+		LEFT JOIN t_organization o on o.organization_id = u.organization_id
+		<where>
+			u.user_id = #{userId}
+		</where>
+	</select>
+
+</mapper>

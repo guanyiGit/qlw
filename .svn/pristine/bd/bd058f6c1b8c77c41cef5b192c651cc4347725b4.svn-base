@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TImagesRefMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TImagesRef" >
+    <id column="image_ref_id" property="imageRefId" jdbcType="BIGINT" />
+    <result column="image_id" property="imageId" jdbcType="BIGINT" />
+    <result column="target_type" property="targetType" jdbcType="INTEGER" />
+    <result column="ref_id" property="refId" jdbcType="BIGINT" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    image_ref_id, image_id, target_type, ref_id, creation_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TImagesRefExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_images_ref
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_images_ref
+    where image_ref_id = #{imageRefId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_images_ref
+    where image_ref_id = #{imageRefId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TImagesRefExample" >
+    delete from t_images_ref
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TImagesRef" >
+    insert into t_images_ref (image_ref_id, image_id, target_type, 
+      ref_id, creation_time)
+    values (#{imageRefId,jdbcType=BIGINT}, #{imageId,jdbcType=BIGINT}, #{targetType,jdbcType=INTEGER}, 
+      #{refId,jdbcType=BIGINT}, #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TImagesRef" >
+    insert into t_images_ref
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="imageRefId != null" >
+        image_ref_id,
+      </if>
+      <if test="imageId != null" >
+        image_id,
+      </if>
+      <if test="targetType != null" >
+        target_type,
+      </if>
+      <if test="refId != null" >
+        ref_id,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="imageRefId != null" >
+        #{imageRefId,jdbcType=BIGINT},
+      </if>
+      <if test="imageId != null" >
+        #{imageId,jdbcType=BIGINT},
+      </if>
+      <if test="targetType != null" >
+        #{targetType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null" >
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TImagesRefExample" resultType="java.lang.Integer" >
+    select count(*) from t_images_ref
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_images_ref
+    <set >
+      <if test="record.imageRefId != null" >
+        image_ref_id = #{record.imageRefId,jdbcType=BIGINT},
+      </if>
+      <if test="record.imageId != null" >
+        image_id = #{record.imageId,jdbcType=BIGINT},
+      </if>
+      <if test="record.targetType != null" >
+        target_type = #{record.targetType,jdbcType=INTEGER},
+      </if>
+      <if test="record.refId != null" >
+        ref_id = #{record.refId,jdbcType=BIGINT},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_images_ref
+    set image_ref_id = #{record.imageRefId,jdbcType=BIGINT},
+      image_id = #{record.imageId,jdbcType=BIGINT},
+      target_type = #{record.targetType,jdbcType=INTEGER},
+      ref_id = #{record.refId,jdbcType=BIGINT},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TImagesRef" >
+    update t_images_ref
+    <set >
+      <if test="imageId != null" >
+        image_id = #{imageId,jdbcType=BIGINT},
+      </if>
+      <if test="targetType != null" >
+        target_type = #{targetType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null" >
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where image_ref_id = #{imageRefId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TImagesRef" >
+    update t_images_ref
+    set image_id = #{imageId,jdbcType=BIGINT},
+      target_type = #{targetType,jdbcType=INTEGER},
+      ref_id = #{refId,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where image_ref_id = #{imageRefId,jdbcType=BIGINT}
+  </update>
+  
+  <select  id="selectServiceSiteById"  parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from t_images_ref 
+  	<where>
+  		target_type = 9
+  		<if test="orgId != null and orgId != -1">
+  			and ref_id = #{orgId}
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="selectInformationPic" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from t_images_ref
+  	<where>
+  		target_type = 1
+  		<if test="informationId != null and informationId != -1">
+  			and ref_id = #{informationId}
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="slelctByRefIdAndType" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_images_ref
+    <where>
+      <if test="refId != null and refId != -1">
+        ref_id = #{refId}
+      </if>
+      <if test="type != null and type != -1">
+        and target_type = #{type}
+      </if>
+    </where>
+
+  </select>
+
+  <delete id="deletePicture">
+    delete from t_images_ref
+    <where>
+      ref_id = #{refId} and target_type = #{type}
+    </where>
+  </delete>
+
+</mapper>

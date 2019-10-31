@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--信息审核-->
+    <meta charset="UTF-8">
+    <title>信息审核</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/Validform.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="./js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" href="./views/device_manager/device_manager-active.css">
+    <link rel="stylesheet" href="./views/message_moderation/message_moderation.css">
+
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <!--bootstrap table -->
+
+    <script type="text/javascript" src="./bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+
+    <!--jquery ui js 解决bootstrap 静态模块不能拖动问题-->
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--自定义的stringbuffer-->
+    <script type="text/javascript" src="./utils/stringBuffer.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="./js/dateformat.js"></script>
+    <script type="text/javascript" src="./js/sendHttp.js"></script>
+    <script type="text/javascript" src="./views/message_moderation/message_moderation.js"></script>
+
+    <style>
+        #message_moderation_table {
+            border: solid 1px #ccc;
+            width: 100%;
+        }
+
+        #message_moderation_table thead tr {
+            height: 50px;
+            background: rgb(65, 199, 214);
+        }
+
+        #message_moderation_table td {
+            text-align: center;
+        }
+
+        #message_moderation_table input {
+            height: 20px;
+            width: 20px;
+        }
+
+        .search-container {
+            margin: 42px 16px 42px 0;
+            position: relative;
+            width: 313px;
+            float: right;
+        }
+
+        .search-icon {
+            display: inline-block;
+            height: 35px;
+            width: 35px;
+            background: url(./assets/img/seach-icon.png) no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            left:-33px;
+            top: 8px;
+        }
+
+        .search-container::after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .form-input {
+            border-radius: 50px;
+            width: 350px;
+            margin-right: 10px;
+            border: solid 1px #A3C3FA;
+            height: 46px;
+            text-indent: 4em;
+            float: right;
+            transition: text-indent 1s;
+            -moz-transition: text-indent 1s; /* Firefox 4 */
+            -webkit-transition: text-indent 1s; /* Safari 和 Chrome */
+            -o-transition: text-indent 1s;
+        }
+
+        input:focus {
+            outline: none !important;
+            border: 1px solid red;
+            box-shadow: 0 0 10px #719ECE;
+        }
+
+        .th-inner {
+            font-size: 21px;
+            color: #fff;
+            font-family: "微软雅黑";
+        }
+
+        #message_moderation_table input {
+            height: 25px;
+            width: 25px;
+        }
+
+        .top-tabbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 16px;
+            margin: 10px 0 20px 0;
+        }
+
+        .top-tabbar > div {
+            width: 50%;
+            color: #9E9E9E;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 22px;
+        }
+
+        .top-tabbar > div:hover,.disableds>span:hover{
+            cursor: pointer;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid" id="app">
+    <div class="row top-tabbar">
+        <div class="isyeo">待审核</div>
+        <div id="top-active" class="isNo" style="background-color: #51CAD4;color: #ffff;">已审核</div>
+    </div>
+    <div class="search-container">
+        <span class="search-icon"></span>
+        <input class="form-input" type="text" placeholder="标题搜索...">
+    </div>
+    <table id="message_moderation_table"></table>
+</div>
+
+
+</body>
+<script type="text/javascript">
+    $(function () {
+        $(".form-input").focus(function () {
+            $(".search-icon").animate({"left": "251px"}, 500);
+            $(this).animate({"text-indent":"2em"},500)
+        })
+        $(".form-input").blur(function () {
+            if(!$(this).val()){
+                $(".search-icon").animate({"left": "-33px"}, 500);
+                $(this).animate({"text-indent":"4em"},500)
+            }
+        })
+    });
+</script>
+</html>

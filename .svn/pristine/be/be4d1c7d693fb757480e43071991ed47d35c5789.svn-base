@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.dogCard.DogCardMapper" >
+    <!--犬主-->
+    <!--<resultMap id="DogOwnerResultMap" type="com.soholy.dogmanager.entity.dogCard.DogOwners" >-->
+        <!--<id column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />-->
+        <!--<result column="district_id" property="districtId" jdbcType="BIGINT" />-->
+        <!--<result column="dog_owner_type" property="dogOwnerType" jdbcType="INTEGER" />-->
+        <!--<result column="dog_owner_name" property="dogOwnerName" jdbcType="VARCHAR" />-->
+        <!--<result column="dog_owner_phone" property="dogOwnerPhone" jdbcType="VARCHAR" />-->
+        <!--<result column="address" property="address" jdbcType="VARCHAR" />-->
+        <!--<result column="sex" property="sex" jdbcType="INTEGER" />-->
+        <!--<result column="e_mail" property="eMail" jdbcType="VARCHAR" />-->
+        <!--<result column="postal_code" property="postalCode" jdbcType="VARCHAR" />-->
+        <!--<result column="status" property="status" jdbcType="INTEGER" />-->
+        <!--<result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />-->
+        <!--<result column="image_url" property="originalUrl" />-->
+        <!--<result column="thumbnail_url" property="thumbnailUrl" />-->
+        <!--<result column="card_type" property="cardType" jdbcType="INTEGER" />-->
+        <!--<result column="dog_owner_card_id" property="dogOwnerCardId" jdbcType="VARCHAR" />-->
+        <!--<result column="card_num" property="cardNum" jdbcType="VARCHAR" />-->
+        <!--<result column="district_name" property="districtName" jdbcType="VARCHAR" />-->
+    <!--</resultMap>-->
+    <sql id="Base_Column_List" >
+    dog_owner_id, district_id, dog_owner_type, dog_owner_name, dog_owner_phone, address,
+    sex, e_mail, postal_code, status, creation_time
+  </sql>
+    <!--犬-->
+    <!--<resultMap id="DogResultMap" type="com.dog.dogCard.entity.DogInfo" >-->
+        <!--<id column="dog_id" property="dogId" jdbcType="BIGINT" />-->
+        <!--<result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />-->
+        <!--<result column="dog_breed_type" property="dogBreedType" jdbcType="INTEGER" />-->
+        <!--<result column="dog_color_type" property="dogColorType" jdbcType="INTEGER" />-->
+        <!--<result column="dog_name" property="dogName" jdbcType="VARCHAR" />-->
+        <!--<result column="birth_time" property="birthTime" jdbcType="TIMESTAMP" />-->
+        <!--<result column="dog_gender" property="dogGender" jdbcType="INTEGER" />-->
+        <!--<result column="dog_character" property="dogCharacter" jdbcType="VARCHAR" />-->
+        <!--<result column="weight" property="weight" jdbcType="DOUBLE" />-->
+        <!--<result column="dog_status" property="dogStatus" jdbcType="INTEGER" />-->
+        <!--<result column="deduction_sum" property="deductionSum" jdbcType="DOUBLE" />-->
+        <!--<result column="father_id" property="fatherId" jdbcType="BIGINT" />-->
+        <!--<result column="mother_id" property="motherId" jdbcType="BIGINT" />-->
+        <!--<result column="health_status" property="healthStatus" jdbcType="INTEGER" />-->
+        <!--<result column="operation_id" property="operationId" jdbcType="BIGINT" />-->
+        <!--<result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />-->
+        <!--<result column="mark" property="mark" jdbcType="INTEGER" />-->
+        <!--<result column="dogAge" property="dogAge" jdbcType="INTEGER" />-->
+        <!--<result column="breed" property="breed" jdbcType="VARCHAR" />-->
+        <!--<result column="color" property="color" jdbcType="VARCHAR" />-->
+    <!--</resultMap>-->
+    <!--查询免疫证信息和犬、犬主id-->
+    <select id="selectImmuneCard" resultType="com.soholy.dogmanager.entity.dogCard.ImmuneCard">
+        SELECT
+        A.dog_id dogId,
+        A.dog_owner_id dogOwnerId,
+        A.immune_card_num immuneCardNum,
+        A.lssue_time lssueTime,
+        A.start_time startTime,
+        A.end_time endTime,
+        B.organization_id orgId,
+        B.organization_name orgName
+        FROM t_immune_card A
+        LEFT JOIN t_organization B
+        ON B.organization_id=A.lssue_org_id
+        <where>
+            <if test="cardNum != null and cardNum != 'null'">
+                A.immune_card_num=#{cardNum}
+            </if>
+            <if test="dogid != null and cardNum != 'null'">
+                A.dog_id=#{dogid}
+            </if>
+        </where>
+    </select>
+
+    <!--查询设备信息-->
+    <select id="selectDevice" resultType="com.soholy.dogmanager.entity.dogCard.Device">
+        SELECT
+        A.creation_time startTime,
+        A.expire_time endTime,
+        B.device_number deviceNumber,
+        C.organization_id orgId,
+        C.organization_name orgName,
+        B.imei,
+        B.device_type deviceType
+        FROM t_device_ref_dog A
+        LEFT JOIN t_device B
+        ON B.device_id=A.device_id
+        LEFT JOIN t_organization C
+        ON C.organization_id=B.org_id
+        WHERE A.dog_id=#{dogId}
+    </select>
+
+    <!--根据设备编号查询犬id-->
+    <select id="selectDogIdByDeviceId" resultType="java.lang.Long">
+        SELECT
+        A.dog_id
+        FROM t_device_ref_dog A
+        LEFT JOIN t_device B
+        ON B.device_id=A.device_id
+        WHERE B.device_number=#{deviceNumber}
+    </select>
+
+    <!--根据设备id查询犬名字-->
+    <select id="selectDogNameByDeviceId" resultType="java.lang.String">
+        SELECT
+        C.dog_name
+        FROM t_device A
+        LEFT JOIN t_device_ref_dog B
+        ON B.device_id=A.device_id
+        LEFT JOIN t_dog_info C
+        ON C.dog_id=B.dog_id
+        WHERE A.device_id=#{deviceId}
+    </select>
+
+    <!--查询犬证信息-->
+    <select id="selectDogCard" resultType="com.soholy.dogmanager.entity.dogCard.DogCard">
+        SELECT
+        A.dog_card_num dogCardNum,
+        A.lssue_time lssueTime,
+        A.start_time startTime,
+        A.cause reason,
+        A.end_time endTime,
+        B.organization_id orgId,
+        B.organization_name orgName
+        FROM t_dog_card A
+        LEFT JOIN t_organization B
+        ON B.organization_id=A.lssue_org_id
+        WHERE A.dog_id=#{dogId}
+    </select>
+    <!--办证修改设备信息-->
+    <update id="updateDevice">
+        update t_device
+        <set >
+            <if test="status != null" >
+                device_status = #{status},
+            </if>
+            <if test="startTime != null" >
+                start_time = #{startTime},
+            </if>
+            <if test="orgId != null" >
+                org_id = #{orgId},
+            </if>
+        </set>
+        where device_id=#{deviceId}
+    </update>
+
+    <!--犬证审核-->
+    <update id="dogCardAudit">
+        update t_dog_card
+        <set >
+            <if test="dogCardNum != null and dogCardNum != ''">
+                dog_card_num = #{dogCardNum},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="lssueOrgId != null" >
+                lssue_org_id = #{lssueOrgId},
+            </if>
+            <if test="lssuerId != null" >
+                lssuer_id = #{lssuerId},
+            </if>
+            <if test="reason != null" >
+                cause = #{reason},
+            </if>
+            <if test="startTime != null" >
+                lssue_time = #{startTime},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime},
+            </if>
+        </set>
+        where dog_id=#{dogId}
+    </update>
+    <!--根据设备编号查询设备id-->
+    <select id="selectDeviceId" resultType="java.lang.Integer">
+        select device_id from t_device where device_number = #{deviceNumber}
+    </select>
+
+    <!--犬证续期-->
+    <update id="updateCardDate">
+        update t_dog_card
+        <set>
+            <if test="endDate != null">
+                end_time = #{endDate}
+            </if>
+        </set>
+        where dog_id = #{dogId}
+    </update>
+
+    <!--医院查询犬列表-->
+    <select id="selectDogInfos" resultType="com.soholy.dogmanager.entity.dogCard.DogCardRelatedInfo">
+        SELECT
+        A.seq_num seqNum,
+        A.dog_card_num dogCardNum,
+        A.lssue_time lssueTime,
+        A.creation_time applyTime,
+        A.status,
+        A.end_time nextYearsCheckDate,
+        B.dog_owner_id dogOwnerId,
+        B.dog_owner_name dogOwnerName,
+        B.dog_owner_phone dogOwnerPhone,
+        C.organization_id lssueOrgId,
+        C.organization_name lssueOrgName,
+        D.user_id lssuerId,
+        D.name lssuerName,
+        E.seq_id immuneCardId,
+        E.immune_card_num immuneCardNum,
+        F.dog_id dogId,
+        F.dog_name dogName,
+        G.dictionary_describe dogVarieties
+        FROM t_dog_card A
+        LEFT JOIN t_dog_owner B
+        ON B.dog_owner_id = A.dog_owner_id
+        LEFT JOIN t_organization C
+        ON C.organization_id = A.lssue_org_id
+        LEFT JOIN t_users D
+        ON D.user_id = A.lssuer_id
+        LEFT JOIN t_immune_card E
+        ON E.dog_id = A.dog_id
+        LEFT JOIN t_dog_info F
+        ON F.dog_id = A.dog_id
+        LEFT JOIN t_dictionary G
+        ON G.dictionary_value = F.dog_breed_type
+        WHERE G.dictionary_field = "dog_breed_type"
+        <if test="input != null and input != 'null'">
+            and (A.dog_card_num like '%${input}%' or E.immune_card_num like '%${input}%' or B.dog_owner_name like '%${input}%' or B.dog_owner_phone like '%${input}%')
+        </if>
+        <if test="status != null and status != 6">
+            and A.status = #{status}
+        </if>
+        <if test="status == 6">
+            and A.status in (1,4,5)
+        </if>
+        <if test="orgId != null">
+            and A.lssue_org_id=#{orgId}
+        </if>
+        ORDER BY A.lssue_time DESC
+        LIMIT #{start},#{size}
+    </select>
+    <!--医院查询犬列表总条数-->
+    <select id="selectDogInfosCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM
+        (SELECT
+        A.seq_num seqNum,
+        A.dog_card_num dogCardNum,
+        A.lssue_time lssueTime,
+        A.status,
+        B.dog_owner_id dogOwnerId,
+        B.dog_owner_name dogOwnerName,
+        B.dog_owner_phone dogOwnerPhone,
+        C.organization_id lssueOrgId,
+        C.organization_name lssueOrgName,
+        D.user_id lssuerId,
+        D.name lssuerName,
+        E.seq_id immuneCardId,
+        E.immune_card_num immuneCardNum,
+        F.dog_id dogId,
+        F.dog_name dogName,
+        G.dictionary_describe dogVarieties
+        FROM t_dog_card A
+        LEFT JOIN t_dog_owner B
+        ON B.dog_owner_id = A.dog_owner_id
+        LEFT JOIN t_organization C
+        ON C.organization_id = A.lssue_org_id
+        LEFT JOIN t_users D
+        ON D.user_id = A.lssuer_id
+        LEFT JOIN t_immune_card E
+        ON E.dog_id = A.dog_id
+        LEFT JOIN t_dog_info F
+        ON F.dog_id = A.dog_id
+        LEFT JOIN t_dictionary G
+        ON G.dictionary_value = F.dog_breed_type
+        WHERE G.dictionary_field = "dog_breed_type"
+        <if test="input != null and input != 'null'">
+            and (A.dog_card_num like '%${input}%' or E.immune_card_num like '%${input}%' or B.dog_owner_name like '%${input}%' or B.dog_owner_phone like '%${input}%')
+        </if>
+        <if test="status != null and status != 6">
+            and A.status = #{status}
+        </if>
+        <if test="status == 6">
+            and A.status in (1,4,5)
+        </if>
+        <if test="orgId != null">
+            and A.lssue_org_id=#{orgId}
+        </if>) DD
+    </select>
+
+    <!--查询电子犬证-->
+    <select id="selectElectronicDogCard" parameterType="java.lang.Long" resultType="com.soholy.dogmanager.entity.dogCard.ElectronicDogCard">
+        SELECT
+        A.phone,
+        B.dog_owner_name dogOwnersName,
+        C.lssue_time startDate,
+        C.dog_card_num dogCardNum,
+        C.`status` dogCradStatus,
+        D.organization_name issuanceUnit,
+        E.dog_gender gender,
+        F.dictionary_describe dogVarieties,
+        G.dictionary_describe color,
+        H.inspections_date yearCheckDate,
+        J.device_number markNum,
+        MN.thumbnail_url dogUrl
+        FROM t_users A
+        LEFT JOIN t_dog_owner B
+        ON B.dog_owner_id=A.dog_own_id
+        LEFT JOIN t_dog_card C
+        ON C.dog_owner_id=B.dog_owner_id
+        LEFT JOIN t_organization D
+        ON D.organization_id=C.lssue_org_id
+        LEFT JOIN t_dog_info E
+        ON E.dog_id=C.dog_id
+        LEFT JOIN t_dictionary F
+        ON F.dictionary_value=E.dog_breed_type
+        LEFT JOIN t_dictionary G
+        ON G.dictionary_value=E.dog_color_type
+        LEFT JOIN t_inspections_info H
+        ON H.dog_id=C.dog_id
+        LEFT JOIN t_device_ref_dog I
+        ON I.dog_id=C.dog_id
+        LEFT JOIN t_device J
+        ON J.device_id=I.device_id
+        LEFT JOIN
+        (SELECT
+        M.ref_id,
+        N.thumbnail_url
+        FROM t_images_ref M
+        LEFT JOIN t_images N
+        ON N.image_id=M.image_id
+        WHERE M.target_type=2
+        GROUP BY M.ref_id) MN
+        ON MN.ref_id=C.dog_id
+        WHERE
+        F.dictionary_field = "dog_breed_type"
+        AND G.dictionary_field = "dog_color_type"
+        AND A.user_id = #{userId}
+    </select>
+
+    <!--根据用户id查询犬主id-->
+    <select id="selectOwnerIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+        B.dog_owner_id
+        FROM t_users A
+        LEFT JOIN t_dog_owner B
+        ON B.dog_owner_phone=A.phone
+        WHERE A.user_id = #{userId}
+    </select>
+    
+    <!--根据用户id查用户信息-->
+    <select id="selectUserByUserId" parameterType="java.lang.Long" resultType="com.soholy.dogmanager.entity.dogCard.User">
+        SELECT
+        A.user_id userId,
+        A.organization_id organizationId,
+        A.district_id districtId,
+        B.organization_name department,
+        C.dog_owner_id ownerId
+        FROM t_users A
+        LEFT JOIN t_organization B
+        ON B.organization_id=A.organization_id
+        LEFT JOIN t_dog_owner C
+        ON C.dog_owner_phone=A.phone
+        WHERE A.user_id = #{userId}
+    </select>
+
+    <!--修改犬主信息证件表-->
+    <update id="updateDogOwnerCard" parameterType="com.soholy.dogmanager.entity.dogCard.DogOwners">
+        UPDATE t_dog_owner_card SET
+        card_type=#{cardType},
+        card_num=#{cardNum}
+        WHERE
+        dog_owner_id=#{dogOwnerId}
+        AND dog_owner_card_id=#{dogOwnerCardId}
+    </update>
+    <!--注销犬-->
+    <update id="cancellationDog">
+        UPDATE t_dog_info SET
+        cancellation_reason=#{cancellation},
+        cancellation_note=#{cancellationNote},
+        cancellation_time=#{cancellationTime}
+        WHERE dog_id=#{dogId}
+    </update>
+
+    <!--注销犬证-->
+    <update id="cancellationDogCard">
+        UPDATE t_dog_card SET
+        status=3
+        WHERE dog_id=#{dogId}
+    </update>
+
+    <!--注销设备-->
+    <update id="cancellationEquipment">
+        UPDATE t_device SET
+        t_device.device_status=2
+        FROM t_device,t_device_ref_dog
+        WHERE
+        t_device.device_id=t_device_ref_dog.device_id
+        AND t_device_ref_dog.dog_id=#{dogId}
+    </update>
+    <!--查询犬只种类-->
+    <select id="selectDogSpecies" resultType="com.soholy.dogmanager.entity.dogCard.Conditions">
+        SELECT dictionary_describe name,dictionary_value value FROM t_dictionary WHERE dictionary_field="dog_breed_type"
+    </select>
+    <!--查询犬只毛色-->
+    <select id="selectDogColor" resultType="com.soholy.dogmanager.entity.dogCard.Conditions">
+        SELECT dictionary_describe name,dictionary_value value FROM t_dictionary WHERE dictionary_field="dog_color_type"
+    </select>
+   	<!--查流浪狗收容原因 -->
+   	 <select id="selectDogCollType" resultType="com.soholy.dogmanager.entity.dogCard.Conditions">
+        SELECT dictionary_describe name,dictionary_value value FROM t_dictionary WHERE dictionary_field="coll_dog_type"
+    </select>
+    <!--查违规类型 -->
+   	 <select id="selectViolationType" resultType="com.soholy.dogmanager.entity.dogCard.Conditions">
+        SELECT dictionary_describe name,dictionary_value value FROM t_dictionary WHERE dictionary_field="violation_type"
+    </select>
+    <!--查所有的免疫证号-->
+    <select id="selectImmuneCardNums" resultType="java.lang.String">
+        SELECT
+        A.num
+        FROM
+        (SELECT
+        immune_card_num num
+        FROM t_immune_card
+        WHERE (status=1 OR status=2)
+        <if test="input != null">
+            and immune_card_num like '%${input}%'
+        </if>
+        ) A
+        LEFT JOIN
+        (SELECT
+        C.immune_card_num n
+        FROM t_immune_card C
+        INNER JOIN
+        t_dog_card D
+        ON D.dog_id=C.dog_id
+        WHERE C.status=1 OR C.status=2) B
+        ON B.n=A.num
+        WHERE B.n IS NULL
+    </select>
+    <!--根据图片url查图片id-->
+    <select id="selectIdsByurl" resultType="java.lang.Long">
+        SELECT image_id FROM t_images WHERE image_url=#{url}
+    </select>
+
+    <delete id="delectPicRef">
+        DELETE FROM t_images_ref WHERE image_id=#{picId}
+    </delete>
+    <delete id="delectPic">
+        DELETE FROM t_images WHERE image_id=#{picId}
+    </delete>
+
+    <resultMap id="dogAndDogOwnerInfoResultMap" type="com.soholy.dogmanager.entity.dogCard.DogAndDogOwnerInfo">
+        <association property="tImmuneCard" javaType="com.soholy.dogmanager.entity.TImmuneCard" resultMap="com.soholy.dogmanager.mapper.TImmuneCardMapper.BaseResultMap"></association>
+        <association property="tDogOwner" javaType="com.soholy.dogmanager.entity.TDogOwner" resultMap="com.soholy.dogmanager.mapper.TDogOwnerMapper.BaseResultMap"></association>
+        <association property="tDogInfo" javaType="com.soholy.dogmanager.entity.TDogInfo"  resultMap="com.soholy.dogmanager.mapper.TDogInfoMapper.BaseResultMap"></association>
+        <association property="dogBreedType" javaType="com.soholy.dogmanager.entity.TDictionary" columnPrefix="dogdic_" resultMap="com.soholy.dogmanager.mapper.TDictionaryMapper.BaseResultMap"></association>
+        <association property="dogColorType" javaType="com.soholy.dogmanager.entity.TDictionary" columnPrefix="colourdic_" resultMap="com.soholy.dogmanager.mapper.TDictionaryMapper.BaseResultMap"></association>
+        <association property="tDogCard" javaType="com.soholy.dogmanager.entity.TDogCard" resultMap="com.soholy.dogmanager.mapper.TDogCardMapper.BaseResultMap"></association>
+        <association property="tImmuneCardOrg" javaType="com.soholy.dogmanager.entity.TOrganization" columnPrefix="ico_" resultMap="com.soholy.dogmanager.mapper.TOrganizationMapper.BaseResultMap"></association>
+        <collection property="tDogOwnerCardVo" ofType="com.soholy.dogmanager.entity.dogCard.TDogOwnerCardVo" >
+            <id column="dog_owner_card_id" property="dogOwnerCardId" jdbcType="BIGINT" />
+            <result column="dog_owner_id" property="dogOwnerId" jdbcType="BIGINT" />
+            <result column="card_type" property="cardType" jdbcType="INTEGER" />
+            <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+            <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+            <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+            <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+            <association property="ownerCardTypeic" javaType="com.soholy.dogmanager.entity.TDictionary" columnPrefix="dowcdic_" resultMap="com.soholy.dogmanager.mapper.TDictionaryMapper.BaseResultMap"></association>
+        </collection>
+        <collection property="imageList" ofType="com.soholy.dogmanager.entity.dogCard.TImagesRefImageRef">
+            <association property="tImagesRef" javaType="com.soholy.dogmanager.entity.TImagesRef" resultMap="com.soholy.dogmanager.mapper.TImagesRefMapper.BaseResultMap"></association>
+            <association property="tImages" javaType="com.soholy.dogmanager.entity.TImages" resultMap="com.soholy.dogmanager.mapper.TImagesMapper.BaseResultMap"></association>
+        </collection>
+        <!--<discriminator javaType="java.lang.Integer" column="target_type">-->
+            <!--<case value="2" resultType="com.soholy.dogmanager.entity.dogCard.DogAndDogOwnerInfo">-->
+                <!--<collection property="tDogInfoImages" resultMap="imageRefResultMap"></collection>-->
+            <!--</case>-->
+            <!--<case value="10" resultType="com.soholy.dogmanager.entity.dogCard.DogAndDogOwnerInfo">-->
+                <!--<collection property="tDogInfoImages" resultMap="imageRefResultMap"></collection>-->
+            <!--</case>-->
+            <!--<case value="11" resultType="com.soholy.dogmanager.entity.dogCard.DogAndDogOwnerInfo">-->
+                <!--<collection property="tDogOwnerImages" resultMap="imageRefResultMap"></collection>-->
+            <!--</case>-->
+            <!--<case value="12" resultType="com.soholy.dogmanager.entity.dogCard.DogAndDogOwnerInfo">-->
+                <!--<collection property="tDogOwnerImages" resultMap="imageRefResultMap"></collection>-->
+            <!--</case>-->
+            <!--<case value="13" resultType="com.soholy.dogmanager.entity.dogCard.DogAndDogOwnerInfo">-->
+                <!--<collection property="tDogOwnerImages" resultMap="imageRefResultMap"></collection>-->
+            <!--</case>-->
+        <!--</discriminator>-->
+    </resultMap>
+
+    <resultMap id="imageRefResultMap" type="com.soholy.dogmanager.entity.dogCard.TImagesRefImageRef">
+        <association property="tImagesRef" javaType="com.soholy.dogmanager.entity.TImagesRef" resultMap="com.soholy.dogmanager.mapper.TImagesRefMapper.BaseResultMap"></association>
+        <association property="tImages" javaType="com.soholy.dogmanager.entity.TImages" resultMap="com.soholy.dogmanager.mapper.TImagesMapper.BaseResultMap"></association>
+    </resultMap>
+
+    <!--根据(免疫证号/免疫证id)查询犬主和犬只信息-->
+    <select id="findDogAllInfoByImcardNumOrSeqId" resultMap="dogAndDogOwnerInfoResultMap">
+        SELECT
+        ic.*,
+
+        ico.address ico_address,ico.approval_time ico_approval_time,ico.creation_time ico_creation_time,ico.credit_code ico_credit_code,
+        ico.district_id ico_district_id,ico.establish_date ico_establish_date,ico.fail_reason ico_fail_reason,ico.latitude ico_latitude,
+        ico.longitude ico_longitude,ico.organization_capital ico_organization_capital,ico.organization_id ico_organization_id,
+        ico.organization_name ico_organization_name,ico.org_type ico_org_type,ico.owned_city_id ico_owned_city_id,
+        ico.person_liable ico_person_liable,ico.phone ico_phone,ico.power ico_power,ico.province_id ico_province_id,
+        ico.register_number ico_register_number,ico.scope_of_operation ico_scope_of_operation,ico.`status` ico_status,
+
+        di.*,
+
+        dogdic.creation_time dogdic_creation_time,dogdic.dictionary_describe dogdic_dictionary_describe,
+        dogdic.dictionary_field dogdic_dictionary_field,dogdic.dictionary_id dogdic_dictionary_id,dogdic.dictionary_value dogdic_dictionary_value,
+
+        colourdic.creation_time colourdic_creation_time,colourdic.dictionary_describe colourdic_dictionary_describe,
+        colourdic.dictionary_field colourdic_dictionary_field,colourdic.dictionary_id colourdic_dictionary_id,colourdic.dictionary_value colourdic_dictionary_value,
+
+        dogpic.ref_id ,dogpic.creation_time ,dogpic.image_ref_id ,dogpic.target_type ,
+        dogpic.image_id  ,dogpic.image_name ,dogpic.image_titile ,
+        dogpic.image_url ,dogpic.image_size ,dogpic.image_ext ,
+        dogpic.thumbnail_url ,dogpic.thumbnail_size ,dogpic.cration_time ,
+
+        dc.*,
+
+        dow.*,
+
+        dowc.*,
+
+        dowcdic.creation_time dowcdic_creation_time,dowcdic.dictionary_describe dowcdic_dictionary_describe,dowcdic.dictionary_field dowcdic_dictionary_field,
+        dowcdic.dictionary_id dowcdic_dictionary_id,dowcdic.dictionary_value dowcdic_dictionary_value
+        FROM t_immune_card ic
+        LEFT JOIN t_organization ico ON ico.organization_id = ic.lssue_org_id
+        LEFT JOIN t_dog_info di ON di.dog_id = ic.dog_id
+        LEFT JOIN (
+            SELECT
+                dic.dictionary_id,dic.dictionary_field,dic.dictionary_value,dic.dictionary_describe,dic.creation_time
+            FROM t_dictionary dic WHERE dic.dictionary_field = 'dog_breed_type'
+            ) dogdic ON dogdic.dictionary_value = di.dog_breed_type
+        LEFT JOIN (
+            SELECT
+                dic.dictionary_id,dic.dictionary_field,dic.dictionary_value,dic.dictionary_describe,dic.creation_time
+            FROM t_dictionary dic WHERE dic.dictionary_field = 'dog_color_type'
+            ) colourdic ON colourdic.dictionary_value = di.dog_breed_type
+        LEFT JOIN t_dog_card dc ON dc.dog_id = di.dog_id
+        LEFT JOIN t_dog_owner dow ON dow.dog_owner_id = di.dog_owner_id
+        LEFT JOIN (
+            SELECT
+                iref.ref_id,iref.creation_time,iref.image_ref_id,iref.target_type,
+                i.cration_time,i.image_ext,i.image_id,i.image_name,i.image_size,i.image_titile,i.image_url,i.thumbnail_size,i.thumbnail_url
+            FROM t_images_ref iref,t_images i WHERE i.image_id = iref.image_id AND target_type IN  (2,10,11,12,13)
+         ) dogpic ON dogpic.ref_id = di.dog_id OR dow.dog_owner_id = dogpic.ref_id
+        LEFT JOIN t_dog_owner_card dowc ON dowc.dog_owner_id = dow.dog_owner_id
+        LEFT JOIN (
+            SELECT
+                dic.dictionary_id,dic.dictionary_field,dic.dictionary_value,dic.dictionary_describe,dic.creation_time
+            FROM t_dictionary dic WHERE dic.dictionary_field = 'card_type'
+        ) dowcdic ON dowcdic.dictionary_value = dowc.card_type
+        <where>
+            <if test="seqId != null">
+                ic.seq_id = #{seqId}
+            </if>
+            <if test="immuneCardNum != null and immuneCardNum != ''">
+                ic.immune_card_num = #{immuneCardNum}
+            </if>
+        </where>
+    </select>
+
+    <!--初始化密码-->
+    <update id="initPassword">
+        update t_users
+        set password=#{password}
+        where username=#{account}
+    </update>
+</mapper>

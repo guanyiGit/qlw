@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>犬证办理</title>
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+
+    <!--引入webuploader相关组件-->
+    <link href="../../../static/webuploader/webuploader.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>
+    <!--&lt;!&ndash;引入uploaderpicture 工具&ndash;&gt;-->
+    <!--<script type="text/javascript" src="../../utils/uploaderPicture.js"></script>-->
+
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/dogCard/dogCardInfo.js"></script>
+    <style type="text/css">
+        .search
+        {
+            left: 0;
+            position: relative;
+        }
+        #auto_div
+        {
+            display: none;
+            width: 300px;
+            border: 1px #74c0f9 solid;
+            background: #FFF;
+            position: absolute;
+            top: 24px;
+            left: 0;
+            color: #323232;
+        }
+    </style>
+    <!--日期插件-->
+    <link rel="stylesheet" href="../../../static/css/dcalendar.picker.css"/>
+    <script type="text/javascript" src="../../../static/js/dcalendar.picker.js"></script>
+    <script type="text/javascript">
+        $('#mydatepicker3').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });        $('#dqfrq').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });        $('#dyxqxk').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });        $('#dyxqxj').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });        $('#xqfrq').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });        $('#xyxqxk').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });        $('#xyxqxj').dcalendarpicker({
+            format:'yyyy-mm-dd'
+        });
+    </script>
+</head>
+<body style="width: 1200px;">
+<div class="container-fluid" style="width:90%;margin-left: -1%">
+    <div style="z-index: 14;">
+        <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label" style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);"><div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+            <div style="width: auto; height: auto; text-align: left;">
+                <div style="width: auto; height: auto;">
+                    <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                        <span onclick="returnn();">犬证管理</span>&gt;&gt;犬证办理
+                    </label>
+                    <!--<button id="return" class="btn btn-sm btn-info" style="margin-left: 1100px;margin-top: -50px;width: 80px" onclick="returnn();">返回</button>-->
+                </div>
+            </div>
+        </div>
+            <div style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class="panel panel-default"  style="width: 1300px; height: 1545px;margin-top: 20px">
+        <!--form 表单-->
+        <form id="add" method="post">
+            <div class="form-group">
+                <!--证件信息-->
+                <!--免疫证-->
+                <div class="row" style="margin-right: 20px;margin-left: 20px;margin-top: 10px">
+                    <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;color: #ffffff">&nbsp&nbsp&nbsp&nbsp<b>证件信息</b></div>
+                    <div  class="col-sm-12 tables-text" style="height: 100%">
+                        <div style="margin-top: 20px">
+                        <span class="search">
+                            <labe>免疫证号:</labe>
+                            <input id="immuneNum" class="check" onchange="selectRelatedInfo();">
+                            <div id="auto_div"></div>
+                        </span>
+                            <span  style="margin-left: 200px">
+                            <label>办理机构:</label>
+                            <input id="mqfjg" readonly="readonly">
+                        </span>
+                        </div>
+                        <div style="margin-top: 10px">
+                        <span>
+                            <labe>签发日期:</labe>
+                            <input id="mqfrq" readonly="readonly">
+                        </span>
+                        </div>
+                        <div style="margin-top: 10px">
+                        <span>
+                            <labe>有效期限:</labe>
+                            <input id="myxqxk" readonly="readonly"><p style="display: inline;margin-left: 35px;margin-right: 35px">—</p><input id="myxqxj" readonly="readonly">
+                        </span>
+                        </div>
+                        <!--分隔线-->
+                        <!--犬证-->
+                        <hr style="border: 1px dashed #0f0f0f;width: 100%;color: #0f0f0f;size: 1px">
+
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>犬证号码:</labe>
+                            <input id="dogCardNum" readonly="readonly">
+                        </span>
+                            <span  style="margin-left: 200px">
+                            <label>签发机构:</label>
+                            <input id="dqfjg" readonly="readonly">
+                        </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>签发日期:</labe>
+                            <input id="dqfrq" readonly="readonly">
+                        </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>有效期限:</labe>
+                            <input id="dyxqxk" readonly="readonly"><p style="display: inline;margin-left: 35px;margin-right: 35px">—</p>
+                            <input id="dyxqxj" readonly="readonly">
+                        </span>
+                        </div>
+                        <!--分隔线-->
+                        <!--设备-->
+                        <hr style="border: 1px dashed #0f0f0f;width: 100%;color: #0f0f0f;size: 1px">
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>项圈编号:</labe>
+                            <input id="xqbh" class="check" onchange="selectDiviceId();"><img id="tishi" style="width: 25px;height: 25px;margin-top: -2px;display: none;">
+                        </span>
+                            <span  style="margin-left: 200px">
+                            <label>签发机构:</label>
+                            <input id="xqfjg" readonly="readonly">
+                        </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>签发日期:</labe>
+                            <input id="xqfrq" readonly="readonly">
+                        </span>
+                        </div>
+                        <div style="margin-top: 10px;margin-bottom: 20px">
+                        <span>
+                            <labe>有效期限:</labe>
+                            <input id="xyxqxk" readonly="readonly"><p style="display: inline;margin-left: 35px;margin-right: 35px">—</p>
+                            <input id="xyxqxj" readonly="readonly">
+                        </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <!--犬只信息-->
+                <div class="panel panel-info tables-text" style="margin-left: 20px;margin-top: 20px;">
+                    <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;color: #ffffff">&nbsp&nbsp&nbsp&nbsp<b>犬只信息</b></div>
+                    <div style="margin-top: 20px;margin-left: 20px">
+                            <span style="margin-right: 50px">
+                                <label>犬名:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="dogName" readonly="readonly">
+                            </span>
+                        <label>品种:</label>
+                        <input id="pz" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="xb" readonly="readonly">
+                            </span>
+                        <label>年龄:</label>
+                        <input id="nl" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>出生日期:</label>
+                                <input id="csrq" readonly="readonly">
+                            </span>
+                        <label>毛色:</label>
+                        <input id="ms" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>父本:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="father" readonly="readonly">
+                            </span>
+                        <label>母本:</label>
+                        <input id="mather" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px">
+                        <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                        <!--dom结构部分-->
+                        <div id="dg" class="panel panel-default" style="width: 1200px;">
+                            <div class="uploader-demo">
+                                <div id="filePicker">
+                                    <img src="../../../static/images/dog.jpg">
+                                    <img src="../../../static/images/dog.jpg">
+                                    <img src="../../../static/images/dog.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" >
+                <!--犬主信息-->
+                <div class="panel panel-info tables-text" style="margin-left: 20px;margin-top: 20px;">
+                    <div style="background-color: rgb(65, 199, 219);height: 40px;line-height: 40px;color: #ffffff">&nbsp&nbsp&nbsp&nbsp<b>犬主信息</b></div>
+                    <div style="margin-top: 20px;margin-left: 20px;">
+                            <span style="margin-right: 50px">
+                                <label>犬主姓名:</label>
+                                <input id="dogOwerName" readonly="readonly">
+                            </span>
+                        <label>性质:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                        <input id="xz" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>证件类型:</label>
+                                <input id="zjlx" readonly="readonly">
+                            </span>
+                        <label>证件号码:</label>
+                        <input id="zjhm" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="xb1" readonly="readonly">
+                            </span>
+                        <label>出生日期:</label>
+                        <input id="csrq1" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>现住区县:</label>
+                                <input id="xzqx" readonly="readonly">
+                            </span>
+                        <label>所属部门:</label>
+                        <input id="ssbm" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>所属社区:</label>
+                                <input id="sssq" readonly="readonly">
+                            </span>
+                        <label>邮编:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                        <input id="yb" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px">
+                            <span style="margin-right: 50px">
+                                <label>联系电话:</label>
+                                <input id="phone" readonly="readonly">
+                            </span>
+                        <label>电子邮箱:</label>
+                        <input id="dzyx" readonly="readonly">
+                    </div>
+                    <div style="margin-top: 10px;margin-left:20px;margin-bottom: 20px;">
+                        <label>详细地址:</label>
+                        <input id="xxdz" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+            <img src="../../../static/images/dog.jpg" id="bigImg" style="float: left;margin-left: 200px;margin-top: -760px;position:absolute;z-index:9999;display: none;">
+        </form>
+        <!--工具按钮-->
+        <div class="row btns">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+                <!--<button class="btn btn-sm btn-info" style="margin-right: 50px">打印</button>-->
+                <button id="update" class="btn btn-sm btn-info an" style="margin-right: 50px;width: 80px" onclick="dogCardRenewal();">保存</button>
+                <button id="insert" class="btn btn-sm btn-info an" style="margin-right: 50px;width: 80px" onclick="insertDogCard();">保存</button>
+                <button id="que" class="btn btn-sm btn-default an" style="width: 80px" onclick="returnn();">取消</button>
+            </div>
+            <div class="col-sm-4">
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    .tables-text{
+        font-size: 15px;
+    }
+    .tables-text labe,.tables-text label{
+        width: 100px;
+        display: inline-block;
+        font-weight: normal;
+    }
+    .panel-info>div{
+        margin-bottom: 20px;
+    }
+    .btns{
+        margin-top: 64px;
+    }
+</style>
+</html>

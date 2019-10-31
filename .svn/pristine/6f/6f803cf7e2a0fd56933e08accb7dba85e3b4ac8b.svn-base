@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script type="text/javascript" src="../../../static/js/jquery-3.3.1.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!-- 引入bootstrap select插件 -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-select.min.js"></script>
+    <!--引入stringbuffer.js-->
+    <script type="text/javascript" src="../../../static/utils/stringBuffer.js"></script>
+    <!-- 弹框组件 -->
+    <script type="text/javascript" src="../../../static/js/bootbox.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery.form.js"></script>
+    <!--引入本页面js-->
+    <script type="text/javascript" src="../../../static/views/serviceSite/ServiceSiteExamineList.js"></script>
+
+</head>
+<body>
+<div  class="container-fluid" style="width: 1200px">
+    <div class="row">
+        <ul id="myNav" class="nav nav-pills ">
+           <li class="active" style="width: 48%;text-align: center;">
+                <a href="#to_auditing" data-toggle="tab" style="color: rgb(67, 200, 214)">
+                    待审核
+                </a>
+            </li>
+            <li style="width: 48%;text-align: center"><a href="#auditing" data-toggle="tab">已审核</a></li>
+        </ul>
+    </div>
+    <div id="my" class="tab-content">
+        <!--带审核列表table -->
+        <div class="tab-pane fade in active" id="to_auditing">
+            <div  class="row" style="margin-top: 20px">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <!-- 查询待审核 -->
+                        <input id="query_to_auditing" type="text"  placeholder="网点名称" class="form-control query_input">
+                        <span class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span id="searchUser">搜索 </span></i></a></span>
+                    </div>
+                </div>
+            </div>
+            <!-- 待审核列表 -->
+            <div>
+                <table id="to_auditingTable"></table>
+            </div>
+        </div>
+        <!--已审核列表table -->
+        <div class="tab-pane fade" id="auditing">
+            <div  class="row" style="margin-top: 20px">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input id="query_auditing" type="text"  placeholder="网点名称" class="form-control query_input">
+                        <span class="input-group-addon"><a href="#"><i class="glyphicon glyphicon-search"> <span id="searchRole">搜索   </span></i></a></span>
+                    </div>
+                </div>
+            </div>
+            <!-- 已审核列表 -->
+            <div>
+                <table id="auditingTable"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TAppointmentMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TAppointment" >
+    <id column="appointment_id" property="appointmentId" jdbcType="BIGINT" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="appointment_name" property="appointmentName" jdbcType="VARCHAR" />
+    <result column="appointment_phone" property="appointmentPhone" jdbcType="VARCHAR" />
+    <result column="appointment_channel" property="appointmentChannel" jdbcType="INTEGER" />
+    <result column="schedule_time" property="scheduleTime" jdbcType="TIMESTAMP" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.soholy.dogmanager.entity.TAppointment" extends="BaseResultMap" >
+    <result column="remarks" property="remarks" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <resultMap type="com.soholy.dogmanager.entity.reservation.ReserveInformation" id="reserveInformationResultMap" extends="BaseResultMap">
+    <result property="organizationName" column="organization_name" jdbcType="VARCHAR" />
+    <result property="cardName" column="dictionary_value" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 查询所有预约业务类型 -->
+  <select id="findAppointmentChannelAll" resultType="java.util.Map">
+  		SELECT d.dictionary_value AS 'dicName',d.dictionary_describe AS 'decType' 
+  		FROM t_appointment a 
+  		RIGHT JOIN t_dictionary d ON  a.appointment_channel = d.dictionary_value
+  		WHERE d.dictionary_field = 'appointment_channel'
+  		GROUP BY d.dictionary_value
+  	</select>
+
+  <!-- 查询机构预约业务  -->
+  <select id="findAppointmentsByOrgIdAndLikeUserInfo" resultMap="BaseResultMap">
+    SELECT
+    a.appointment_channel,a.appointment_id,a.appointment_name,a.appointment_phone,a.biz_type,
+    a.creation_time, a.creation_time,a.org_id,a.remarks, a.schedule_time,a.`status`,a.user_id
+    FROM t_appointment a ,t_organization o
+    WHERE a.org_id = o.organization_id
+    AND a.org_id = #{orgId}
+    <if test="keyWord != null and keyWord != ''">
+      AND (a.appointment_phone LIKE CONCAT('%',#{keyWord},'%') OR a.appointment_name LIKE CONCAT('%',#{keyWord},'%'))
+    </if>
+    ORDER BY a.creation_time DESC
+  </select>
+
+  <!-- 检查通知即将到期的  提前3天-->
+  <select id="findAppointmentIsExpire" resultMap="BaseResultMap">
+    SELECT
+    a.appointment_channel,a.appointment_id,a.appointment_name,a.appointment_phone,a.biz_type,
+    a.creation_time, a.creation_time,a.org_id,a.remarks, a.schedule_time,a.`status`,a.user_id
+    FROM t_appointment a
+    WHERE a.schedule_time &lt; (select date_sub(#{curTime}, interval #{day} day))
+    ORDER BY a.creation_time DESC
+  </select>
+
+  <!-- 根据用户id查询预约列表 -->
+  <select id="findAppointmentsByUserIdAndLikeHospitalName" resultMap="reserveInformationResultMap">
+    SELECT
+    a.appointment_id,  a.appointment_name, a.appointment_phone, a.appointment_channel,
+    a.schedule_time, a.status, a.creation_time,
+    d.dictionary_value ,
+    o.organization_name
+    FROM  t_appointment a,t_organization o ,t_dictionary d
+    <where>
+      a.org_id = o.organization_id
+      <if test="userId != null">
+        AND a.user_id = #{userId}
+      </if>
+      <if test="hospitalName != null and hospitalName!= ''">
+        AND o.organization_name LIKE CONCAT("%",#{hospitalName},"%")
+      </if>
+      AND d.dictionary_id = a.biz_type
+    </where>
+    ORDER BY a.creation_time DESC
+  </select>
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    appointment_id, biz_type, appointment_name, appointment_phone, appointment_channel, 
+    schedule_time, org_id, status, creation_time, user_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    remarks
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.soholy.dogmanager.entity.TAppointmentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TAppointmentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_appointment
+    where appointment_id = #{appointmentId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_appointment
+    where appointment_id = #{appointmentId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TAppointmentExample" >
+    delete from t_appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TAppointment" >
+    insert into t_appointment (appointment_id, biz_type, appointment_name,
+    appointment_phone, appointment_channel, schedule_time,
+    org_id, status, creation_time,
+    user_id, remarks)
+    values (#{appointmentId,jdbcType=BIGINT}, #{bizType,jdbcType=INTEGER}, #{appointmentName,jdbcType=VARCHAR},
+    #{appointmentPhone,jdbcType=VARCHAR}, #{appointmentChannel,jdbcType=INTEGER}, #{scheduleTime,jdbcType=TIMESTAMP},
+    #{orgId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP},
+    #{userId,jdbcType=BIGINT}, #{remarks,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TAppointment" >
+    insert into t_appointment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="appointmentId != null" >
+        appointment_id,
+      </if>
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="appointmentName != null" >
+        appointment_name,
+      </if>
+      <if test="appointmentPhone != null" >
+        appointment_phone,
+      </if>
+      <if test="appointmentChannel != null" >
+        appointment_channel,
+      </if>
+      <if test="scheduleTime != null" >
+        schedule_time,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="appointmentId != null" >
+        #{appointmentId,jdbcType=BIGINT},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="appointmentName != null" >
+        #{appointmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentPhone != null" >
+        #{appointmentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentChannel != null" >
+        #{appointmentChannel,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleTime != null" >
+        #{scheduleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TAppointmentExample" resultType="java.lang.Integer" >
+    select count(*) from t_appointment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_appointment
+    <set >
+      <if test="record.appointmentId != null" >
+        appointment_id = #{record.appointmentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.bizType != null" >
+        biz_type = #{record.bizType,jdbcType=INTEGER},
+      </if>
+      <if test="record.appointmentName != null" >
+        appointment_name = #{record.appointmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appointmentPhone != null" >
+        appointment_phone = #{record.appointmentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appointmentChannel != null" >
+        appointment_channel = #{record.appointmentChannel,jdbcType=INTEGER},
+      </if>
+      <if test="record.scheduleTime != null" >
+        schedule_time = #{record.scheduleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orgId != null" >
+        org_id = #{record.orgId,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_appointment
+    set appointment_id = #{record.appointmentId,jdbcType=BIGINT},
+    biz_type = #{record.bizType,jdbcType=INTEGER},
+    appointment_name = #{record.appointmentName,jdbcType=VARCHAR},
+    appointment_phone = #{record.appointmentPhone,jdbcType=VARCHAR},
+    appointment_channel = #{record.appointmentChannel,jdbcType=INTEGER},
+    schedule_time = #{record.scheduleTime,jdbcType=TIMESTAMP},
+    org_id = #{record.orgId,jdbcType=BIGINT},
+    status = #{record.status,jdbcType=INTEGER},
+    creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+    user_id = #{record.userId,jdbcType=BIGINT},
+    remarks = #{record.remarks,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_appointment
+    set appointment_id = #{record.appointmentId,jdbcType=BIGINT},
+    biz_type = #{record.bizType,jdbcType=INTEGER},
+    appointment_name = #{record.appointmentName,jdbcType=VARCHAR},
+    appointment_phone = #{record.appointmentPhone,jdbcType=VARCHAR},
+    appointment_channel = #{record.appointmentChannel,jdbcType=INTEGER},
+    schedule_time = #{record.scheduleTime,jdbcType=TIMESTAMP},
+    org_id = #{record.orgId,jdbcType=BIGINT},
+    status = #{record.status,jdbcType=INTEGER},
+    creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+    user_id = #{record.userId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TAppointment" >
+    update t_appointment
+    <set >
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="appointmentName != null" >
+        appointment_name = #{appointmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentPhone != null" >
+        appointment_phone = #{appointmentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentChannel != null" >
+        appointment_channel = #{appointmentChannel,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleTime != null" >
+        schedule_time = #{scheduleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where appointment_id = #{appointmentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soholy.dogmanager.entity.TAppointment" >
+    update t_appointment
+    set biz_type = #{bizType,jdbcType=INTEGER},
+    appointment_name = #{appointmentName,jdbcType=VARCHAR},
+    appointment_phone = #{appointmentPhone,jdbcType=VARCHAR},
+    appointment_channel = #{appointmentChannel,jdbcType=INTEGER},
+    schedule_time = #{scheduleTime,jdbcType=TIMESTAMP},
+    org_id = #{orgId,jdbcType=BIGINT},
+    status = #{status,jdbcType=INTEGER},
+    creation_time = #{creationTime,jdbcType=TIMESTAMP},
+    user_id = #{userId,jdbcType=BIGINT},
+    remarks = #{remarks,jdbcType=LONGVARCHAR}
+    where appointment_id = #{appointmentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TAppointment" >
+    update t_appointment
+    set biz_type = #{bizType,jdbcType=INTEGER},
+      appointment_name = #{appointmentName,jdbcType=VARCHAR},
+      appointment_phone = #{appointmentPhone,jdbcType=VARCHAR},
+      appointment_channel = #{appointmentChannel,jdbcType=INTEGER},
+      schedule_time = #{scheduleTime,jdbcType=TIMESTAMP},
+      org_id = #{orgId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=BIGINT}
+    where appointment_id = #{appointmentId,jdbcType=BIGINT}
+  </update>
+  <select id="selectOrgName" resultType="java.lang.String">
+    select organization_name from t_organization where organization_id=#{orgId}
+  </select>
+</mapper>

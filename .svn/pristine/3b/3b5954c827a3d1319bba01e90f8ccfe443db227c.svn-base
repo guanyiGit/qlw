@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <title>免疫证详情</title>
+
+    <script type="text/javascript" src="../../../static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common.js"></script>
+    <!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="../../../static/js/cookie_util.js"></script>
+    <script type="text/javascript" src="../../../static/js/Validform.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/jquery-calendar.js"></script>
+    <script type="text/javascript" src="../../../static/js/alertBox.js"></script>
+    <!-- 引入 bootstrap -->
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../static/bootstrap-3.3.7/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/bootstrap-3.3.7/dist/js/bootstrap-table.js"></script>
+    <!--引入webuploader相关组件-->
+    <link href="../../../static/webuploader/webuploader.css" rel="stylesheet">
+    <script type="text/javascript" src="../../../static/webuploader/webuploader.min.js"></script>
+
+    <!--引入本页面js-->
+    <script type="text/javascript" b src="../../../static/views/immunisation/immune_certificate_detail.js"></script>
+
+</head>
+<body>
+<!--<div class="container-fluid" style="width:900px;">-->
+<div class="container-fluid">
+    <div style="z-index: 14;">
+        <div id="55aeff1c-8ece-ecf9-d35a-3068acd82ed3" class="component component-Label"
+             style="left: 246px; top: 156px; width: 207px; height: 25px; padding: 0px; opacity: 1; z-index: 14; line-height: 24px; transform: scaleX(1) scaleY(1);">
+            <div class="context" style="background-color: rgba(0, 0, 0, 0); position: absolute; line-height: 24px;">
+                <div style="width: auto; height: auto; text-align: left;">
+                    <div style="width: auto; height: auto;">
+                        <label style="white-space: nowrap; text-align: left; font-size: 18px; font-weight: 700; font-style: normal; text-decoration: none; font-family: 微软雅黑; color: rgb(255, 102, 85);">
+                            免疫证办理&gt;&gt;免疫证办理详情
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" style="margin-top: 20px">
+        <!--form 表单-->
+        <form id="add" method="post">
+            <div class="form-group">
+                <!--证件信息-->
+                <!--<div class="panel panel-info" style="margin-left: 20px;margin-top: 20px;">-->
+                <div style="background-color: rgb(65, 199, 219);line-height: 40px;height: 40px;color: #fff;margin-bottom: 14px;">
+                    &nbsp&nbsp&nbsp&nbsp证件信息
+                </div>
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                            <label for="immNum">免疫证号:</label>
+                              <input id="immNum">
+                        </span>
+                    <span class="col-sm-5">
+                              <label for="issAu">签发机构:</label>
+                                  <input id="issAu">
+                        </span>
+                </div>
+
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                            <label for="issDate">签发日期:</label>
+                            <input id="issDate" >
+                        </span>
+                    <span class="col-sm-5 selestd">
+                              <label>有效期限:</label>
+                            <input id="startDate" type="datetime-local">
+                            <p style="display: inline;margin-left: 15px;margin-right: 15px">—</p>
+                            <input id="endDate" type="datetime-local">
+                        </span>
+                </div>
+                <!--</div>-->
+            </div>
+            <div class="form-group">
+                <!--犬只信息-->
+                <div style="background-color: rgb(65, 199, 219);line-height: 40px;height: 40px;color: #fff;margin-bottom: 14px;">
+                    &nbsp&nbsp&nbsp&nbsp犬只信息
+                </div>
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                             <label for="dogName">犬名:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="dogName">
+                        </span>
+                    <span class="col-sm-5">
+                             <label for="breed">品种:</label>
+                    <input id="breed">
+                        </span>
+                </div>
+
+
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                             <label for="dogSex">性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+
+                                <input id="dogSex">
+                        </span>
+                    <span class="col-sm-5">
+                             <label for="dogAge">犬龄:</label>
+                    <input id="dogAge">
+                        </span>
+                </div>
+
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                            <label for="dogBirth">出生日期:</label>
+                                <input id="dogBirth">
+                        </span>
+                    <span class="col-sm-5">
+                            <label for="color">毛色:</label>
+                    <input id="color">
+                        </span>
+                </div>
+
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                           <label for="father">父本:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="father">
+                        </span>
+                    <span class="col-sm-5">
+                           <label for="mother">母本:</label>
+                    <input id="mother">
+                        </span>
+                </div>
+
+                <div style="display: none">
+                    <!--要实现如上demo，首先需要准备一个按钮，和一个用来存放添加的文件信息列表的容器。-->
+                    <!--dom结构部分-->
+                    <div id="dg" class="panel panel-default">
+                        <div class="uploader-demo">
+                            <!--用来存放item-->
+                            <ul id="fileList" class="list-unstyled list-inline "></ul>
+                            <div id="filePicker"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <!--犬主信息-->
+                <!--<div class="panel panel-info" style="margin-left: 20px;margin-top: 20px;">-->
+                <div class="row"
+                     style="background-color: rgb(65, 199, 219);line-height: 40px;height: 40px;color: #fff;margin-bottom: 14px;">
+                    &nbsp&nbsp&nbsp&nbsp犬主信息
+                </div>
+                <div class="row">
+                        <span class="col-sm-6 col-lg-offset-1">
+                            <label for="dogOwner">犬主姓名:</label>
+                            <input id="dogOwner">
+                        </span>
+                    <span class="col-sm-5">
+                                <label for="property">性质:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <input id="property">
+                        </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-lg-offset-1">
+                                <label for="cardType">证件类型:</label>
+                                 <input id="cardType">
+                            </span>
+                    <span class="col-sm-5">
+                                <label for="cardNum">证件号码:</label>
+                                <input id="cardNum">
+                            </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-lg-offset-1">
+                                <label for="sex">性别:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                                <!-- <select id="sex" style="width: 174px;height: 26px">
+                                    <option class="sex" selected="selected" value="0">男</option>
+                                    <option class="sex"  value="1">女</option>
+                                </select> -->
+                                <input id="sex">
+                            </span>
+                    <span class="col-sm-5">
+                                <label for="ownerBirth">出生日期:</label>
+                                <input id="ownerBirth">
+                            </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-lg-offset-1">
+                                <label for="district">现住区县:</label>
+                                <input id="district">
+                            </span>
+                    <span class="col-sm-5">
+                            <label>所属部门:</label>
+                            <input>
+                            </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-lg-offset-1">
+                                <label for="community">所属社区:</label>
+                                <input id="community">
+                            </span>
+                    <span class="col-sm-5">
+                            <label for="postalCode">邮编:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                            <input id="postalCode">
+                            </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-lg-offset-1">
+                                <label for="phone">联系电话:</label>
+                                <input id="phone">
+                            </span>
+                    <span class="col-sm-5">
+                            <label for="email">电子邮箱:</label>
+                            <input id="email">
+                            </span>
+                </div>
+                <div class="row">
+                            <span class="col-sm-6 col-lg-offset-1">
+                            <label for="address">详细地址:</label>
+                            <input id="address">
+                            </span>
+                </div>
+                <!--</div>-->
+            </div>
+        </form>
+        <!--工具按钮-->
+        <div style="width: 100% "  class="btns">
+            <button id="print" class="btn btn-sm btn-info" style="margin-right: 120px">打印</button>
+            <button id="cancel" class="btn btn-sm btn-default">取消</button>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    label {
+        width: 100px;
+    }
+
+    .row {
+        margin: 0;
+        line-height: 45px;
+        height: 45px;
+    }
+
+    input, select {
+        width: 200px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    panel-info {
+        height: auto;
+    }
+
+    .selestd input {
+        width: 100px;
+    }
+    .form-group{
+        margin: 20px 20px;
+        /*border:solid 1px #bce8f1;*/
+    }
+    .btns{
+        display: flex;
+        justify-content: center;
+        margin: 60px 0;
+    }
+</style>
+</html>

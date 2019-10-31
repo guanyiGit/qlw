@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.serviceSite.TypeRefImagesMapper">
+	
+	<select id="selectImagesByTypeAndId" resultType="com.soholy.dogmanager.pojo.servicesite.TypeRefImages">
+		select tr.target_type targetType,
+			tr.ref_id refId,
+			tm.image_id imageId,
+			tm.image_name imageName,
+			tm.image_titile imageTitile,
+			tm.image_url imageUrl,
+			tm.image_size imageSize,
+			tm.image_ext imageExt,
+			tm.thumbnail_url thumbnailUrl,
+			tm.thumbnail_size thumbnailSize,
+			tm.cration_time crationTime
+			from
+			t_images_ref tr
+		left join t_images tm
+		on tr.image_id = tm.image_id
+		where tr.target_type=#{targetType}
+		and tr.ref_id=#{refId}
+		ORDER BY tm.cration_time ASC
+	</select>
+</mapper>

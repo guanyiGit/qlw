@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/task 
+	http://www.springframework.org/schema/task/spring-task-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+
+	<!-- 开启注解 -->
+<!-- 	<context:annotation-config /> -->
+	<task:annotation-driven/><!--定时任务  -->
+	<context:component-scan base-package="com.soholy.dogmanager.common.utils"/><!--定时任务  -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig" >
+		<property name="maxIdle" value="100" />
+		<property name="maxWaitMillis" value="1000" />
+		<property name="testOnBorrow" value="true" />
+	</bean >
+
+	<bean id="redisManager" class="com.soholy.dogmanager.shiro.redis.impl.RedisManager">
+        <property  name = "host" value ="192.168.0.69:6380" />
+		<!--<property  name = "host" value ="120.79.233.141:6379" />-->
+		<!--可选属性-->
+	    <property name ="timeout" value ="10000"/>
+	    <!--<property name ="password" value ="123456" />-->
+	    <property name ="database" value ="1"/>
+	    <property name ="jedisPoolConfig" ref ="poolConfig"/>
+	    <property name ="count" value ="100"/>
+	</bean>
+
+
+
+	<!--<bean id="redisManager" class="com.soholy.dogmanager.shiro.redis.impl.RedisManager">-->
+		<!--<property  name = "host" value ="120.79.233.141:6379" />-->
+	     <!--&lt;!&ndash; 可选属性 &ndash;&gt;-->
+	    <!--<property name ="timeout" value ="10000"/>-->
+	    <!--<property name ="password" value ="123456" />-->
+	    <!--<property name ="database" value ="1"/>-->
+	    <!--<property name ="jedisPoolConfig" ref ="poolConfig"/>-->
+	    <!--<property name ="count" value ="100"/>-->
+	<!--</bean>-->
+
+	<!-- redis集群版 -->
+	<!-- <bean id="jedisCluster" class="redis.clients.jedis.JedisCluster"> <constructor-arg>
+		<set> <bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host"
+		value="192.168.156.15"/> <constructor-arg name="port" value="6379"/> </bean>
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host"
+		value="192.168.156.16"/> <constructor-arg name="port" value="6379"/> </bean>
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host"
+		value="192.168.156.17"/> <constructor-arg name="port" value="6379"/> </bean>
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host"
+		value="192.168.156.18"/> <constructor-arg name="port" value="6379"/> </bean>
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host"
+		value="192.168.156.19"/> <constructor-arg name="port" value="6379"/> </bean>
+		<bean class="redis.clients.jedis.HostAndPort"> <constructor-arg name="host"
+		value="192.168.156.20"/> <constructor-arg name="port" value="6379"/> </bean>
+		</set> </constructor-arg> </bean> <bean id="jedisClientCluster" class="com.taotao.jedis.service.impl.JedisClientCluster"></bean> -->
+
+</beans>

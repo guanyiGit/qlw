@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TRolesMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TRoles">
+		<id column="role_id" property="roleId" jdbcType="INTEGER" />
+		<result column="dept_id" property="deptId" jdbcType="VARCHAR" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		<result column="r_status" property="rStatus" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="role_describe" property="roleDescribe"
+			jdbcType="VARCHAR" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		role_id, dept_id, role_name, r_status, parent_id,
+		role_describe, creation_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TRolesExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_roles
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TRolesExample">
+		delete from t_roles
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.soholy.dogmanager.entity.TRoles">
+		insert into t_roles (role_id,
+		dept_id, role_name,
+		r_status, parent_id, role_describe,
+		creation_time)
+		values (#{roleId,jdbcType=INTEGER}, #{deptId,jdbcType=VARCHAR},
+		#{roleName,jdbcType=VARCHAR},
+		#{rStatus,jdbcType=INTEGER},
+		#{parentId,jdbcType=INTEGER}, #{roleDescribe,jdbcType=VARCHAR},
+		#{creationTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TRolesExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_roles
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_roles
+		<set>
+			<if test="record.roleId != null">
+				role_id = #{record.roleId,jdbcType=INTEGER},
+			</if>
+			<if test="record.deptId != null">
+				dept_id = #{record.deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.roleName != null">
+				role_name = #{record.roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.rStatus != null">
+				r_status = #{record.rStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=INTEGER},
+			</if>
+			<if test="record.roleDescribe != null">
+				role_describe = #{record.roleDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="record.creationTime != null">
+				creation_time =
+				#{record.creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_roles
+		set role_id = #{record.roleId,jdbcType=INTEGER},
+		dept_id
+		= #{record.deptId,jdbcType=VARCHAR},
+		role_name =
+		#{record.roleName,jdbcType=VARCHAR},
+		r_status =
+		#{record.rStatus,jdbcType=INTEGER},
+		parent_id =
+		#{record.parentId,jdbcType=INTEGER},
+		role_describe =
+		#{record.roleDescribe,jdbcType=VARCHAR},
+		creation_time =
+		#{record.creationTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TRoles">
+		update t_roles
+		set
+		dept_id = #{deptId,jdbcType=VARCHAR},
+		role_name =
+		#{roleName,jdbcType=VARCHAR},
+		r_status = #{rStatus,jdbcType=INTEGER},
+		parent_id = #{parentId,jdbcType=INTEGER},
+		role_describe =
+		#{roleDescribe,jdbcType=VARCHAR},
+		creation_time =
+		#{creationTime,jdbcType=TIMESTAMP}
+		where role_id =
+		#{roleId,jdbcType=INTEGER}
+	</update>
+
+
+	<insert id="insertRole" parameterType="com.soholy.dogmanager.entity.TRoles">
+		insert into t_roles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				role_id,
+			</if>
+			<if test="deptId != null">
+				dept_id,
+			</if>
+			<if test="roleName != null">
+				role_name,
+			</if>
+			<if test="rStatus != null">
+				r_status,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="roleDescribe != null">
+				role_describe,
+			</if>
+			<if test="creationTime != null">
+				creation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
+			</if>
+			<if test="deptId != null">
+				#{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="rStatus != null">
+				#{rStatus,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="roleDescribe != null">
+				#{roleDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime != null">
+				#{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="deleteByRoleId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_roles
+		where role_id = #{roleId,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectRolesByStatus" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_roles
+		<where>
+			<if test="status != null and status != -1">
+				r_status = #{status}
+			</if>
+			<if test="query != null and query  != ''">
+				and CONCAT(role_id,role_name) like '%' #{query} '%'
+			</if>
+		</where>
+	</select>
+
+	<update id="updateRole" parameterType="com.soholy.dogmanager.entity.TRoles">
+		update t_roles
+		<set>
+			<if test="deptId != null">
+				dept_id = #{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				role_name = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="rStatus != null">
+				r_status = #{rStatus,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="roleDescribe != null">
+				role_describe = #{roleDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime != null">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where role_id = #{roleId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据角色id获取所有资源id集合 -->
+	<select id="selectResourcesIdsByRoleId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select rr.resources_id
+		from t_roles r
+		left join
+		t_role_ref_resources rr on r.role_id = rp.role_id where
+		r.role_id=#{roleId}
+	</select>
+
+</mapper>

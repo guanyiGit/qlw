@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TUsersMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TUsers">
+		<id column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="organization_id" property="organizationId"
+			jdbcType="INTEGER" />
+		<result column="dog_own_id" property="dogOwnId" jdbcType="BIGINT" />
+		<result column="org_type" property="orgType" jdbcType="INTEGER" />
+		<result column="district_id" property="districtId" jdbcType="INTEGER" />
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="u_status" property="uStatus" jdbcType="INTEGER" />
+		<result column="login_num" property="loginNum" jdbcType="INTEGER" />
+		<result column="recentLogin_time" property="recentloginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<!--插入登录信息-->
+	<insert id="saveLoginInfo">
+		INSERT INTO t_user_logRecord (
+			user_id,recent_loginDate,recent_logoutDate
+		) VALUES (
+			#{userId},#{recentLoginDate},#{recentLogoutDate}
+		)
+	</insert>
+
+	<!--修改登录信息 登录记录表-->
+	<update id="modifyLoginInfo">
+		UPDATE t_user_logRecord ul
+		<set>
+			<if test="recentLoginDate != null">
+				ul.recent_loginDate = #{recentLoginDate},
+			</if>
+			<if test="recentLogoutDate != null">
+				ul.recent_logoutDate = #{recentLogoutDate},
+			</if>
+		</set>
+		WHERE ul.user_id = #{userId}
+	</update>
+
+	<!--根据设备id查询用户信息-->
+	<select id="findUserInfoByDeviceId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT u.* FROM
+			t_device d, t_device_ref_dog dd, t_dog_info di, t_dog_owner dow, t_users u
+		WHERE d.device_id = dd.device_id
+		AND dd.dog_id = di.dog_id
+		AND di.dog_owner_id = dow.dog_owner_id
+		AND u.dog_own_id = dow.dog_owner_id
+		AND d.device_id = #{_parameter}
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.soholy.dogmanager.entity.TUsersExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_users
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from t_users
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		t_users
+		where user_id = #{userId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TUsersExample">
+		delete from t_users
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TUsers">
+		insert into t_users
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="organizationId != null">
+				organization_id,
+			</if>
+			<if test="dogOwnId != null">
+				dog_own_id,
+			</if>
+			<if test="orgType != null">
+				org_type,
+			</if>
+			<if test="districtId != null">
+				district_id,
+			</if>
+			<if test="openId != null">
+				open_id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="uStatus != null">
+				u_status,
+			</if>
+			<if test="loginNum != null">
+				login_num,
+			</if>
+			<if test="recentloginTime != null">
+				recentLogin_time,
+			</if>
+			<if test="creationTime != null">
+				creation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="organizationId != null">
+				#{organizationId,jdbcType=INTEGER},
+			</if>
+			<if test="dogOwnId != null">
+				#{dogOwnId,jdbcType=BIGINT},
+			</if>
+			<if test="orgType != null">
+				#{orgType,jdbcType=INTEGER},
+			</if>
+			<if test="districtId != null">
+				#{districtId,jdbcType=INTEGER},
+			</if>
+			<if test="openId != null">
+				#{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="uStatus != null">
+				#{uStatus,jdbcType=INTEGER},
+			</if>
+			<if test="loginNum != null">
+				#{loginNum,jdbcType=INTEGER},
+			</if>
+			<if test="recentloginTime != null">
+				#{recentloginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creationTime != null">
+				#{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.soholy.dogmanager.entity.TUsersExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_users
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_users
+		<set>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.organizationId != null">
+				organization_id =
+				#{record.organizationId,jdbcType=INTEGER},
+			</if>
+			<if test="record.dogOwnId != null">
+				dog_own_id = #{record.dogOwnId,jdbcType=BIGINT},
+			</if>
+			<if test="record.orgType != null">
+				org_type = #{record.orgType,jdbcType=INTEGER},
+			</if>
+			<if test="record.districtId != null">
+				district_id = #{record.districtId,jdbcType=INTEGER},
+			</if>
+			<if test="record.openId != null">
+				open_id = #{record.openId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.username != null">
+				username = #{record.username,jdbcType=VARCHAR},
+			</if>
+			<if test="record.password != null">
+				password = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sex != null">
+				sex = #{record.sex,jdbcType=INTEGER},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.uStatus != null">
+				u_status = #{record.uStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.loginNum != null">
+				login_num = #{record.loginNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.recentloginTime != null">
+				recentLogin_time =
+				#{record.recentloginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.creationTime != null">
+				creation_time =
+				#{record.creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_users
+		set user_id = #{record.userId,jdbcType=BIGINT},
+		organization_id = #{record.organizationId,jdbcType=INTEGER},
+		dog_own_id = #{record.dogOwnId,jdbcType=BIGINT},
+		org_type =
+		#{record.orgType,jdbcType=INTEGER},
+		district_id =
+		#{record.districtId,jdbcType=INTEGER},
+		open_id =
+		#{record.openId,jdbcType=VARCHAR},
+		username =
+		#{record.username,jdbcType=VARCHAR},
+		password =
+		#{record.password,jdbcType=VARCHAR},
+		name =
+		#{record.name,jdbcType=VARCHAR},
+		sex = #{record.sex,jdbcType=INTEGER},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		email =
+		#{record.email,jdbcType=VARCHAR},
+		u_status =
+		#{record.uStatus,jdbcType=INTEGER},
+		login_num =
+		#{record.loginNum,jdbcType=INTEGER},
+		recentLogin_time =
+		#{record.recentloginTime,jdbcType=TIMESTAMP},
+		creation_time =
+		#{record.creationTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TUsers">
+		update t_users
+		<set>
+			<if test="organizationId != null">
+				organization_id = #{organizationId,jdbcType=INTEGER},
+			</if>
+			<if test="dogOwnId != null">
+				dog_own_id = #{dogOwnId,jdbcType=BIGINT},
+			</if>
+			<if test="orgType != null">
+				org_type = #{orgType,jdbcType=INTEGER},
+			</if>
+			<if test="districtId != null">
+				district_id = #{districtId,jdbcType=INTEGER},
+			</if>
+			<if test="openId != null">
+				open_id = #{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="uStatus != null">
+				u_status = #{uStatus,jdbcType=INTEGER},
+			</if>
+			<if test="loginNum != null">
+				login_num = #{loginNum,jdbcType=INTEGER},
+			</if>
+			<if test="recentloginTime != null">
+				recentLogin_time = #{recentloginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creationTime != null">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where user_id = #{userId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TUsers">
+		update t_users
+		set
+		organization_id = #{organizationId,jdbcType=INTEGER},
+		dog_own_id =
+		#{dogOwnId,jdbcType=BIGINT},
+		org_type = #{orgType,jdbcType=INTEGER},
+		district_id = #{districtId,jdbcType=INTEGER},
+		open_id =
+		#{openId,jdbcType=VARCHAR},
+		username = #{username,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		name =
+		#{name,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=INTEGER},
+		phone =
+		#{phone,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		u_status =
+		#{uStatus,jdbcType=INTEGER},
+		login_num = #{loginNum,jdbcType=INTEGER},
+		recentLogin_time = #{recentloginTime,jdbcType=TIMESTAMP},
+		creation_time = #{creationTime,jdbcType=TIMESTAMP}
+		where user_id =
+		#{userId,jdbcType=BIGINT}
+	</update>
+
+
+	<!-- 添加用户 -->
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="user.userId" keyColumn="user_id">
+		insert into t_users
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="user.userId != null">
+				user_id,
+			</if>
+			<if test="user.organizationId != null">
+				organization_id,
+			</if>
+			<if test="user.dogOwnId != null">
+				dog_own_id,
+			</if>
+			<if test="user.orgType != null">
+				org_type,
+			</if>
+			<if test="user.districtId != null">
+				district_id,
+			</if>
+			<if test="user.openId != null">
+				open_id,
+			</if>
+			<if test="user.username != null">
+				username,
+			</if>
+			<if test="user.password != null">
+				password,
+			</if>
+			<if test="user.name != null">
+				name,
+			</if>
+			<if test="user.sex != null">
+				sex,
+			</if>
+			<if test="user.phone != null">
+				phone,
+			</if>
+			<if test="user.email != null">
+				email,
+			</if>
+			<if test="user.uStatus != null">
+				u_status,
+			</if>
+			<if test="user.loginNum != null">
+				login_num,
+			</if>
+			<if test="user.recentloginTime != null">
+				recentLogin_time,
+			</if>
+			<if test="user.creationTime != null">
+				creation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="user.userId != null">
+				#{user.userId,jdbcType=BIGINT},
+			</if>
+			<if test="user.organizationId != null">
+				#{user.organizationId,jdbcType=INTEGER},
+			</if>
+			<if test="user.dogOwnId != null">
+				#{user.dogOwnId,jdbcType=BIGINT},
+			</if>
+			<if test="user.orgType != null">
+				#{user.orgType,jdbcType=INTEGER},
+			</if>
+			<if test="user.districtId != null">
+				#{user.districtId,jdbcType=INTEGER},
+			</if>
+			<if test="user.openId != null">
+				#{user.openId,jdbcType=VARCHAR},
+			</if>
+			<if test="user.username != null">
+				#{user.username,jdbcType=VARCHAR},
+			</if>
+			<if test="user.password != null">
+				#{user.password,jdbcType=VARCHAR},
+			</if>
+			<if test="user.name != null">
+				#{user.name,jdbcType=VARCHAR},
+			</if>
+			<if test="user.sex != null">
+				#{user.sex,jdbcType=INTEGER},
+			</if>
+			<if test="user.phone != null">
+				#{user.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="user.email != null">
+				#{user.email,jdbcType=VARCHAR},
+			</if>
+			<if test="user.uStatus != null">
+				#{user.uStatus,jdbcType=INTEGER},
+			</if>
+			<if test="user.loginNum != null">
+				#{user.loginNum,jdbcType=INTEGER},
+			</if>
+			<if test="user.recentloginTime != null">
+				#{user.recentloginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="user.creationTime != null">
+				#{user.creationTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+
+	<!-- 修改密码 -->
+	<update id="updateUserPwdById">
+		update t_users u
+		<if test="newPassword != null and newPassword !=''">
+			set u.password = #{newPassword}
+		</if>
+		where u.user_id = #{userId}
+	</update>
+
+	<select id="selectUserByUserName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_users where username = #{username}
+	</select>
+
+	<select id="selectUserByPhone" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_users where phone = #{phone}
+	</select>
+
+	<select id="selectUserByEmail" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_users where email = #{email}
+	</select>
+
+	<select id="selectUsersByStatus" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_users where u_status = #{status}
+	</select>
+
+	<select id="selectUsersByOrgType" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_users where org_type = #{orgType}
+	</select>
+	<sql id="Base_Column_List">
+		user_id, organization_id, dog_own_id, org_type,
+		district_id, open_id,
+		username, password,
+		name, sex, phone, email,
+		u_status, login_num, recentLogin_time,
+		creation_time
+	</sql>
+	
+	<update id="updataStatus">
+		update t_users u
+		set u.u_status = #{status}
+		where u.user_id = #{userId}
+	</update>
+
+	<select id="getUserByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_users u where u.phone = #{phone}
+	</select>
+
+	<select id="getUserByOwnerId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from t_users u where u.dog_own_id = #{ownerId}
+	</select>
+
+
+	<update id="updateUserByName">
+		update t_users u set u.username=#{newUserName},u.password=#{passWord},u.phone=#{newUserName}
+		where u.username=#{oldUserName} and u.org_type=4
+	</update>
+
+	<select id="selectOrgNameById" resultType="java.lang.String">
+		select organization_name from t_organization where organization_id=#{orgId}
+	</select>
+	<!--根据登陆名称查询对象-->
+	<select id="getTUserByUserName" resultMap="BaseResultMap">
+		select*from t_users where username=#{userName} LIMIT 0,1
+	</select>
+	<!--根据手机号查询对象-->
+	<select id="getTUserByPhone" resultMap="BaseResultMap">
+		select*from t_users where phone=#{phone} LIMIT 0,1
+	</select>
+
+	<!--根据id修改密码-->
+	<update id="updPasswordById">
+		update t_users set password=#{password} where user_id=#{id}
+	</update>
+</mapper>

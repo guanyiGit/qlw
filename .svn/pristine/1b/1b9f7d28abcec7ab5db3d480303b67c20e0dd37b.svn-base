@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TOpinionRefDogMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TOpinionRefDog" >
+    <id column="opinion_ref_dog_id" property="opinionRefDogId" jdbcType="INTEGER" />
+    <result column="dog_id" property="dogId" jdbcType="BIGINT" />
+    <result column="opinion_id" property="opinionId" jdbcType="BIGINT" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    opinion_ref_dog_id, dog_id, opinion_id, creation_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TOpinionRefDogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_opinion_ref_dog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_opinion_ref_dog
+    where opinion_ref_dog_id = #{opinionRefDogId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_opinion_ref_dog
+    where opinion_ref_dog_id = #{opinionRefDogId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TOpinionRefDogExample" >
+    delete from t_opinion_ref_dog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TOpinionRefDog" >
+    insert into t_opinion_ref_dog (opinion_ref_dog_id, dog_id, opinion_id, 
+      creation_time)
+    values (#{opinionRefDogId,jdbcType=INTEGER}, #{dogId,jdbcType=BIGINT}, #{opinionId,jdbcType=BIGINT}, 
+      #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TOpinionRefDog" >
+    insert into t_opinion_ref_dog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="opinionRefDogId != null" >
+        opinion_ref_dog_id,
+      </if>
+      <if test="dogId != null" >
+        dog_id,
+      </if>
+      <if test="opinionId != null" >
+        opinion_id,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="opinionRefDogId != null" >
+        #{opinionRefDogId,jdbcType=INTEGER},
+      </if>
+      <if test="dogId != null" >
+        #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="opinionId != null" >
+        #{opinionId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TOpinionRefDogExample" resultType="java.lang.Integer" >
+    select count(*) from t_opinion_ref_dog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_opinion_ref_dog
+    <set >
+      <if test="record.opinionRefDogId != null" >
+        opinion_ref_dog_id = #{record.opinionRefDogId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dogId != null" >
+        dog_id = #{record.dogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.opinionId != null" >
+        opinion_id = #{record.opinionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_opinion_ref_dog
+    set opinion_ref_dog_id = #{record.opinionRefDogId,jdbcType=INTEGER},
+      dog_id = #{record.dogId,jdbcType=BIGINT},
+      opinion_id = #{record.opinionId,jdbcType=BIGINT},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TOpinionRefDog" >
+    update t_opinion_ref_dog
+    <set >
+      <if test="dogId != null" >
+        dog_id = #{dogId,jdbcType=BIGINT},
+      </if>
+      <if test="opinionId != null" >
+        opinion_id = #{opinionId,jdbcType=BIGINT},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where opinion_ref_dog_id = #{opinionRefDogId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TOpinionRefDog" >
+    update t_opinion_ref_dog
+    set dog_id = #{dogId,jdbcType=BIGINT},
+      opinion_id = #{opinionId,jdbcType=BIGINT},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where opinion_ref_dog_id = #{opinionRefDogId,jdbcType=INTEGER}
+  </update>
+</mapper>

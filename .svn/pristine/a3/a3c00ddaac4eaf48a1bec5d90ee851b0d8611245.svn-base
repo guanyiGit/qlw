@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TBlacklistMapper" >
+    <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TBlacklist" >
+        <id column="black_id" property="blackId" jdbcType="BIGINT" />
+        <result column="black_name" property="blackName" jdbcType="VARCHAR" />
+        <result column="join_cause" property="joinCause" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="operator" property="operator" jdbcType="VARCHAR" />
+        <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
+        <result column="remove_time" property="removeTime" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="card_type" property="cardType" jdbcType="INTEGER" />
+        <result column="birth_data" property="birthData" jdbcType="TIMESTAMP" />
+        <result column="dep" property="dep" jdbcType="VARCHAR" />
+        <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="community" property="community" jdbcType="VARCHAR" />
+        <result column="county" property="county" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+        black_id, black_name, join_cause, phone, card_num, sex, address, operator, join_time,
+        remove_time, status, card_type, birth_data, dep, postcode, email, remark, community,
+        county
+    </sql>
+
+
+
+    <select id="findTBlacklistAll" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_blacklist
+        <where>
+            status=1
+            <if test="string != null and string !='' ">
+                and (black_name like concat('%',#{string},'%') or card_num like concat('%',#{string},'%') or phone like concat('%',#{string},'%'))
+            </if>
+        </where>
+        ORDER BY join_time DESC LIMIT #{index},#{pageSize}
+    </select>
+    <select id="findTBlacklistAllCount" parameterType="java.util.HashMap" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM t_blacklist
+        <where>
+            status=1
+            <if test="string != null and string !='' ">
+                and (black_name like concat('%',#{string},'%') or card_num like concat('%',#{string},'%') or phone like concat('%',#{string},'%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="checkBlackList" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_blacklist
+        WHERE
+        black_name like concat('%',#{string},'%') or card_num like concat('%',#{string},'%') or phone like concat('%',#{string},'%')
+    </select>
+
+    <!-- 批量修改 -->
+    <update id="removeBatch" parameterType="java.util.List">
+        update t_blacklist
+        set  status=
+        <foreach collection="list" item="item" index="index"
+                 separator=" " open="case" close="end">
+            when #{item.blackId} then #{item.status}
+        </foreach>
+        where black_id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.blackId,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TBlacklistExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from t_blacklist
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from t_blacklist
+        where black_id = #{blackId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from t_blacklist
+        where black_id = #{blackId,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TBlacklistExample" >
+        delete from t_blacklist
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.soholy.dogmanager.entity.TBlacklist" >
+        insert into t_blacklist (black_id, black_name, join_cause,
+        phone, card_num, sex,
+        address, operator, join_time,
+        remove_time, status, card_type,
+        birth_data, dep, postcode,
+        email, remark, community,
+        county)
+        values (#{blackId,jdbcType=BIGINT}, #{blackName,jdbcType=VARCHAR}, #{joinCause,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+        #{address,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{joinTime,jdbcType=TIMESTAMP},
+        #{removeTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{cardType,jdbcType=INTEGER},
+        #{birthData,jdbcType=TIMESTAMP}, #{dep,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{community,jdbcType=VARCHAR},
+        #{county,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TBlacklist" >
+        insert into t_blacklist
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="blackId != null" >
+                black_id,
+            </if>
+            <if test="blackName != null" >
+                black_name,
+            </if>
+            <if test="joinCause != null" >
+                join_cause,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="cardNum != null" >
+                card_num,
+            </if>
+            <if test="sex != null" >
+                sex,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="operator != null" >
+                operator,
+            </if>
+            <if test="joinTime != null" >
+                join_time,
+            </if>
+            <if test="removeTime != null" >
+                remove_time,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="cardType != null" >
+                card_type,
+            </if>
+            <if test="birthData != null" >
+                birth_data,
+            </if>
+            <if test="dep != null" >
+                dep,
+            </if>
+            <if test="postcode != null" >
+                postcode,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="community != null" >
+                community,
+            </if>
+            <if test="county != null" >
+                county,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="blackId != null" >
+                #{blackId,jdbcType=BIGINT},
+            </if>
+            <if test="blackName != null" >
+                #{blackName,jdbcType=VARCHAR},
+            </if>
+            <if test="joinCause != null" >
+                #{joinCause,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNum != null" >
+                #{cardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null" >
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="joinTime != null" >
+                #{joinTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="removeTime != null" >
+                #{removeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="cardType != null" >
+                #{cardType,jdbcType=INTEGER},
+            </if>
+            <if test="birthData != null" >
+                #{birthData,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dep != null" >
+                #{dep,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null" >
+                #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="community != null" >
+                #{community,jdbcType=VARCHAR},
+            </if>
+            <if test="county != null" >
+                #{county,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TBlacklistExample" resultType="java.lang.Integer" >
+        select count(*) from t_blacklist
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
+        update t_blacklist
+        <set >
+            <if test="record.blackId != null" >
+                black_id = #{record.blackId,jdbcType=BIGINT},
+            </if>
+            <if test="record.blackName != null" >
+                black_name = #{record.blackName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.joinCause != null" >
+                join_cause = #{record.joinCause,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phone != null" >
+                phone = #{record.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cardNum != null" >
+                card_num = #{record.cardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sex != null" >
+                sex = #{record.sex,jdbcType=INTEGER},
+            </if>
+            <if test="record.address != null" >
+                address = #{record.address,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operator != null" >
+                operator = #{record.operator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.joinTime != null" >
+                join_time = #{record.joinTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.removeTime != null" >
+                remove_time = #{record.removeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.status != null" >
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.cardType != null" >
+                card_type = #{record.cardType,jdbcType=INTEGER},
+            </if>
+            <if test="record.birthData != null" >
+                birth_data = #{record.birthData,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.dep != null" >
+                dep = #{record.dep,jdbcType=VARCHAR},
+            </if>
+            <if test="record.postcode != null" >
+                postcode = #{record.postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.email != null" >
+                email = #{record.email,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null" >
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.community != null" >
+                community = #{record.community,jdbcType=VARCHAR},
+            </if>
+            <if test="record.county != null" >
+                county = #{record.county,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update t_blacklist
+        set black_id = #{record.blackId,jdbcType=BIGINT},
+        black_name = #{record.blackName,jdbcType=VARCHAR},
+        join_cause = #{record.joinCause,jdbcType=VARCHAR},
+        phone = #{record.phone,jdbcType=VARCHAR},
+        card_num = #{record.cardNum,jdbcType=VARCHAR},
+        sex = #{record.sex,jdbcType=INTEGER},
+        address = #{record.address,jdbcType=VARCHAR},
+        operator = #{record.operator,jdbcType=VARCHAR},
+        join_time = #{record.joinTime,jdbcType=TIMESTAMP},
+        remove_time = #{record.removeTime,jdbcType=TIMESTAMP},
+        status = #{record.status,jdbcType=INTEGER},
+        card_type = #{record.cardType,jdbcType=INTEGER},
+        birth_data = #{record.birthData,jdbcType=TIMESTAMP},
+        dep = #{record.dep,jdbcType=VARCHAR},
+        postcode = #{record.postcode,jdbcType=VARCHAR},
+        email = #{record.email,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        community = #{record.community,jdbcType=VARCHAR},
+        county = #{record.county,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TBlacklist" >
+        update t_blacklist
+        <set >
+            <if test="blackName != null" >
+                black_name = #{blackName,jdbcType=VARCHAR},
+            </if>
+            <if test="joinCause != null" >
+                join_cause = #{joinCause,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNum != null" >
+                card_num = #{cardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null" >
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="joinTime != null" >
+                join_time = #{joinTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="removeTime != null" >
+                remove_time = #{removeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="cardType != null" >
+                card_type = #{cardType,jdbcType=INTEGER},
+            </if>
+            <if test="birthData != null" >
+                birth_data = #{birthData,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dep != null" >
+                dep = #{dep,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null" >
+                postcode = #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="community != null" >
+                community = #{community,jdbcType=VARCHAR},
+            </if>
+            <if test="county != null" >
+                county = #{county,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where black_id = #{blackId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TBlacklist" >
+        update t_blacklist
+        set black_name = #{blackName,jdbcType=VARCHAR},
+        join_cause = #{joinCause,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        card_num = #{cardNum,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=INTEGER},
+        address = #{address,jdbcType=VARCHAR},
+        operator = #{operator,jdbcType=VARCHAR},
+        join_time = #{joinTime,jdbcType=TIMESTAMP},
+        remove_time = #{removeTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER},
+        card_type = #{cardType,jdbcType=INTEGER},
+        birth_data = #{birthData,jdbcType=TIMESTAMP},
+        dep = #{dep,jdbcType=VARCHAR},
+        postcode = #{postcode,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR},
+        community = #{community,jdbcType=VARCHAR},
+        county = #{county,jdbcType=VARCHAR}
+        where black_id = #{blackId,jdbcType=BIGINT}
+    </update>
+</mapper>

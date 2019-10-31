@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.user.UserRefRolesMapper">
+	<resultMap id="BaseResultMap" type="com.soholy.dogmanager.pojo.user.UserRefRoles"
+		extends="com.soholy.dogmanager.mapper.TUsersMapper.BaseResultMap">
+		<collection property="roles" ofType="com.soholy.dogmanager.entity.TRoles"
+			resultMap="com.soholy.dogmanager.mapper.TRolesMapper.BaseResultMap">
+		</collection>
+	</resultMap>
+
+	<select id="selectRolesByUserId" resultMap="BaseResultMap">
+		select u.user_id,
+		u.name,
+		u.sex,
+		u.phone,
+		u.email,
+		u.u_status,
+		u.login_num,
+		u.recentLogin_time,
+		r.role_id,
+		r.role_name,
+		r.role_describe
+		from t_users u
+		left join
+		t_user_ref_roles ur on ur.user_id = u.user_id
+		left join t_roles r on
+		ur.role_id = r.role_id
+		<where>
+			<if test="userId != null">
+				u.user_id = #{userId}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectUserRefRoles" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		u.user_id,
+		u.name,
+		u.sex,
+		u.phone,
+		u.email,
+		u.u_status
+		uStatus,
+		u.login_num,
+		u.recentLogin_time,
+		r.role_id,
+		r.role_name
+		from t_users u
+		left join
+		t_user_ref_role ur on ur.users_id = u.user_id
+		left join t_roles r on
+		ur.role_id = r.role_id
+		<where>
+			<if test="status != null">
+				u.u_status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectUserVo" resultType="com.soholy.dogmanager.pojo.user.UserVo">
+		select
+		u.user_id userId,
+		u.organization_id organizationId,
+		o.org_type orgType,
+		d.dictionary_describe orgTypeName,
+		o.organization_name orgName,
+		u.district_id districtId,
+		u.username,
+		u.name,
+		u.sex,
+		u.phone,
+		u.email,
+		u.u_status uStatus,
+		u.login_num loginNum,
+		u.recentLogin_time recentloginTime,
+		u.creation_time createTime,
+		r.role_id roleId,
+		r.role_name roleName
+		from
+		t_users u
+		left join t_user_ref_roles ur on ur.user_id = u.user_id
+		left join t_roles r on ur.role_id = r.role_id
+		left join t_organization o on o.organization_id = u.organization_id
+		left join t_dictionary d on o.org_type = d.dictionary_value
+		and d.dictionary_field = 'org_type'
+		<where>
+			<if test="status != null">
+				and u.u_status = #{status}
+			</if>
+			<if test="query != null and query  != ''">
+				and (u.name like '%' #{query} '%' OR u.phone like '%' #{query} '%')
+			</if>
+		</where>
+		order by u.creation_time desc
+	</select>
+</mapper>

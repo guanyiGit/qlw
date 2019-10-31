@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soholy.dogmanager.mapper.TDeviceDataMapper" >
+  <resultMap id="BaseResultMap" type="com.soholy.dogmanager.entity.TDeviceData" >
+    <id column="device_date_id" property="deviceDateId" jdbcType="VARCHAR" />
+    <result column="device_id" property="deviceId" jdbcType="BIGINT" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="electricity_volume" property="electricityVolume" jdbcType="DOUBLE" />
+    <result column="data_time" property="dataTime" jdbcType="TIMESTAMP" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!--
+  /**
+     * 查询设备数据
+     * @param imei
+     * @return
+     */
+    Map<String,String> findDatasByImei(@Param("imei") String imei);
+  -->
+  <select id="findDatasByImei" resultType="java.util.HashMap">
+    SELECT d.device_date_id '序号',
+      dev.imei 'imei' ,
+      d.latitude '纬度',
+      d.longitude '经度',
+      CONCAT(d.electricity_volume,'%') '电量' ,
+      DATE_FORMAT(d.data_time,'%Y-%c-%d %H:%i:%s') '设备上报的时间',
+      DATE_FORMAT(d.creation_time,'%Y-%c-%d %H:%i:%s') '数据接收时间'  ,
+      w.rssi 'rssi',w.bssid 'bssid',
+      CASE d.data_type
+        WHEN 0 then 'gps数据'
+        WHEN 1 then 'wifi数据'
+        WHEN 2 then '心跳数据'
+        WHEN 3 then '电量告警数据'
+        WHEN 3 then '开机数据'
+      end '数据类型'
+    from t_device_data d
+      INNER JOIN t_device dev on dev.device_id = d.device_id
+      left JOIN t_device_data_wifi w on d.device_date_id = w.device_date_id
+      <if test="imei != null and imei != ''">
+        where dev.imei = #{imei}
+      </if>
+      ORDER BY d.creation_time desc
+  </select>
+
+
+  <!--批量插入设备数据-->
+  <insert id="saveDatas" parameterType="com.soholy.dogmanager.entity.TDeviceData">
+      <foreach collection="datas" item="data" >
+          INSERT INTO `t_device_data`
+          (`device_date_id`, `device_id`,
+          <if test="data.longitude != null">
+              `longitude`,
+          </if>
+          <if test="data.latitude != null">
+              `latitude`,
+          </if>
+          `electricity_volume`, `data_time`, `data_type`, `creation_time`)
+          VALUES
+          (
+              #{data.deviceDateId},#{data.deviceId},
+          <if test="data.longitude != null">
+              #{data.longitude,jdbcType=FLOAT},
+          </if>
+          <if test="data.latitude != null">
+              #{data.latitude,jdbcType=FLOAT},
+          </if>
+              #{data.electricityVolume},#{data.dataTime},#{data.dataType},#{data.creationTime}
+          )
+      </foreach>
+  </insert>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    device_date_id, device_id, longitude, latitude, electricity_volume, data_time, data_type, 
+    creation_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.soholy.dogmanager.entity.TDeviceDataExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_device_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_device_data
+    where device_date_id = #{deviceDateId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_device_data
+    where device_date_id = #{deviceDateId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.soholy.dogmanager.entity.TDeviceDataExample" >
+    delete from t_device_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.soholy.dogmanager.entity.TDeviceData" >
+    insert into t_device_data (device_date_id, device_id, longitude, 
+      latitude, electricity_volume, data_time, 
+      data_type, creation_time)
+    values (#{deviceDateId,jdbcType=VARCHAR}, #{deviceId,jdbcType=BIGINT}, #{longitude,jdbcType=REAL}, 
+      #{latitude,jdbcType=REAL}, #{electricityVolume,jdbcType=DOUBLE}, #{dataTime,jdbcType=TIMESTAMP}, 
+      #{dataType,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soholy.dogmanager.entity.TDeviceData" >
+    insert into t_device_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceDateId != null" >
+        device_date_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="electricityVolume != null" >
+        electricity_volume,
+      </if>
+      <if test="dataTime != null" >
+        data_time,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceDateId != null" >
+        #{deviceDateId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=REAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="electricityVolume != null" >
+        #{electricityVolume,jdbcType=DOUBLE},
+      </if>
+      <if test="dataTime != null" >
+        #{dataTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.soholy.dogmanager.entity.TDeviceDataExample" resultType="java.lang.Integer" >
+    select count(*) from t_device_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_device_data
+    <set >
+      <if test="record.deviceDateId != null" >
+        device_date_id = #{record.deviceDateId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceId != null" >
+        device_id = #{record.deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=REAL},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=REAL},
+      </if>
+      <if test="record.electricityVolume != null" >
+        electricity_volume = #{record.electricityVolume,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dataTime != null" >
+        data_time = #{record.dataTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dataType != null" >
+        data_type = #{record.dataType,jdbcType=INTEGER},
+      </if>
+      <if test="record.creationTime != null" >
+        creation_time = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_device_data
+    set device_date_id = #{record.deviceDateId,jdbcType=VARCHAR},
+      device_id = #{record.deviceId,jdbcType=BIGINT},
+      longitude = #{record.longitude,jdbcType=REAL},
+      latitude = #{record.latitude,jdbcType=REAL},
+      electricity_volume = #{record.electricityVolume,jdbcType=DOUBLE},
+      data_time = #{record.dataTime,jdbcType=TIMESTAMP},
+      data_type = #{record.dataType,jdbcType=INTEGER},
+      creation_time = #{record.creationTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soholy.dogmanager.entity.TDeviceData" >
+    update t_device_data
+    <set >
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=REAL},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="electricityVolume != null" >
+        electricity_volume = #{electricityVolume,jdbcType=DOUBLE},
+      </if>
+      <if test="dataTime != null" >
+        data_time = #{dataTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where device_date_id = #{deviceDateId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soholy.dogmanager.entity.TDeviceData" >
+    update t_device_data
+    set device_id = #{deviceId,jdbcType=BIGINT},
+      longitude = #{longitude,jdbcType=REAL},
+      latitude = #{latitude,jdbcType=REAL},
+      electricity_volume = #{electricityVolume,jdbcType=DOUBLE},
+      data_time = #{dataTime,jdbcType=TIMESTAMP},
+      data_type = #{dataType,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where device_date_id = #{deviceDateId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectDeviceDatasByDate" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_device_data d where d.device_id = #{deviceId}
+		and d.longitude<![CDATA[>]]> 0 and d.latitude<![CDATA[>]]> 0
+        <if test="date != null">and data_time like concat("%",#{date},"%") </if>
+      order by data_time
+	</select>
+
+	<select id="selectDeviceDatasByTimes" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_device_data d
+		<where>
+			d.longitude<![CDATA[>]]> 0 and d.latitude<![CDATA[>]]> 0	
+			<if test="deviceId != null and deviceId != '' ">
+				and	d.device_id = #{deviceId}
+			</if>
+			<if test="startTime != null and startTime != '' ">
+				AND d.data_time <![CDATA[>=]]>
+				#{startTime}
+			</if>
+			<if test="endTime != null and endTime != '' ">
+				AND d.data_time <![CDATA[<=]]>
+				#{endTime}
+			</if>
+			order by data_time
+		</where>
+	</select>
+
+	<select id="getDeviceDatasByDate" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_device_data where data_time like concat("%",#{date},"%") order
+		by data_time
+	</select>
+
+  <!--查询某天的设备在线总数-->
+  <select id="findDayDeviceActiveCount" parameterType="java.util.Date" resultType="java.lang.Long">
+    SELECT COUNT(1) from (
+        SELECT COUNT(1) from t_device_data dd
+        WHERE DATE_FORMAT(dd.creation_time,"%Y-%m-%d")  = DATE_FORMAT(#{_parameter},"%Y-%m-%d")
+        GROUP BY dd.device_id
+        HAVING MAX(dd.creation_time)
+    ) inn_dd
+  </select>
+
+
+  
+</mapper>
